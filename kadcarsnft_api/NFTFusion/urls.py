@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('renderGltfModel/', views.renderGltfModel, name='renderGltfModel')
+    path('renderModel/', views.renderGltfModel, name='renderModel')
 ]
