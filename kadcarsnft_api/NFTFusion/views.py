@@ -26,7 +26,7 @@ def renderModel(payload):
 
     # bpy.ops.import_scene.gltf(filepath=os.path.join(path_to_glb_folder, "tessst.glb")) # Import .glb file to scene
     bpy.ops.import_scene.gltf(filepath=os.path.join(
-        path_to_glb_folder, "./assets/2.glb"))  # Import .glb file to scene
+        path_to_glb_folder, "./assets/9-22.glb"))  # Import .glb file to scene
     bpy.context.scene.render.filepath = path_to_jpeg_folder  # Set save path for images
     bpy.context.scene.render.image_settings.file_format = "JPEG"  # Set image file format
     # bpy.ops.object.camera_add(location=(0, 2, 4), rotation=(-0.7853, 0, 0))

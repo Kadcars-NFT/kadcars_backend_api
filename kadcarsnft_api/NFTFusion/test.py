@@ -2,8 +2,8 @@ import bpy
 from bpy import context
 import os
 import math
-
-from render_utils import create_area_light_object
+import json
+from render_utils import create_area_light_object, colorize_kadcar_and_render
 
 path_to_glb_folder = "/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets" # If you are using Windows use r"\Users\Path\To\Folder"
 path_to_jpeg_folder = "/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets"
@@ -33,70 +33,30 @@ removeList = [".gitignore", ".DS_Store"] # If you have . files in your directory
 glb_dirList = [x for x in glb_dirList if (x not in removeList)]
 
 
-# bpy.ops.import_scene.gltf(filepath=os.path.join(path_to_glb_folder, "tessst.glb")) # Import .glb file to scene
-bpy.ops.import_scene.gltf(filepath=os.path.join(path_to_glb_folder, "GLTF.glb")) # Import .glb file to scene
-bpy.context.scene.render.filepath = path_to_jpeg_folder # Set save path for images
-bpy.context.scene.render.image_settings.file_format = "JPEG" # Set image file format
-# bpy.ops.object.camera_add(location=(0, 2, 4), rotation=(-0.7853, 0, 0))
-# bpy.ops.object.camera_add(location=(1,6,6), rotation=(0, math.pi/2, 0))
+bpy.ops.import_scene.gltf(filepath=os.path.join(path_to_glb_folder, "garbage.glb")) # Import .glb file to scene
+
 obj_camera = bpy.data.objects["Camera"]
 bpy.context.scene.camera = obj_camera
 bpy.context.scene.render.engine = 'CYCLES'
+bpy.data.scenes["Scene"].cycles.samples = 250#500
 
-obj = bpy.data.objects["Object004.001"]
-obj.rotation_mode = 'XYZ'
+f = open('lights.json')
+data = json.load(f)
 
-rotate_by = 4.21875   #How many degrees to rotate the knob for every step
-start_angle = 45      #What angle to start from
+curr = 0
+cunt = 10
 
-# bpy.ops.object.light_add(type='AREA', location=[5, 5, 5])
-# light_ob = bpy.context.object
-# light = light_ob.data
-# light.energy = 50
-# light.color = (1, 1, 1)
+# for i in range(cunt):
+#     md = data['lights'][0]
+#     md["location"][0] = curr + i
+#     create_area_light_object(md)
 
-# bpy.ops.object.light_add(type='AREA', location=[15, 15, 15])
-# light_ob = bpy.context.object
-# light = light_ob.data
-# light.energy = 1000
-# light.color = (1, 0, 0)
+f.close()
 
-metadata = {
-    "align":'WORLD',
-    "location": [5,5,5],
-    "rotation": [0,0,0],
-    "scale": [0.683125, 2.105, 0.683],
-    "energy": 1000,
-    "color": [0,1,0],
-    "diffuse_factor": 1.0,
-    "specular_factor": 1.0,
-    "volume_factor": 1.0,
-    "shape": 'RECTANGLE',
-    "size": 0.25,
-    "size_y": 0.25,
-}
-metadata2 = {
-    "align":'WORLD',
-    "location": [15,15,15],
-    "rotation": [0,0,0],
-    "scale": [0.683125, 2.105, 0.683],
-    "energy": 1000,
-    "color": [1,0,0],
-    "diffuse_factor": 1.0,
-    "specular_factor": 1.0,
-    "volume_factor": 1.0,
-    "shape": 'RECTANGLE',
-    "size": 0.25,
-    "size_y": 0.25,
-}
+# colorize_kadcar_and_render("body", "primary", "Material.069")
 
-create_area_light_object(metadata)
-create_area_light_object(metadata2)
-
-# for x in range(1,65):
-#     angle = (start_angle * (math.pi/180)) + (x-1) * (rotate_by * (math.pi/180))
-#     obj.rotation_euler = ( angle, 0,  0)
-
+bpy.context.scene.render.filepath = path_to_jpeg_folder # Set save path for images
+bpy.context.scene.render.image_settings.file_format = "JPEG" # Set image file format
 bpy.ops.render.render(write_still=True) # Tell Blender to render an image
 
 
