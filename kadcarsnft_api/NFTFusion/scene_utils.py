@@ -1,5 +1,6 @@
 import bpy
 import json
+import os
 
 #Cleans up scene by deleting all objects
 def delete_all_objects():
@@ -18,6 +19,31 @@ def delete_all_objects():
             else:
                 o.select_set(True)
     bpy.ops.object.delete() # Deletes all selected objects in the scene
+
+def set_car_location_in_scene(filepath, location, rotation_quaternion):
+    # delete_all_objects()
+    deselect_all_scene_objects()
+    bpy.ops.import_scene.gltf(filepath=filepath)
+    collection_name = 'car'
+    bpy.ops.collection.create(name=collection_name)
+
+    move_collection_to_location(collection_name, location, rotation_quaternion)
+
+def move_collection_to_location(collection_name, location, rotation_quaternion):
+    target_col = bpy.data.collections[collection_name]
+    for obj in target_col.all_objects:
+        # print("name: " + obj.name + "     type: " + obj.type)
+        #TODO: fix object types
+        if obj.type == 'MESH':
+            obj.location.x = location['x']
+            obj.location.y = location['y']
+            obj.location.z = location['z']
+
+            obj.rotation_quaternion.w = rotation_quaternion['w']
+            obj.rotation_quaternion.x = rotation_quaternion['x']
+            obj.rotation_quaternion.y = rotation_quaternion['y']
+            obj.rotation_quaternion.z = rotation_quaternion['z']
+
 
 #Creates light object using given light metadata and adds it to the scene
 def create_area_light_object(light_metadata):
@@ -75,6 +101,22 @@ def apply_hdri(hdri):
     link = links.new(node_environment.outputs["Color"], node_background.inputs["Color"])
     link = links.new(node_background.outputs["Background"], node_output.inputs["Surface"])
 
+def import_background_into_scene(filepath, collection_name):
+    import_scene_into_collection(filepath, collection_name)
+    set_scene_camera(cam_name="Camera")
+
+def import_scene_into_collection(filepath, collection_name):
+    deselect_all_scene_objects()
+    
+    bpy.ops.import_scene.gltf(filepath=filepath)
+    bpy.ops.collection.create(name=collection_name)
+
+    return bpy.data.collections[collection_name]
+
+def set_scene_camera(cam_name):
+    obj_camera = bpy.data.objects[cam_name]
+    bpy.context.scene.camera = obj_camera
+
 #Changes camera using metadata
 def apply_changes_to_scene_camera(camera_metadata):
     pass
@@ -82,3 +124,53 @@ def apply_changes_to_scene_camera(camera_metadata):
 #Creates new camera using metadata and adds it to the scene
 def add_new_camera_to_scene(camera_metadata):
     pass
+
+def delete_objects_from_collection(collection_name):
+    select_only_objects_in_collection(collection_name)
+    bpy.ops.object.delete()
+
+def delete_objects_from_collection(collection):
+    select_only_objects_in_collection(collection)
+    bpy.ops.object.delete()
+
+def select_only_objects_in_collection(collection_name):
+    collection = bpy.data.collections[collection_name]
+    deselect_all_scene_objects()
+    select_all_objects_in_collection(collection)
+
+def select_only_objects_in_collection(collection):
+    deselect_all_scene_objects()
+    select_all_objects_in_collection(collection)
+
+def deselect_all_scene_objects():
+    for ob in bpy.context.selected_objects:
+        ob.select_set(False)
+
+def select_all_objects_in_collection(collection):
+    for obj in collection.all_objects:
+        obj.select_set(True)
+
+def get_objects_from_collection_by_names(collection, name_list):
+    object_list = []
+    for obj in collection.all_objects:
+        if obj.name in name_list:
+            object_list.append(obj)
+
+    return object_list
+
+def export_scene_as_gltf(output_file):
+    filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
+    
+    bpy.ops.export_scene.gltf(
+        filepath=os.path.join(filepath, output_file),
+        use_selection=True,
+        export_apply=True,
+        export_texcoords=True,
+        export_normals=True,
+        export_tangents=True,
+        export_materials='EXPORT',
+        export_colors=True,
+        use_mesh_edges=True,
+        use_mesh_vertices=True,
+        export_extras=True
+    )
