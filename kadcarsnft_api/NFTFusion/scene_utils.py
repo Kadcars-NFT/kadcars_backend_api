@@ -101,9 +101,13 @@ def apply_hdri(hdri):
     link = links.new(node_environment.outputs["Color"], node_background.inputs["Color"])
     link = links.new(node_background.outputs["Background"], node_output.inputs["Surface"])
 
-def import_background_into_scene(filepath, collection_name):
+def import_background_into_scene(filepath, collection_name, hdri=None):
+    deselect_all_scene_objects()
     import_scene_into_collection(filepath, collection_name)
     set_scene_camera(cam_name="Camera")
+
+    if hdri:
+        apply_hdri(hdri)
 
 def import_scene_into_collection(filepath, collection_name):
     deselect_all_scene_objects()
@@ -125,15 +129,15 @@ def apply_changes_to_scene_camera(camera_metadata):
 def add_new_camera_to_scene(camera_metadata):
     pass
 
-def delete_objects_from_collection(collection_name):
-    select_only_objects_in_collection(collection_name)
+def delete_objects_from_collection_name(collection_name):
+    select_only_objects_in_collection_name(collection_name)
     bpy.ops.object.delete()
 
 def delete_objects_from_collection(collection):
     select_only_objects_in_collection(collection)
     bpy.ops.object.delete()
 
-def select_only_objects_in_collection(collection_name):
+def select_only_objects_in_collection_name(collection_name):
     collection = bpy.data.collections[collection_name]
     deselect_all_scene_objects()
     select_all_objects_in_collection(collection)
@@ -143,8 +147,9 @@ def select_only_objects_in_collection(collection):
     select_all_objects_in_collection(collection)
 
 def deselect_all_scene_objects():
-    for ob in bpy.context.selected_objects:
-        ob.select_set(False)
+    # for ob in bpy.context.selected_objects:
+    #     ob.select_set(False)
+    bpy.ops.object.select_all(action='DESELECT')
 
 def select_all_objects_in_collection(collection):
     for obj in collection.all_objects:

@@ -1,5 +1,11 @@
 {
     "body": [
         "Object004.002"
+    ],
+    "rims": [
+        "rims_front_right",
+        "rims_back_right",
+        "rims_front_left",
+        "rims_back_left"
     ]
 }

@@ -1,4 +1,33 @@
 import bpy
+from kadcar_factory import *
+from scene_utils import *
+
+def shading_orchestrator(car_collection, materials_file, format='glb'):
+    f = open('colorize.json')
+    data = json.load(f)
+    parts_to_color = data["colorize"]
+    f.close()
+
+    car_part_objects = get_objects_from_collection_by_names(car_collection, parts_to_color)
+    material_collection = import_scene_into_collection(materials_file, 'materials')
+
+    glb_file_names = []
+
+    count = 0
+    for obj in material_collection.all_objects:
+        if obj.type == 'MESH':
+            file_name = 'kadcar_' + obj.name + '.' + format
+            print("type: "+obj.type+"   material: "+obj.material_slots[0].name )
+            transfer_materials_bulk(clean=True, src=obj, target_list=car_part_objects)
+            select_only_objects_in_collection(car_collection)
+            export_scene_as_gltf(file_name)
+            glb_file_names.append(file_name)
+            count += 1
+        if count == 3:
+            break
+
+    delete_all_objects()
+    return glb_file_names
 
 def get_principled_bsdf_for_material(material_name):
     material = bpy.data.materials[material_name]

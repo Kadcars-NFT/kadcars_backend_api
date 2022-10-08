@@ -68,12 +68,17 @@ def replace_object(should_transfer_w_materials, should_clear_old_materials, sour
     target_object.rotation_quaternion.y = source_object.rotation_quaternion.y
     target_object.rotation_quaternion.z = source_object.rotation_quaternion.z
 
-    if should_transfer_w_materials:
-        transfer_materials(should_clear_old_materials, source_object, target_object)
+    bpy.ops.object.select_all(action="DESELECT")
+    target_object.select_set(True)
+    bpy.context.view_layer.objects.active=target_object
+    bpy.ops.object.transform_apply(location=True, rotation=True)
+
+    # if should_transfer_w_materials:
+    #     transfer_materials(should_clear_old_materials, source_object, target_object)
     
-    deselect_all_scene_objects()
-    source_object.select_set(True)
-    bpy.ops.object.delete()
+    # deselect_all_scene_objects()
+    # source_object.select_set(True)
+    # bpy.ops.object.delete()
 
 def apply_color_to_windshield(color):
     pass
