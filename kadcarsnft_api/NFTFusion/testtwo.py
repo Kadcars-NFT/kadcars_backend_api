@@ -32,6 +32,7 @@ kc_glb_list = [
     # 'kadcar_Material.015.glb'
 ]
 
+# import_background_into_scene(os.path.join(path_to_glb_folder, 'test.glb'), 'bg')
 import_background_into_scene(os.path.join(path_to_glb_folder, 'mtn_no_car.glb'), 'bg')
 import_scene_into_collection(os.path.join(path_to_glb_folder, 'blue_aligned_empty.glb'), 'car')
 import_scene_into_collection(os.path.join(path_to_glb_folder, 'rim_skinny.glb'), 'rims')
@@ -52,15 +53,17 @@ for o in bpy.context.selected_objects:
         o.rotation_quaternion.y = 0.0
         o.rotation_quaternion.z = 0.697286
 
-        replace_object(True, True, o.name, 'rim_front_right.001')
-        replace_object(True, True, o.name, 'rim_front_left.001')
-        replace_object(True, True, o.name, 'rim_back_right.001')
-        replace_object(True, True, o.name, 'rim_back_left.001')
+        replace_object(False, False, o.name, 'rim_front_right.001')
+        replace_object(False, False, o.name, 'rim_front_left.001')
+        replace_object(False, False, o.name, 'rim_back_right.001')
+        replace_object(False, False, o.name, 'rim_back_left.001')
 
 set_scene_camera(cam_name="Camera")
-configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
-set_render_output_settings(path_to_glb_folder, 'WEBP', True)
+configure_render_settings('CYCLES', 'CUDA', 'GPU', 100, 25)
+set_render_output_settings(path_to_glb_folder, 'JPEG', True)
 bpy.ops.object.select_all(action="SELECT")
-kfile = os.path.join(path_to_glb_folder, 'something_else.glb')
-export_scene_as_gltf(kfile)
+export_scene_as_gltf("test.glb")
 print(bpy.data.objects.get('rim_front_right').location.y)
+
+
+bpy.ops.wm.read_factory_settings(use_empty=True)

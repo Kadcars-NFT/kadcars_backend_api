@@ -163,8 +163,16 @@ def get_objects_from_collection_by_names(collection, name_list):
 
     return object_list
 
+def parenting_object(parent_object, child_object):
+    bpy.ops.object.select_all(action="DESELECT")
+    child_object.select_set(True)
+    parent_object.select_set(True)
+    bpy.context.view_layer.objects.active = parent_object
+    bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
+
 def export_scene_as_gltf(output_file):
-    filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
+    # filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
+    filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
     
     bpy.ops.export_scene.gltf(
         filepath=os.path.join(filepath, output_file),
@@ -175,7 +183,8 @@ def export_scene_as_gltf(output_file):
         export_tangents=True,
         export_materials='EXPORT',
         export_colors=True,
-        use_mesh_edges=True,
-        use_mesh_vertices=True,
-        export_extras=True
+        #TODO: bpy version
+        # use_mesh_edges=True,
+        # use_mesh_vertices=True,
+        # export_extras=True
     )

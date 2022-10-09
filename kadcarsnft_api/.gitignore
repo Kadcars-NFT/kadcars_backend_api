@@ -7,6 +7,7 @@
 *.jpg
 *.webp
 *.hdr
+*.blend
 
 #Firebase credentials
 /mvp_env/overbuild-249f9-firebase-adminsdk-st6rk-48ec7f9121.json

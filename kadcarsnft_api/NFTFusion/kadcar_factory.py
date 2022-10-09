@@ -1,9 +1,11 @@
+import os
 import bpy
 import json
 from scene_utils import delete_all_objects, export_scene_as_gltf, get_objects_from_collection_by_names, select_only_objects_in_collection
 from shader_utils import transfer_materials_bulk
 from shader_utils import transfer_materials
-from scene_utils import deselect_all_scene_objects, import_scene_into_collection
+from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
+from io_utils import extract_data_from_json
 
 #Method to add color to specified portion of kadcar
 def colorize_kadcar(part_name, colorset, material_name):
@@ -48,37 +50,102 @@ def colorize_kadcar(part_name, colorset, material_name):
             template_object.active_material = material
             bpy.context.collection.objects.link(template_object)
 
-def add_rims_to_kadcar(rim_type, rim_file, color):
-    if rim_type == 1:
-        bpy.ops.import_scene.gltf(filepath=rim_file) # Import .glb file to scene
-        replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.002', target_name='wheel_3_Cylinder_021.004')
-        replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.001', target_name='wheel_3_Cylinder_021.005')
+# def add_rims_to_kadcar(rim_type, rim_file, color):
+#     if rim_type == 1:
+#         bpy.ops.import_scene.gltf(filepath=rim_file) # Import .glb file to scene
+#         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.002', target_name='wheel_3_Cylinder_021.004')
+#         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.001', target_name='wheel_3_Cylinder_021.005')
+
+def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='GLB'):
+    dirname = os.path.dirname(__file__)
+    material_file = os.path.join(dirname, 'assets/material_spheres.glb')
+
+    kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
+    materials_collection = import_scene_into_collection(material_file, 'materials')
+
+    glb_file_names = []
+
+    for obj in materials_collection.all_objects:
+        if obj.type == 'MESH':
+            file_name = kc_name + obj.name + '.' + format
+            transfer_materials_bulk(clean=True, src=obj, target_list=car_part_objects)
+            select_only_objects_in_collection(kadcar_collection)
+            export_scene_as_gltf(file_name)
+            glb_file_names.append(file_name)
+            bpy.ops.wm.read_factory_settings(use_empty=True)
+    
+    return glb_file_names
+
+def add_rims_to_kadcar(kadcar_gltf_path, rim_gltf_path):
+    import_scene_into_collection(kadcar_gltf_path, 'kadcar')
+    import_scene_into_collection(rim_gltf_path, 'rims')
+    
+    dirname = os.path.dirname(__file__)
+    car_parts_json = os.path.join(dirname, 'car_parts.json')
+    rim_object_names = extract_data_from_json(car_parts_json)['rims']
+    
+    deselect_all_scene_objects()
+    for rim_name in rim_object_names:
+        rim = bpy.data.objects[rim_name]
+        rim.select_set(True)
+        bpy.ops.object.delete()
+
+    #TODO CRITICAL: rename rims properly
+    place_object(False, False, 'Kadcar_Empty', 'rim_front_right.001')
+    place_object(False, False, 'Kadcar_Empty', 'rim_front_left.001')
+    place_object(False, False, 'Kadcar_Empty', 'rim_back_right.001')
+    place_object(False, False, 'Kadcar_Empty', 'rim_back_left.001')
+
+    deselect_all_scene_objects()
 
 #TODO: rename replaced object
-def replace_object(should_transfer_w_materials, should_clear_old_materials, source_name, target_name):
-    source_object = bpy.data.objects.get(source_name)
+def replace_object(should_transfer_w_materials, should_clear_old_materials, dest_group_object_name, target_name):
+    dest_group_object = bpy.data.objects.get(dest_group_object_name)
     target_object = bpy.data.objects.get(target_name)
 
-    target_object.location.x = source_object.location.x
-    target_object.location.y = source_object.location.y
-    target_object.location.z = source_object.location.z
+    target_object.location.x = dest_group_object.location.x
+    target_object.location.y = dest_group_object.location.y
+    target_object.location.z = dest_group_object.location.z
 
-    target_object.rotation_quaternion.w = source_object.rotation_quaternion.w
-    target_object.rotation_quaternion.x = source_object.rotation_quaternion.x
-    target_object.rotation_quaternion.y = source_object.rotation_quaternion.y
-    target_object.rotation_quaternion.z = source_object.rotation_quaternion.z
+    target_object.rotation_quaternion.w = dest_group_object.rotation_quaternion.w
+    target_object.rotation_quaternion.x = dest_group_object.rotation_quaternion.x
+    target_object.rotation_quaternion.y = dest_group_object.rotation_quaternion.y
+    target_object.rotation_quaternion.z = dest_group_object.rotation_quaternion.z
 
     bpy.ops.object.select_all(action="DESELECT")
+    
+    target_object.select_set(True)
+    bpy.context.view_layer.objects.active = target_object
+    bpy.ops.object.transform_apply(location=True, rotation=True)
+
+    parenting_object(dest_group_object, target_object)
+
+    if should_transfer_w_materials:
+        transfer_materials(should_clear_old_materials, dest_group_object, target_object)
+
+def place_object(should_transfer_w_materials, should_clear_old_materials, dest_group_object_name, target_name):
+    dest_group_object = bpy.data.objects.get(dest_group_object_name)
+    target_object = bpy.data.objects.get(target_name)
+
+    target_object.location.x = dest_group_object.location.x
+    target_object.location.y = dest_group_object.location.y
+    target_object.location.z = dest_group_object.location.z
+
+    target_object.rotation_quaternion.w = dest_group_object.rotation_quaternion.w
+    target_object.rotation_quaternion.x = dest_group_object.rotation_quaternion.x
+    target_object.rotation_quaternion.y = dest_group_object.rotation_quaternion.y
+    target_object.rotation_quaternion.z = dest_group_object.rotation_quaternion.z
+
+    bpy.ops.object.select_all(action="DESELECT")
+
     target_object.select_set(True)
     bpy.context.view_layer.objects.active=target_object
     bpy.ops.object.transform_apply(location=True, rotation=True)
 
-    # if should_transfer_w_materials:
-    #     transfer_materials(should_clear_old_materials, source_object, target_object)
-    
-    # deselect_all_scene_objects()
-    # source_object.select_set(True)
-    # bpy.ops.object.delete()
+    parenting_object(dest_group_object, target_object)
+
+    if should_transfer_w_materials:
+        transfer_materials(should_clear_old_materials, dest_group_object, target_object)
 
 def apply_color_to_windshield(color):
     pass
@@ -114,6 +181,7 @@ def generate_kadcar_gltfs(materials_file, kadcar_file, format='glb'):
             select_only_objects_in_collection(car_collection)
             export_scene_as_gltf(file_name)
             glb_file_names.append(file_name)
+            bpy.ops.wm.read_factory_settings(use_empty=True)
 
     delete_all_objects()
     return glb_file_names
