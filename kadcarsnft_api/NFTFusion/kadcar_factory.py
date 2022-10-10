@@ -56,23 +56,26 @@ def colorize_kadcar(part_name, colorset, material_name):
 #         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.002', target_name='wheel_3_Cylinder_021.004')
 #         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.001', target_name='wheel_3_Cylinder_021.005')
 
-def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='GLB'):
+def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='glb'):
     dirname = os.path.dirname(__file__)
     material_file = os.path.join(dirname, 'assets/material_spheres.glb')
 
-    kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
     materials_collection = import_scene_into_collection(material_file, 'materials')
+    kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
 
     glb_file_names = []
 
+    i = 0
     for obj in materials_collection.all_objects:
-        if obj.type == 'MESH':
-            file_name = kc_name + obj.name + '.' + format
-            transfer_materials_bulk(clean=True, src=obj, target_list=car_part_objects)
+        if obj.type == 'MESH' and i < 3:
+            file_name = 'shaded/' + kc_name.split(".")[0] + obj.name + '.' + format
+            transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(kadcar_collection)
-            export_scene_as_gltf(file_name)
+            export_scene_as_gltf(file_name, export_all=False)
             glb_file_names.append(file_name)
-            bpy.ops.wm.read_factory_settings(use_empty=True)
+            # bpy.ops.wm.read_factory_settings(use_empty=True)
+
+            i+=1
     
     return glb_file_names
 
@@ -177,7 +180,7 @@ def generate_kadcar_gltfs(materials_file, kadcar_file, format='glb'):
         if obj.type == 'MESH':
             file_name = 'kadcar_' + obj.name + '.' + format
             print("type: "+obj.type+"   material: "+obj.material_slots[0].name )
-            transfer_materials_bulk(clean=True, src=obj, target_list=car_part_objects)
+            transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(car_collection)
             export_scene_as_gltf(file_name)
             glb_file_names.append(file_name)

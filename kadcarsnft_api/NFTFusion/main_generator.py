@@ -26,7 +26,7 @@ rims_glbs = [
 
 #feed base cars glbs + rim glbs, return base cars * rims glbs
 kadcars_with_rims_gltf_file_names = generate_kadcars_with_rims_gltfs(base_car_glbs, rims_glbs, path_to_glb_folder)
-
+print(kadcars_with_rims_gltf_file_names)
 #take x glbs, colorize, return x * color glbs
 kadcars_with_shading_gltf_file_names = generate_kadcars_with_shading_gltfs(kadcars_with_rims_gltf_file_names, path_to_glb_folder)
 

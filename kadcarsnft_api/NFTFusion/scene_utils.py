@@ -170,10 +170,13 @@ def parenting_object(parent_object, child_object):
     bpy.context.view_layer.objects.active = parent_object
     bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
 
-def export_scene_as_gltf(output_file):
+def export_scene_as_gltf(output_file, export_all=True):
     # filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
     filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
     
+    if export_all:
+        bpy.ops.object.select_all(action="SELECT")
+
     bpy.ops.export_scene.gltf(
         filepath=os.path.join(filepath, output_file),
         use_selection=True,

@@ -18,7 +18,7 @@ def shading_orchestrator(car_collection, materials_file, format='glb'):
         if obj.type == 'MESH':
             file_name = 'kadcar_' + obj.name + '.' + format
             print("type: "+obj.type+"   material: "+obj.material_slots[0].name )
-            transfer_materials_bulk(clean=True, src=obj, target_list=car_part_objects)
+            transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(car_collection)
             export_scene_as_gltf(file_name)
             glb_file_names.append(file_name)
@@ -38,9 +38,10 @@ def get_principled_bsdf_for_material(material_name):
 
     return bsdf
 
-def transfer_materials_bulk(clean, src, target_list):
-    for tgt in target_list:
-        transfer_materials(clean, src, tgt)
+def transfer_materials_bulk(clean, src, target_object_names):
+    for tgt in target_object_names:
+        target_object = bpy.data.objects.get(tgt)
+        transfer_materials(clean, src, target_object)
 
 def transfer_materials(clean, src, tgt):
     if clean:
