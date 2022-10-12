@@ -82,7 +82,6 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
             select_only_objects_in_collection(kadcar_collection)
             export_scene_as_gltf(file_name, export_all=False)
             glb_file_names.append(file_name)
-            # bpy.ops.wm.read_factory_settings(use_empty=True)
 
             i+=1
     

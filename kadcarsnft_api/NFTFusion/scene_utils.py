@@ -148,6 +148,10 @@ def delete_objects_from_collection(collection):
     select_only_objects_in_collection(collection)
     bpy.ops.object.delete()
 
+def delete_all_objects_in_scene():
+    bpy.ops.object.select_all(action='SELECT')
+    bpy.ops.object.delete()
+
 def select_only_objects_in_collection_name(collection_name):
     collection = bpy.data.collections[collection_name]
     deselect_all_scene_objects()
