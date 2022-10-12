@@ -63,12 +63,21 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
     materials_collection = import_scene_into_collection(material_file, 'materials')
     kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
 
+    # for o in kadcar_collection.all_objects:
+    #     if o.type == 'MESH':
+    #         o.select_set(True)
+    #     print("Name: " + o.name + "              Type: " + o.type)
+    # for scene in bpy.data.scenes:
+    #     for view_layer in scene.view_layers:
+    #         for o in view_layer.objects:
+    #             print(o.users_collection[0].name)
+    #             o.select_set(True)
     glb_file_names = []
 
     i = 0
     for obj in materials_collection.all_objects:
         if obj.type == 'MESH' and i < 3:
-            file_name = 'shaded/' + kc_name.split(".")[0] + obj.name + '.' + format
+            file_name = 'with_shading/' + kc_name.split(".")[0] + obj.name + '.' + format
             transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(kadcar_collection)
             export_scene_as_gltf(file_name, export_all=False)

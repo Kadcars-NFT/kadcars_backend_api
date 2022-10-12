@@ -20,6 +20,13 @@ def delete_all_objects():
                 o.select_set(True)
     bpy.ops.object.delete() # Deletes all selected objects in the scene
 
+def clear_scene_except_cameras():
+    bpy.ops.object.select_all(action='SELECT')
+    for o in bpy.context.selected_objects:
+        if o.type == "CAMERA":
+            o.select_set(False)
+    bpy.ops.object.delete()
+
 def set_car_location_in_scene(filepath, location, rotation_quaternion):
     # delete_all_objects()
     deselect_all_scene_objects()
@@ -112,6 +119,10 @@ def import_background_into_scene(filepath, collection_name, hdri=None):
 def import_scene_into_collection(filepath, collection_name):
     deselect_all_scene_objects()
     
+    if collection_name in bpy.data.collections:
+        if bpy.data.collections[collection_name] is not bpy.context.scene.collection:
+            bpy.data.collections.remove(bpy.data.collections[collection_name])
+
     bpy.ops.import_scene.gltf(filepath=filepath)
     bpy.ops.collection.create(name=collection_name)
 
@@ -152,8 +163,14 @@ def deselect_all_scene_objects():
     bpy.ops.object.select_all(action='DESELECT')
 
 def select_all_objects_in_collection(collection):
-    for obj in collection.all_objects:
-        obj.select_set(True)
+    # for obj in collection.all_objects:
+    #     obj.select_set(True)
+    for scene in bpy.data.scenes:
+        for view_layer in scene.view_layers:
+            for o in view_layer.objects:
+                if o.users_collection[0].name == collection.name:
+                    print(o.users_collection[0].name)
+                    o.select_set(True)
 
 def get_objects_from_collection_by_names(collection, name_list):
     object_list = []
@@ -171,8 +188,8 @@ def parenting_object(parent_object, child_object):
     bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
 
 def export_scene_as_gltf(output_file, export_all=True):
-    # filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
-    filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
+    filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
+    # filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
     
     if export_all:
         bpy.ops.object.select_all(action="SELECT")

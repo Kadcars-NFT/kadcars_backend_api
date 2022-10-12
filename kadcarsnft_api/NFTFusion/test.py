@@ -6,7 +6,6 @@ import math
 import json
 from scene_utils import *
 from render_utils import *
-from render_settings import *
 from kadcar_factory import *
 
 dirname = os.path.dirname(__file__)
@@ -36,11 +35,11 @@ bpy.context.scene.camera = obj_camera
 configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
 
 #Customize the kadcar and scene
-# apply_hdri(os.path.join(path_to_glb_folder, 'bg.hdr'))
+apply_hdri(os.path.join(path_to_glb_folder, 'bg.hdr'))
 # colorize_kadcar_and_render("body", "primary", "Material.069")
 
 rim_file = os.path.join(path_to_glb_folder, "rims_poc.glb")
-add_rims_to_kadcar(1, rim_file, 'lol')
+# add_rims_to_kadcar(1, rim_file, 'lol')
 
 #Set final render settings
 set_render_output_settings(path_to_glb_folder, 'WEBP', True)
