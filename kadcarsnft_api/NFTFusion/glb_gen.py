@@ -1,9 +1,9 @@
 import os
 import bpy
-from kadcar_factory import generate_kadcar_gltfs
+from kadcar_factory import generate_kadcar_gltfs, add_materials_to_kadcar
 from NFT_render_provider import *
 from scene_utils import *
-
+from io_utils import *
 
 scene_names = ['BEACH', 'MOUNTAIN', 'SNOW']
 
@@ -29,17 +29,22 @@ kc_glb_list = [
     # 'kadcar_Material.015.glb'
 ]
 
-car_coll = import_scene_into_collection(filepath=os.path.join(path_to_glb_folder, "blue_aligned_empty.glb"), collection_name='car')
-import_scene_into_collection(filepath=os.path.join(path_to_glb_folder, "material_spheres.glb"), collection_name='material')
+# car_coll = import_scene_into_collection(filepath=os.path.join(path_to_glb_folder, "blue_aligned_empty.glb"), collection_name='car')
+# import_scene_into_collection(filepath=os.path.join(path_to_glb_folder, "material_spheres.glb"), collection_name='material')
 
-for o in bpy.context.selected_objects:
-    print(o.users_collection[0].name)
+dirname = os.path.dirname(__file__)
+colorize_json = os.path.join(dirname, 'colorize.json')
+car_parts_to_colorize = extract_data_from_json(colorize_json)['colorize']
+
+add_materials_to_kadcar(os.path.join(path_to_glb_folder, "blue_aligned_empty.glb"), car_parts_to_colorize, 'blueblueblueballs')
 
 obj_camera = bpy.data.objects["Camera"]
 bpy.context.scene.camera = obj_camera
-select_only_objects_in_collection(car_coll)
-clear_scene_except_cameras()
-export_scene_as_gltf("hahaha.glb", export_all=False)
+# select_only_objects_in_collection(car_coll)
+# clear_scene_except_cameras()
+# export_scene_as_gltf("hahaha.glb", export_all=False)
+
+
 # for o in bpy.data.collections['car'].all_objects:
 #     print("Name: " + o.name + "              Type: " + o.type)
 #     o.select_set(True)

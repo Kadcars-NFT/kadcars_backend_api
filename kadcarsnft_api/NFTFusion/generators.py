@@ -7,7 +7,7 @@ from io_utils import extract_data_from_json
 from NFT_render_provider import *
 
 def generate_kadcars_with_rims_gltfs(kadcar_gltf_file_names, rims_gltf_file_names, filepath_prefix):
-    clear_scene_except_cameras()
+    delete_all_objects_in_scene()
     result_gltf_filenames = kadcar_gltf_file_names.copy()
 
     i = 0
@@ -20,7 +20,7 @@ def generate_kadcars_with_rims_gltfs(kadcar_gltf_file_names, rims_gltf_file_name
 
             add_rims_to_kadcar(kc_gltf_full_path, rim_gltf_full_path)
             export_scene_as_gltf(os.path.join('with_rims/', export_file_name))
-            clear_scene_except_cameras()
+            delete_all_objects_in_scene()
             result_gltf_filenames.append(export_file_name)
             j += 1
         i += 1

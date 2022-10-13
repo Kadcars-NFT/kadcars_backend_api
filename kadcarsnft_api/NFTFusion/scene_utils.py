@@ -150,7 +150,9 @@ def delete_objects_from_collection(collection):
 
 def delete_all_objects_in_scene():
     bpy.ops.object.select_all(action='SELECT')
-    bpy.ops.object.delete()
+    for o in bpy.context.selected_objects:
+        bpy.data.objects.remove(o, do_unlink=True)
+    # bpy.ops.object.delete()
 
 def select_only_objects_in_collection_name(collection_name):
     collection = bpy.data.collections[collection_name]

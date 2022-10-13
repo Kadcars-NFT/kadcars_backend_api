@@ -62,16 +62,8 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
 
     materials_collection = import_scene_into_collection(material_file, 'materials')
     kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
-
-    # for o in kadcar_collection.all_objects:
-    #     if o.type == 'MESH':
-    #         o.select_set(True)
-    #     print("Name: " + o.name + "              Type: " + o.type)
-    # for scene in bpy.data.scenes:
-    #     for view_layer in scene.view_layers:
-    #         for o in view_layer.objects:
-    #             print(o.users_collection[0].name)
-    #             o.select_set(True)
+    for o in bpy.context.selected_objects:
+        print(o.name + "     " + o.users_collection[0].name)
     glb_file_names = []
 
     i = 0
