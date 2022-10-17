@@ -1,0 +1,47 @@
+{
+    "mountain": {
+        "location": {
+            "x": 0, 
+            "y": 0, 
+            "z": 0.080608
+        },
+        "quaternion_rotation": {
+            "w": 1.0, 
+            "x": 0.0, 
+            "y": 0.0, 
+            "z": 0.0
+        }
+    },
+    "snow": {
+        "location": {
+
+        },
+        "quaternion_rotation": {
+            
+        }
+    },
+    "storage": {
+        "location": {
+
+        },
+        "quaternion_rotation": {
+            
+        }
+    },
+    "beach": {
+        "location": {
+
+        },
+        "quaternion_rotation": {
+            
+        }
+    },
+    "cyber": {
+        "location": {
+
+        },
+        "quaternion_rotation": {
+            
+        }
+    }
+}

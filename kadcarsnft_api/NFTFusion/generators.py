@@ -43,29 +43,21 @@ def generate_kadcars_with_shading_gltfs(kadcars_with_rims_gltf_file_names, filep
     return result_gltf_filenames
 
 def generate_scenes_w_kadcar_and_background_gltfs(kadcars_with_rims_and_shading, filepath_prefix):
-    bg_names = ['MOUNTAIN']
+    bg_names = ['mountain']
     result_gltf_filenames = []
 
     configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
     
     for bg in bg_names:
         for kc_gltf in kadcars_with_rims_and_shading:
-            print(kc_gltf)
-            if bg == 'MOUNTAIN':
-                generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, "mountain_no_car.glb", "mtn_bg.hdr")
-            elif bg == 'BEACH':
-                generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, "beach_no_car.glb", "mtn_bg.hdr")
-            elif bg == 'SNOW':
-                generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, "snow_no_car.glb", "snow_bg.hdr")
-            elif bg == 'STORAGE':
-                generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, "storage_no_car.glb", "mtn_bg.hdr")
-            elif bg == 'CYBER':
-                generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, "cyber_no_car.glb", "mtn_bg.hdr")
+            generate_kadcar_nft_with_background_gltf(filepath_prefix, kc_gltf, bg + "_no_car.glb", bg + "_background.hdr", bg)
 
-             #import scene (background)
-            set_render_output_settings(os.path.join(filepath_prefix, 'final_nft_renders/' + kc_gltf.split('.')[0] + '_render'), 'WEBP', True)
+            # export_scene_as_gltf(os.path.join(filepath_prefix, 'with_backgrounds/' + kc_gltf.split('.')[0] + '_' + bg), export_all=True)
+
+            #import scene (background)
+            set_render_output_settings(os.path.join(filepath_prefix, 'final_nft_renders/' + kc_gltf.split('.')[0] + '_' + bg + '_render'), 'WEBP', True)
             
             # delete_objects_from_collection_name('car')
-            clear_scene_except_cameras()
+            delete_all_objects_in_scene()
 
     return result_gltf_filenames

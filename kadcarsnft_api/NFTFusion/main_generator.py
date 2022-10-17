@@ -10,23 +10,23 @@ from generators import generate_kadcars_with_rims_gltfs, generate_kadcars_with_s
 delete_all_objects()
 
 dirname = os.path.dirname(__file__)
-path_to_glb_folder = os.path.join(dirname, 'assets')
-path_to_jpeg_folder = os.path.join(dirname, 'assets')
+path_to_assets_folder = os.path.join(dirname, 'assets')
+path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 #take x base car glbs
 base_car_glbs = [
-    "blue_aligned_empty.glb"
+    "01.glb"
 ]
 
 rims_glbs = [
-    "rim_skinny.glb"
+    # "rim_skinny.glb"
 ]
 
 #feed base cars glbs + rim glbs, return base cars * rims glbs
-kadcars_with_rims_gltf_file_names = generate_kadcars_with_rims_gltfs(base_car_glbs, rims_glbs, path_to_glb_folder)
+kadcars_with_rims_gltf_file_names = generate_kadcars_with_rims_gltfs(base_car_glbs, rims_glbs, path_to_assets_folder)
 
 #take x glbs, colorize, return x * color glbs
-kadcars_with_shading_gltf_file_names = generate_kadcars_with_shading_gltfs(kadcars_with_rims_gltf_file_names, path_to_glb_folder)
+kadcars_with_shading_gltf_file_names = generate_kadcars_with_shading_gltfs(kadcars_with_rims_gltf_file_names, path_to_assets_folder)
 
 #place each car in each bg and return glbs
-kadcars_with_backgrounds_gltf_file_names = generate_scenes_w_kadcar_and_background_gltfs(kadcars_with_shading_gltf_file_names, path_to_glb_folder)
+kadcars_with_backgrounds_gltf_file_names = generate_scenes_w_kadcar_and_background_gltfs(kadcars_with_shading_gltf_file_names, path_to_assets_folder)

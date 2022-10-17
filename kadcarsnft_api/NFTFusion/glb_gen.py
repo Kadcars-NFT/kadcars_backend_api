@@ -34,12 +34,14 @@ kc_glb_list = [
 
 dirname = os.path.dirname(__file__)
 colorize_json = os.path.join(dirname, 'colorize.json')
-car_parts_to_colorize = extract_data_from_json(colorize_json)['colorize']
+# car_parts_to_colorize = extract_data_from_json(colorize_json)['colorize']
 
-add_materials_to_kadcar(os.path.join(path_to_glb_folder, "blue_aligned_empty.glb"), car_parts_to_colorize, 'blueblueblueballs')
+# add_materials_to_kadcar(os.path.join(path_to_glb_folder, "blue_aligned_empty.glb"), car_parts_to_colorize, 'blueblueblueballs')
 
-obj_camera = bpy.data.objects["Camera"]
-bpy.context.scene.camera = obj_camera
+# obj_camera = bpy.data.objects["Camera"]
+# bpy.context.scene.camera = obj_camera
+
+configure_render_settings('CYCLES', 'CUDA', 'GPU', 100, 25)
 # select_only_objects_in_collection(car_coll)
 # clear_scene_except_cameras()
 # export_scene_as_gltf("hahaha.glb", export_all=False)

@@ -2,6 +2,7 @@ import os
 import bpy
 from scene_utils import set_car_location_in_scene, import_background_into_scene, delete_objects_from_collection_name
 from render_utils import configure_render_settings, set_render_output_settings
+from io_utils import *
 
 #TODO: fix output input paths
 def generate_kadcar_nft_with_mountain_bg_old(path_to_asset_folder, kc_glb_paths, generate_render=False):
@@ -21,11 +22,16 @@ def generate_kadcar_nft_with_mountain_bg_old(path_to_asset_folder, kc_glb_paths,
 
 
 #TODO: add car location variables
-def generate_kadcar_nft_with_background_gltf(path_to_asset_folder, kc_glb_name, bg_glb_name, hdr_file_name):
-    kc_glb_path = os.path.join(path_to_asset_folder, kc_glb_name)
+def generate_kadcar_nft_with_background_gltf(path_to_asset_folder, kc_glb_name, bg_glb_name, hdr_file_name, background_name):
+    dirname = os.path.dirname(__file__)
+    kc_glb_path = os.path.join(path_to_asset_folder, 'with_shading/' + kc_glb_name)
     bg_glb_path = os.path.join(path_to_asset_folder, "backgrounds/" + bg_glb_name)
     hdr_file_path = os.path.join(path_to_asset_folder, "hdr_files/" + hdr_file_name)
+    bg_config_path = os.path.join(dirname, 'background_config_files')
+
+    bg_config = extract_data_from_json(os.path.join(bg_config_path, "backgrounds_config.json"))
+    bg_config_data = bg_config[background_name]
 
     import_background_into_scene(bg_glb_path, 'background', hdr_file_path)
     
-    set_car_location_in_scene(kc_glb_path, {'x': 0, 'y': 0, 'z':0.080608}, {'w': 1.0, 'x':0.0, 'y':0.0, 'z':0.0})
+    set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])

@@ -5,6 +5,7 @@ from scene_utils import delete_all_objects, export_scene_as_gltf, get_objects_fr
 from shader_utils import transfer_materials_bulk
 from shader_utils import transfer_materials
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
+from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json
 
 #Method to add color to specified portion of kadcar
@@ -50,32 +51,29 @@ def colorize_kadcar(part_name, colorset, material_name):
             template_object.active_material = material
             bpy.context.collection.objects.link(template_object)
 
-# def add_rims_to_kadcar(rim_type, rim_file, color):
-#     if rim_type == 1:
-#         bpy.ops.import_scene.gltf(filepath=rim_file) # Import .glb file to scene
-#         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.002', target_name='wheel_3_Cylinder_021.004')
-#         replace_object(should_transfer_w_materials=True, should_clear_old_materials=True, source_name='wheel_10_Plane_007.001', target_name='wheel_3_Cylinder_021.005')
-
 def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='glb'):
+    # material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
+    material_list = ['steel']
     dirname = os.path.dirname(__file__)
-    material_file = os.path.join(dirname, 'assets/material_spheres.glb')
+    # material_file = os.path.join(dirname, 'assets/material_spheres.glb')
+    material_file = os.path.join(dirname, 'assets/material_spheres_new.glb')
 
     materials_collection = import_scene_into_collection(material_file, 'materials')
     kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
-    for o in bpy.context.selected_objects:
-        print(o.name + "     " + o.users_collection[0].name)
+
     glb_file_names = []
 
-    i = 0
     for obj in materials_collection.all_objects:
-        if obj.type == 'MESH' and i < 3:
-            file_name = 'with_shading/' + kc_name.split(".")[0] + obj.name + '.' + format
+        if obj.type == 'MESH':
+            print(obj.name)
+            if obj.name.split('.')[0] not in material_list:
+                continue
+
+            file_name = kc_name.split(".")[0] + obj.name.split('.')[0] + obj.name.split('.')[1] + '.' + format
             transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(kadcar_collection)
-            export_scene_as_gltf(file_name, export_all=False)
+            export_scene_as_gltf(os.path.join(dirname, 'assets/with_shading/' + file_name), export_all=False)
             glb_file_names.append(file_name)
-
-            i+=1
     
     return glb_file_names
 
@@ -88,16 +86,24 @@ def add_rims_to_kadcar(kadcar_gltf_path, rim_gltf_path):
     rim_object_names = extract_data_from_json(car_parts_json)['rims']
     
     deselect_all_scene_objects()
+    old_names = []
     for rim_name in rim_object_names:
+        old_names.append(rim_name)
         rim = bpy.data.objects[rim_name]
         rim.select_set(True)
-        bpy.ops.object.delete()
+        bpy.data.objects.remove(rim, do_unlink=True)
+        # bpy.ops.object.delete()
 
     #TODO CRITICAL: rename rims properly
     place_object(False, False, 'Kadcar_Empty', 'rim_front_right.001')
     place_object(False, False, 'Kadcar_Empty', 'rim_front_left.001')
     place_object(False, False, 'Kadcar_Empty', 'rim_back_right.001')
     place_object(False, False, 'Kadcar_Empty', 'rim_back_left.001')
+
+    rename_object_in_scene('rim_front_right.001', 'rim_front_right')
+    rename_object_in_scene('rim_front_left.001', 'rim_front_left')
+    rename_object_in_scene('rim_back_right.001', 'rim_back_right')
+    rename_object_in_scene('rim_back_left.001', 'rim_back_left')
 
     deselect_all_scene_objects()
 

@@ -29,28 +29,51 @@ def clear_scene_except_cameras():
 
 def set_car_location_in_scene(filepath, location, rotation_quaternion):
     # delete_all_objects()
+    # bpy.ops.import_scene.gltf(filepath=filepath)
+    # collection_name = 'car'
+    # bpy.ops.collection.create(name=collection_name)
     deselect_all_scene_objects()
-    bpy.ops.import_scene.gltf(filepath=filepath)
-    collection_name = 'car'
-    bpy.ops.collection.create(name=collection_name)
+    import_scene_into_collection(filepath, 'kadcar')
 
-    move_collection_to_location(collection_name, location, rotation_quaternion)
+    # move_collection_to_location('kadcar', location, rotation_quaternion)
+    move_kadcar(location, rotation_quaternion)
 
 def move_collection_to_location(collection_name, location, rotation_quaternion):
     target_col = bpy.data.collections[collection_name]
-    for obj in target_col.all_objects:
-        # print("name: " + obj.name + "     type: " + obj.type)
-        #TODO: fix object types
-        if obj.type == 'MESH':
-            obj.location.x = location['x']
-            obj.location.y = location['y']
-            obj.location.z = location['z']
+    obj = bpy.data.objects['Kadcar_Empty']
 
-            obj.rotation_quaternion.w = rotation_quaternion['w']
-            obj.rotation_quaternion.x = rotation_quaternion['x']
-            obj.rotation_quaternion.y = rotation_quaternion['y']
-            obj.rotation_quaternion.z = rotation_quaternion['z']
+    obj.location.x = location['x']
+    obj.location.y = location['y']
+    obj.location.z = location['z']
 
+    obj.rotation_quaternion.w = rotation_quaternion['w']
+    obj.rotation_quaternion.x = rotation_quaternion['x']
+    obj.rotation_quaternion.y = rotation_quaternion['y']
+    obj.rotation_quaternion.z = rotation_quaternion['z']
+    # for obj in target_col.all_objects:
+    #     # print("name: " + obj.name + "     type: " + obj.type)
+    #     #TODO: fix object types
+    #     if obj.type == 'MESH':
+    #         obj.location.x = location['x']
+    #         obj.location.y = location['y']
+    #         obj.location.z = location['z']
+
+    #         obj.rotation_quaternion.w = rotation_quaternion['w']
+    #         obj.rotation_quaternion.x = rotation_quaternion['x']
+    #         obj.rotation_quaternion.y = rotation_quaternion['y']
+    #         obj.rotation_quaternion.z = rotation_quaternion['z']
+
+def move_kadcar(location, rotation_quaternion):
+    obj = bpy.data.objects['Kadcar_Empty']
+
+    obj.location.x = location['x']
+    obj.location.y = location['y']
+    obj.location.z = location['z']
+
+    obj.rotation_quaternion.w = rotation_quaternion['w']
+    obj.rotation_quaternion.x = rotation_quaternion['x']
+    obj.rotation_quaternion.y = rotation_quaternion['y']
+    obj.rotation_quaternion.z = rotation_quaternion['z']
 
 #Creates light object using given light metadata and adds it to the scene
 def create_area_light_object(light_metadata):
@@ -175,7 +198,6 @@ def select_all_objects_in_collection(collection):
         for view_layer in scene.view_layers:
             for o in view_layer.objects:
                 if o.users_collection[0].name == collection.name:
-                    print(o.users_collection[0].name)
                     o.select_set(True)
 
 def get_objects_from_collection_by_names(collection, name_list):
@@ -209,6 +231,7 @@ def export_scene_as_gltf(output_file, export_all=True):
         export_tangents=True,
         export_materials='EXPORT',
         export_colors=True,
+        export_cameras=export_all
         #TODO: bpy version
         # use_mesh_edges=True,
         # use_mesh_vertices=True,
