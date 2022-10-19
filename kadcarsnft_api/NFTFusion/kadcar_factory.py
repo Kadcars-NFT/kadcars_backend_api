@@ -52,8 +52,7 @@ def colorize_kadcar(part_name, colorset, material_name):
             bpy.context.collection.objects.link(template_object)
 
 def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='glb'):
-    # material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
-    material_list = ['steel']
+    material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
     dirname = os.path.dirname(__file__)
     # material_file = os.path.join(dirname, 'assets/material_spheres.glb')
     material_file = os.path.join(dirname, 'assets/material_spheres_new.glb')
@@ -63,18 +62,34 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
 
     glb_file_names = []
 
+    count = {
+        'steel' : 0,
+        'metallic': 0,
+        'matte': 0,
+        'grainy1': 0,
+        'darker': 0,
+        'standard': 0
+    }
+
     for obj in materials_collection.all_objects:
         if obj.type == 'MESH':
             print(obj.name)
-            if obj.name.split('.')[0] not in material_list:
+            material_type = obj.name.split('.')[0]
+            
+            if material_type not in material_list:
                 continue
+
+            if material_type in count.keys():
+                if count[material_type] == 2:
+                    continue
+                count[material_type] += 1
 
             file_name = kc_name.split(".")[0] + obj.name.split('.')[0] + obj.name.split('.')[1] + '.' + format
             transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
             select_only_objects_in_collection(kadcar_collection)
             export_scene_as_gltf(os.path.join(dirname, 'assets/with_shading/' + file_name), export_all=False)
             glb_file_names.append(file_name)
-    
+
     return glb_file_names
 
 def add_rims_to_kadcar(kadcar_gltf_path, rim_gltf_path):

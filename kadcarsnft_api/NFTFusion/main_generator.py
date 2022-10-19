@@ -15,7 +15,7 @@ path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 #take x base car glbs
 base_car_glbs = [
-    "01.glb"
+    "00.glb"
 ]
 
 rims_glbs = [
