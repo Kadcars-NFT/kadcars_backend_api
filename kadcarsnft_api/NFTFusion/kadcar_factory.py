@@ -7,6 +7,7 @@ from shader_utils import transfer_materials
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
 from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json
+from numba import jit
 
 #Method to add color to specified portion of kadcar
 def colorize_kadcar(part_name, colorset, material_name):
@@ -51,8 +52,10 @@ def colorize_kadcar(part_name, colorset, material_name):
             template_object.active_material = material
             bpy.context.collection.objects.link(template_object)
 
+@jit
 def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='glb'):
-    material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
+    # material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
+    material_list = ['darker']
     dirname = os.path.dirname(__file__)
     # material_file = os.path.join(dirname, 'assets/material_spheres.glb')
     material_file = os.path.join(dirname, 'assets/material_spheres_new.glb')
@@ -63,12 +66,12 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
     glb_file_names = []
 
     count = {
-        'steel' : 0,
-        'metallic': 0,
-        'matte': 0,
-        'grainy1': 0,
-        'darker': 0,
-        'standard': 0
+        # 'steel' : 0,
+        # 'metallic': 0,
+        # 'matte': 0,
+        # 'grainy1': 0,
+        # 'darker': 0,
+        # 'standard': 0
     }
 
     for obj in materials_collection.all_objects:
@@ -80,8 +83,8 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
                 continue
 
             if material_type in count.keys():
-                if count[material_type] == 2:
-                    continue
+                # if count[material_type] == 1:
+                #     continue
                 count[material_type] += 1
 
             file_name = kc_name.split(".")[0] + obj.name.split('.')[0] + obj.name.split('.')[1] + '.' + format
