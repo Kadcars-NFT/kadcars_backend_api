@@ -3,21 +3,21 @@
         {
             "align": "WORLD",
             "location": [
-                5,
-                5,
-                5
+                -1.77322,
+                2.1682,
+                0.931429
             ],
-            "rotation": [
-                0,
-                0,
-                0
+            "rotation_euler": [
+                34.8531,
+                -80.3952,
+                -68.9819
             ],
             "scale": [
-                0.683125,
-                2.105,
-                0.683
+                1.47355,
+                1.91066,
+                1.63659
             ],
-            "energy": 1000,
+            "energy": 100,
             "color": [
                 1,
                 1,
@@ -28,7 +28,9 @@
             "volume_factor": 1.0,
             "shape": "RECTANGLE",
             "size": 0.25,
-            "size_y": 0.25
+            "size_y": 0.25,
+            "name": "cam_area_light",
+            "type": "AREA"
         }
     ]
 }

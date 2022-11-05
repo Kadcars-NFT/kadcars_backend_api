@@ -1,0 +1,90 @@
+{
+    "purple": {
+        "rims": "steel_darkgray",
+        "seats": "lightgray",
+        "emblem": "black",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "green": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "red": {
+        "rims": "",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "gold": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "orange": {
+        "rims": "matte_black",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "blue": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "darkgray": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "cyan": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "pink": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "lightgray": {
+        "rims": "steel_darkgray",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    },
+    "black": {
+        "rims": "",
+        "seats": "",
+        "emblem": "",
+        "grill_outer": "",
+        "grill_inner": "",
+        "hood_trim": ""
+    }
+}

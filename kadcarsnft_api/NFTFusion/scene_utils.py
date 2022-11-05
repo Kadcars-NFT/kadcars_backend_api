@@ -1,6 +1,7 @@
 import bpy
 import json
 import os
+from io_utils import extract_data_from_json
 
 #Cleans up scene by deleting all objects
 def delete_all_objects():
@@ -38,34 +39,9 @@ def set_car_location_in_scene(filepath, location, rotation_quaternion):
     # move_collection_to_location('kadcar', location, rotation_quaternion)
     move_kadcar(location, rotation_quaternion)
 
-def move_collection_to_location(collection_name, location, rotation_quaternion):
-    target_col = bpy.data.collections[collection_name]
-    obj = bpy.data.objects['Kadcar_Empty']
-
-    obj.location.x = location['x']
-    obj.location.y = location['y']
-    obj.location.z = location['z']
-
-    obj.rotation_quaternion.w = rotation_quaternion['w']
-    obj.rotation_quaternion.x = rotation_quaternion['x']
-    obj.rotation_quaternion.y = rotation_quaternion['y']
-    obj.rotation_quaternion.z = rotation_quaternion['z']
-    # for obj in target_col.all_objects:
-    #     # print("name: " + obj.name + "     type: " + obj.type)
-    #     #TODO: fix object types
-    #     if obj.type == 'MESH':
-    #         obj.location.x = location['x']
-    #         obj.location.y = location['y']
-    #         obj.location.z = location['z']
-
-    #         obj.rotation_quaternion.w = rotation_quaternion['w']
-    #         obj.rotation_quaternion.x = rotation_quaternion['x']
-    #         obj.rotation_quaternion.y = rotation_quaternion['y']
-    #         obj.rotation_quaternion.z = rotation_quaternion['z']
-
 def move_kadcar(location, rotation_quaternion):
     obj = bpy.data.objects['Kadcar_Empty']
-
+    print(obj.name)
     obj.location.x = location['x']
     obj.location.y = location['y']
     obj.location.z = location['z']
@@ -74,6 +50,8 @@ def move_kadcar(location, rotation_quaternion):
     obj.rotation_quaternion.x = rotation_quaternion['x']
     obj.rotation_quaternion.y = rotation_quaternion['y']
     obj.rotation_quaternion.z = rotation_quaternion['z']
+    print(obj.location)
+    print(obj.rotation_quaternion)
 
 #Creates light object using given light metadata and adds it to the scene
 def create_area_light_object(light_metadata):
@@ -134,7 +112,7 @@ def apply_hdri(hdri):
 def import_background_into_scene(filepath, collection_name, hdri=None):
     deselect_all_scene_objects()
     import_scene_into_collection(filepath, collection_name)
-    set_scene_camera(cam_name="Camera_Orientation")
+    set_scene_camera(cam_name="Camera")
 
     if hdri:
         apply_hdri(hdri)
@@ -163,19 +141,39 @@ def apply_changes_to_scene_camera(camera_metadata):
 def add_new_camera_to_scene(camera_metadata):
     pass
 
-def delete_objects_from_collection_name(collection_name):
-    select_only_objects_in_collection_name(collection_name)
-    bpy.ops.object.delete()
+def relink_collection(src_collection_name, dest_collection_name):
+    src_collection = bpy.data.collections[src_collection_name]
+    dest_collection = bpy.data.collections[dest_collection_name]
 
-def delete_objects_from_collection(collection):
-    select_only_objects_in_collection(collection)
-    bpy.ops.object.delete()
+    for o in src_collection.all_objects:
+        dest_collection.objects.link(o)
+        src_collection.objects.unlink(o)
 
 def delete_all_objects_in_scene():
+    bpy.ops.outliner.orphans_purge()
     bpy.ops.object.select_all(action='SELECT')
+    delete_and_unlink()
+    
+    # for collection in bpy.data.collections:
+    #     if collection != "Collection":
+    #         bpy.data.collections.remove(collection)
+    # bpy.ops.object.delete()
+
+def delete_objects_from_collection_name(collection_name):
+    bpy.ops.outliner.orphans_purge()
+    select_only_objects_in_collection_name(collection_name)
+    delete_and_unlink()
+    # bpy.ops.object.delete()
+
+def delete_objects_from_collection(collection):
+    bpy.ops.outliner.orphans_purge()
+    select_only_objects_in_collection(collection)
+    delete_and_unlink()
+    # bpy.ops.object.delete()
+
+def delete_and_unlink():
     for o in bpy.context.selected_objects:
         bpy.data.objects.remove(o, do_unlink=True)
-    # bpy.ops.object.delete()
 
 def select_only_objects_in_collection_name(collection_name):
     collection = bpy.data.collections[collection_name]
@@ -190,6 +188,12 @@ def deselect_all_scene_objects():
     # for ob in bpy.context.selected_objects:
     #     ob.select_set(False)
     bpy.ops.object.select_all(action='DESELECT')
+
+def select_all_objects_in_scene():
+    for scene in bpy.data.scenes:
+        for view_layer in scene.view_layers:
+            for o in view_layer.objects:
+                print(o.users_collection[0].name)
 
 def select_all_objects_in_collection(collection):
     # for obj in collection.all_objects:
@@ -215,6 +219,23 @@ def parenting_object(parent_object, child_object):
     bpy.context.view_layer.objects.active = parent_object
     bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
 
+def add_lights_to_scene(lights_config, file_prefix):
+    lights_data = extract_data_from_json(os.path.join(file_prefix, lights_config))
+    lights = lights_data["lights"]
+
+    for light in lights:
+        name = light["name"]
+        light_data = bpy.data.lights.new(name=name, type=light["type"])
+        light_data.energy = light["energy"]
+
+        light_object = bpy.data.objects.new(name=name+'_obj', object_data=light_data)
+
+        bpy.context.collection.objects.link(light_object)
+
+        light_object.location = light["location"]
+        light_object.rotation_euler = light["rotation_euler"]
+        light_object.scale = light["scale"]
+
 def export_scene_as_gltf(output_file, export_all=True):
     filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
     # filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
@@ -231,8 +252,8 @@ def export_scene_as_gltf(output_file, export_all=True):
         export_tangents=True,
         export_materials='EXPORT',
         export_colors=True,
-        export_cameras=export_all
-        #TODO: bpy version
+        export_cameras=export_all,
+        export_animations=False
         # use_mesh_edges=True,
         # use_mesh_vertices=True,
         # export_extras=True

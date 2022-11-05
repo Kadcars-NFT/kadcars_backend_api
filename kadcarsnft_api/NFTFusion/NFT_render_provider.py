@@ -1,6 +1,6 @@
 import os
 import bpy
-from scene_utils import set_car_location_in_scene, import_background_into_scene, delete_objects_from_collection_name
+from scene_utils import *
 from render_utils import configure_render_settings, set_render_output_settings
 from io_utils import *
 
@@ -34,4 +34,19 @@ def generate_kadcar_nft_with_background_gltf(path_to_asset_folder, kc_glb_name, 
 
     import_background_into_scene(bg_glb_path, 'background', hdr_file_path)
     
+    set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])
+
+def generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kc_gltf_name):
+    kc_glb_path = os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kc_gltf_name)
+    bg_glb_path = os.path.join(filepath_prefix, "backgrounds/" + kadcar_specs['Background'] + "_no_car.glb")
+    hdr_file_path = os.path.join(filepath_prefix, "hdr_files/" + kadcar_specs['Background'] + "_background.hdr")
+    bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
+
+    bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
+
+    # import_background_into_scene(bg_glb_path, 'background', hdr_file_path)
+    import_scene_into_collection(bg_glb_path, 'background')
+    set_scene_camera(cam_name="Camera")
+    if kadcar_specs['Background'] != 'cyber' or kadcar_specs['Background'] != 'storage':
+        apply_hdri(hdr_file_path)
     set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])

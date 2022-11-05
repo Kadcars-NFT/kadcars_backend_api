@@ -50,5 +50,7 @@ def transfer_materials(clean, src, tgt):
     for mat in src.data.materials:
         tgt.data.materials.append(mat)
 
-def add_material():
-    pass
+def get_material_for_given_car_part(kadcar_specs, part):
+    primary_color = kadcar_specs['Material']
+    material = extract_json_attribute_data('color_groupings.json', primary_color)[part]
+    return material
