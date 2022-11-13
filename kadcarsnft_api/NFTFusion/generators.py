@@ -3,7 +3,7 @@ import bpy
 import os
 from kadcar_factory import *
 from scene_utils import *
-from io_utils import extract_data_from_json, extract_json_attribute_data
+from io_utils import *
 from NFT_render_provider import *
 import pandas as pd
 
@@ -32,20 +32,24 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         kc_gltf_full_path = os.path.join(filepath_prefix, "kadcars/" + kadcar_specs['Kadcar'] + '.glb')
         spoiler_gltf_full_path = os.path.join(filepath_prefix, "spoilers/" + kadcar_specs['Spoiler'] + '.glb')
         
-        import_scene_into_collection(kc_gltf_full_path, 'kadcar')
-        add_rims_to_kadcar(rim_gltf_full_path)
-        add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
-        
-        parts_to_colorize = extract_json_attribute_data('colorize.json', str('colorize-' + kadcar_specs['Kadcar']))
-        add_material_and_colorize_components(filepath_prefix, parts_to_colorize, str(kadcar_specs['Material'] + "_" + kadcar_specs['Color']))
-        
-        nft_file_name = build_car_metadata(kadcar_specs)
+        nft_file_name, kadcar_metadata = build_car_metadata(kadcar_specs)
         kadcar_export_file_name = nft_file_name + "_car.glb"
         nft_export_file_name = nft_file_name + "_nft.glb"
         nft_render_file_name = nft_file_name + "_render"
 
+        #Import kadcar and add parts
+        import_scene_into_collection(kc_gltf_full_path, 'kadcar')
+        add_rims_to_kadcar(rim_gltf_full_path)
+        add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
+        
+        #Add color and materials to car parts
+        # parts_to_colorize = extract_json_attribute_data('colorize.json', str('colorize-' + kadcar_specs['Kadcar']))
+        # add_material_and_colorize_components(filepath_prefix, parts_to_colorize, str(kadcar_specs['Material'] + "_" + kadcar_specs['Color']))
+        kadcar_metadata = add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_metadata)
+
         #Export car model
         select_only_objects_in_collection_name("kadcar")
+        export_dictionary_to_json(kadcar_metadata, "metadata_json/" + nft_file_name)
         export_scene_as_gltf(os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name), export_all=False)
         delete_all_objects_in_scene()
 
@@ -53,9 +57,10 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kadcar_export_file_name)
         export_scene_as_gltf(os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_export_file_name))
 
-        # #Render and clear
+        #Render and clear
         generate_render_for_nft(os.path.join(filepath_prefix, "completed_renders/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_render_file_name))
         delete_all_objects_in_scene()
+
 
 def generate_render_for_nft(destination_file):
     configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)

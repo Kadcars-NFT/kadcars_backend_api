@@ -1,6 +1,7 @@
 import bpy
 from kadcar_factory import *
 from scene_utils import *
+from io_utils import *
 
 def shading_orchestrator(car_collection, materials_file, format='glb'):
     f = open('colorize.json')
@@ -51,6 +52,6 @@ def transfer_materials(clean, src, tgt):
         tgt.data.materials.append(mat)
 
 def get_material_for_given_car_part(kadcar_specs, part):
-    primary_color = kadcar_specs['Material']
+    primary_color = kadcar_specs['Color']
     material = extract_json_attribute_data('color_groupings.json', primary_color)[part]
     return material

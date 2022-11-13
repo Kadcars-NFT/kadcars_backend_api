@@ -1,51 +1,83 @@
 {
-    "colorize-k2": [
-        "Plane014.002",
-        "Object004.002",
-        "Object136.002",
-        "Object130.002",
-        "Object083.002",
-        "Object105.002",
-        "Object128.002",
-        "Object113.002",
-        "Object111.002",
-        "Object001.004"
-    ],
-    "colorize-k2p": [
-        "Plane014.002",
-        "Object004.002",
-        "Object136.002",
-        "Object083.002",
-        "Object105.002",
-        "Object113.002",
-        "Object111.002",
-        "Object001.004"
-    ],
-    "emblem": [
-        "Object117.002"
-    ],
-    "headlights": [
-        "Box007.002",
-        "Box008.002",
-        "Box009.002",
-        "Box010.002"
-    ],
-    "rims": [
-        "rim_front_right",
-        "rim_back_right",
-        "rim_front_left",
-        "rim_back_right"
-    ],
-    "seats": [
-        "Object001.001"
-    ],
-    "hood_trim": [
-        "Shape001.002"
-    ],
-    "grill_outer": [
-        "Plane025.002"
-    ],
-    "grill_inner": [
-        "Line028.002"
-    ]
+    "independent": {
+        "colorize-k2": [
+            "Plane014.002",
+            "Object004.002",
+            "Object136.002",
+            "Object130.002",
+            "Object083.002",
+            "Object105.002",
+            "Object128.002",
+            "Object113.002",
+            "Object111.002",
+            "Object001.004"
+        ],
+        "colorize-k2p": [
+            "Plane014.002",
+            "Object004.002",
+            "Object136.002",
+            "Object083.002",
+            "Object105.002",
+            "Object113.002",
+            "Object111.002",
+            "Object001.004"
+        ],
+        "headlights": [
+            "Box007.002",
+            "Box008.002",
+            "Box009.002",
+            "Box010.002"
+        ],
+        "trim": [
+            "Plane003.002",
+            "Box020.002",
+            "Box012.002",
+            "Box013.002"
+        ]
+    },
+    "dependent": {
+        "emblem": {
+            "component": "body",
+            "objects": [
+                "Object117.002"
+            ]
+        },
+        "seats": {
+            "component": "body",
+            "objects": [
+                "Object001.001"
+            ]
+        },
+        "hood-trim": {
+            "component": "body",
+            "objects": [
+                "Shape001.002"
+            ]
+        },
+        "grill-outer": {
+            "component": "body",
+            "objects": [
+                "Object098.002"
+            ]
+        },
+        "grill-inner": {
+            "component": "body",
+            "objects": [
+                "Plane025.002"
+            ]
+        },
+        "rim": {
+            "component": "wheel",
+            "objects": [
+                "rim_front_right",
+                "rim_back_right",
+                "rim_front_left",
+                "rim_back_right",
+                "Cylinder001.001",
+                "Cylinder001.002",
+                "Cylinder001.003",
+                "Cylinder001.004"
+            ]
+        }
+    }
 }

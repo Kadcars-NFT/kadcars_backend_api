@@ -18,3 +18,8 @@ def extract_json_attribute_data(json_file, attribute):
 def extract_json_keys(json_file):
     keys = extract_data_from_json(json_file).keys()
     return keys
+
+def export_dictionary_to_json(dictionary, output):
+    dirname = os.path.dirname(__file__)
+    with open(os.path.join(dirname, output + ".json"), "w") as outfile:
+        json.dump(dictionary, outfile)
