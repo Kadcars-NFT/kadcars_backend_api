@@ -21,5 +21,5 @@ def extract_json_keys(json_file):
 
 def export_dictionary_to_json(dictionary, output):
     dirname = os.path.dirname(__file__)
-    with open(os.path.join(dirname, output + ".json"), "w") as outfile:
+    with open(os.path.join(dirname, "json_config_files/" + output + ".json"), "w") as outfile:
         json.dump(dictionary, outfile)
