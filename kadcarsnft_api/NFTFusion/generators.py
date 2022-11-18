@@ -40,7 +40,16 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         #Import kadcar and add parts
         import_scene_into_collection(kc_gltf_full_path, 'kadcar')
         add_rims_to_kadcar(rim_gltf_full_path)
-        add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
+
+        if kadcar_specs['Kadcar'] == "k2":
+            add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
+        else:
+            headlight_file = "headlight_1"
+            if kadcar_specs['Spoiler'] == 'spoiler_2':
+                headlight_file = "headlight_2"
+
+            headlight_gltf_full_path = os.path.join(filepath_prefix, "headlight/" + headlight_file + '.glb')
+            add_headlight_to_pickup(kadcar_specs, headlight_gltf_full_path)
         
         #Add color and materials to car parts
         # parts_to_colorize = extract_json_attribute_data('colorize.json', str('colorize-' + kadcar_specs['Kadcar']))

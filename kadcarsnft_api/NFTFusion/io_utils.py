@@ -2,10 +2,7 @@ import os
 import json
 
 def extract_data_from_json(json_file):
-    dirname = os.path.dirname(__file__)
-    json_path = os.path.join(dirname, json_file)
-
-    f = open(json_path)
+    f = open(json_file)
     data = json.load(f)
     f.close()
 
@@ -21,5 +18,17 @@ def extract_json_keys(json_file):
 
 def export_dictionary_to_json(dictionary, output):
     dirname = os.path.dirname(__file__)
-    with open(os.path.join(dirname, "json_config_files/" + output + ".json"), "w") as outfile:
+    with open(os.path.join(dirname, output + ".json"), "w") as outfile:
         json.dump(dictionary, outfile)
+
+def remove_dir_at_path(dir_path):
+    if os.path.exists(dir_path):
+        os.rmdir(dir_path)
+        return True
+    return False
+
+def create_dir_at_path(dir_path):
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+        return True
+    return False

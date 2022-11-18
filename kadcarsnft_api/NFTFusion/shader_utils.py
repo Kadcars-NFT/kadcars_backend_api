@@ -52,6 +52,7 @@ def transfer_materials(clean, src, tgt):
         tgt.data.materials.append(mat)
 
 def get_material_for_given_car_part(kadcar_specs, part):
+    dirname = os.path.dirname(__file__)
     primary_color = kadcar_specs['Color']
-    material = extract_json_attribute_data('color_groupings.json', primary_color)[part]
+    material = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/color_groupings.json'), primary_color)[part]
     return material

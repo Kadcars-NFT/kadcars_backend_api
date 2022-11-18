@@ -54,11 +54,12 @@ def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format=
 
 def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_metadata):
     #Add material spheres to scene
+    dirname = os.path.dirname(__file__)
     material_list = ["matte", "steel", "chrome", "metallic", "glossy"]
     material_file = os.path.join(filepath_prefix, 'material_gltfs/material_spheres_new.glb')
     import_scene_into_collection(material_file, 'materials')
 
-    colorize_data = extract_data_from_json('colorize.json')
+    colorize_data = extract_data_from_json(os.path.join(dirname, 'json_config_files/colorize.json'))
     primary_color_independent = colorize_data["independent"]
     primary_color_dependent = colorize_data["dependent"]
 
@@ -89,7 +90,6 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
 
         if material_name == "default":
             continue
-        
         add_material_and_colorize_components(filepath_prefix, components_to_colorize, material_name)
     
     return kadcar_metadata
@@ -102,10 +102,10 @@ def add_material_and_colorize_components(filepath_prefix, car_part_objects, mate
 def add_rims_to_kadcar(rim_gltf_path):
     import_scene_into_collection(rim_gltf_path, 'rims')
     
-    # dirname = os.path.dirname(__file__)
     # car_parts_json = os.path.join(dirname, 'car_parts.json')
     # rim_object_names = extract_data_from_json(car_parts_json)['rims']
-    rim_object_names = extract_json_attribute_data('car_parts.json', 'rims')
+    dirname = os.path.dirname(__file__)
+    rim_object_names = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/car_parts.json'), 'rims')
     deselect_all_scene_objects()
 
     old_names = []
@@ -132,14 +132,13 @@ def add_rims_to_kadcar(rim_gltf_path):
     relink_collection('rims', 'kadcar')
 
 def add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_path):
+    dirname = os.path.dirname(__file__)
     if kadcar_specs['Kadcar'] == 'k2p':
         return
 
     import_scene_into_collection(spoiler_gltf_path, 'spoilers')
 
-    dirname = os.path.dirname(__file__)
-    car_parts_json = os.path.join(dirname, 'car_parts.json')
-    spoiler_obj_name = extract_data_from_json(car_parts_json)['spoiler']
+    spoiler_obj_name = extract_data_from_json(os.path.join(dirname, 'json_config_files/car_parts.json'))['spoiler']
 
     deselect_all_scene_objects()
     old_names = []
@@ -156,6 +155,29 @@ def add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_path):
 
     deselect_all_scene_objects()
     relink_collection('spoilers', 'kadcar')
+
+def add_headlight_to_pickup(kadcar_specs, headlight_gltf_path):
+    dirname = os.path.dirname(__file__)
+
+    import_scene_into_collection(headlight_gltf_path, 'headlight')
+
+    headlight_obj_name = extract_data_from_json(os.path.join(dirname, 'json_config_files/car_parts.json'))['headlight']
+
+    deselect_all_scene_objects()
+    old_names = []
+    for spoiler_name in headlight_obj_name:
+        print(spoiler_name)
+        old_names.append(spoiler_name)
+        spoiler = bpy.data.objects[spoiler_name]
+        spoiler.select_set(True)
+        bpy.data.objects.remove(spoiler, do_unlink=True)
+        bpy.ops.outliner.orphans_purge()
+
+    place_object(False, False, 'Kadcar_Empty', 'headlight.001')
+    rename_object_in_scene('headlight.001', 'headlight')
+
+    deselect_all_scene_objects()
+    relink_collection('headlight', 'kadcar')
 
 def place_object(should_transfer_w_materials, should_clear_old_materials, dest_group_object_name, target_name):
     dest_group_object = bpy.data.objects.get(dest_group_object_name)
@@ -207,6 +229,7 @@ def replace_object(should_transfer_w_materials, should_clear_old_materials, dest
         transfer_materials(should_clear_old_materials, dest_group_object, target_object)
 
 def build_car_metadata(kadcar_specs):
+    dirname = os.path.dirname(__file__)
     component_list = ["body", "rim", "engine", "spoiler"]
     kadcar_export_file_name = str(
         kadcar_specs['Kadcar'] + "_" + kadcar_specs['Rim'] + "_" +
@@ -224,7 +247,7 @@ def build_car_metadata(kadcar_specs):
             }
         ]
     }),
-    kadcar_metadata = extract_data_from_json("kc_metadata.json")["components"]
+    kadcar_metadata = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))["components"]
 
     if kadcar_specs['Kadcar'] == "k2":
         # spoiler_meta[0]["stats"][0]["val"] = kadcar_specs['Spoiler']
