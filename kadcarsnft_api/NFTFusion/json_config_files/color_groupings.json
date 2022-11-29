@@ -86,5 +86,13 @@
         "grill-outer": "matte-black",
         "grill-inner": "metallic-black",
         "hood-trim": "matte-black"
+    },
+    "white": {
+        "rim": "metallic-black",
+        "seats": "default",
+        "emblem": "metallic-black",
+        "grill-outer": "matte-black",
+        "grill-inner": "metallic-black",
+        "hood-trim": "matte-black"
     }
 }

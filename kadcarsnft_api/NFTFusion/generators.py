@@ -32,10 +32,10 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         kc_gltf_full_path = os.path.join(filepath_prefix, "kadcars/" + kadcar_specs['Kadcar'] + '.glb')
         spoiler_gltf_full_path = os.path.join(filepath_prefix, "spoilers/" + kadcar_specs['Spoiler'] + '.glb')
         
-        nft_file_name, kadcar_metadata = build_car_metadata(kadcar_specs)
-        kadcar_export_file_name = nft_file_name + "_car.glb"
-        nft_export_file_name = nft_file_name + "_nft.glb"
-        nft_render_file_name = nft_file_name + "_render"
+        nft_name, kadcar_metadata = build_car_metadata(kadcar_specs)
+        kadcar_export_file_name = nft_name + "_car.glb"
+        nft_export_file_name = nft_name + "_nft.glb"
+        nft_render_file_name = nft_name + "_render"
 
         #Import kadcar and add parts
         import_scene_into_collection(kc_gltf_full_path, 'kadcar')
@@ -44,12 +44,12 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         if kadcar_specs['Kadcar'] == "k2":
             add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
         else:
-            headlight_file = "headlight_1"
+            clearance_light_file = "clearance_light_1"
             if kadcar_specs['Spoiler'] == 'spoiler_2':
-                headlight_file = "headlight_2"
+                clearance_light_file = "clearance_light_2"
 
-            headlight_gltf_full_path = os.path.join(filepath_prefix, "headlight/" + headlight_file + '.glb')
-            add_headlight_to_pickup(kadcar_specs, headlight_gltf_full_path)
+            clearance_light_gltf_full_path = os.path.join(filepath_prefix, "clearance_light/" + clearance_light_file + '.glb')
+            add_clearance_light_to_pickup(kadcar_specs, clearance_light_gltf_full_path)
         
         #Add color and materials to car parts
         # parts_to_colorize = extract_json_attribute_data('colorize.json', str('colorize-' + kadcar_specs['Kadcar']))
@@ -58,16 +58,20 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
 
         #Export car model
         select_only_objects_in_collection_name("kadcar")
-        export_dictionary_to_json(kadcar_metadata, "metadata_json/" + nft_file_name)
         export_scene_as_gltf(os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name), export_all=False)
         delete_all_objects_in_scene()
 
-        #Export full nft model
+        #Generate final gltf and export full nft model with metadata
         generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kadcar_export_file_name)
-        export_scene_as_gltf(os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_export_file_name))
+        nft_output_path = os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
+        if not os.path.exists(nft_output_path):
+            os.mkdir(nft_output_path)
+        export_scene_as_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name))
+        export_dictionary_to_json(kadcar_metadata, os.path.join(nft_output_path + "/" + nft_name))
 
         #Render and clear
-        generate_render_for_nft(os.path.join(filepath_prefix, "completed_renders/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_render_file_name))
+        # generate_render_for_nft(os.path.join(filepath_prefix, "completed_renders/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_render_file_name))
+        generate_render_for_nft(os.path.join(nft_output_path + "/" + nft_render_file_name))
         delete_all_objects_in_scene()
 
 

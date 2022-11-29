@@ -1,195 +1,304 @@
 {
-    "components": [
-        {
-            "name": "body",
-            "stats": [
-                {
-                    "key": "body-type",
-                    "val": ""
-                },
-                {
-                    "key": "body-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
+    "stats": {
+        "components": [
+            {
+                "name": "body",
+                "stats": [
+                    {
+                        "key": "body-type",
+                        "val": ""
+                    },
+                    {
+                        "key": "body-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "trim-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "hood-trim-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "grill-inner-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "grill-outer-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "seats-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "emblem-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "headlights-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "length",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "ground-to-roof",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "ground-clearance",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "wheel-base",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "center-width",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "hood-width",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "grill-width",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "rear-width",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "aerodynamic-factor",
+                        "val": {
+                            "value": 0.1,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "downforce",
+                        "val": {
+                            "value": 0.1,
+                            "unit": "%"
+                        }
                     }
-                },
-                {
-                    "key": "trim-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
+                ]
+            },
+            {
+                "name": "wheel",
+                "stats": [
+                    {
+                        "key": "wheel-type",
+                        "val": "offroad"
+                    },
+                    {
+                        "key": "rim-type",
+                        "val": ""
+                    },
+                    {
+                        "key": "rim-material",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "key": "width",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "diameter",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "rim-to-edge",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "lbs"
+                        }
+                    },
+                    {
+                        "key": "grip",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "braking-power",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "%"
+                        }
                     }
-                },
-                {
-                    "key": "hood-trim-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
+                ]
+            },
+            {
+                "name": "engine",
+                "stats": [
+                    {
+                        "key": "engine-type",
+                        "val": ""
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "lbs"
+                        }
+                    },
+                    {
+                        "key": "horse-power",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "hp"
+                        }
+                    },
+                    {
+                        "key": "size",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "liters"
+                        }
+                    },
+                    {
+                        "key": "fuel-consumption",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "mpg"
+                        }
                     }
-                },
-                {
-                    "key": "grill-inner-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
+                ]
+            },
+            {
+                "name": "derived-stats",
+                "stats": [
+                    {
+                        "key": "top-speed",
+                        "val": {
+                            "value": 0.0,
+                            "unit": ""
+                        }
+                    },
+                    {
+                        "key": "0-60",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "time"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "liters"
+                        }
+                    },
+                    {
+                        "key": "aerodynamic-factor",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "mpg"
+                        }
+                    },
+                    {
+                        "key": "downforce",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "mpg"
+                        }
                     }
-                },
-                {
-                    "key": "grill-outer-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
+                ]
+            },
+            {
+                "name": "background",
+                "stats": [
+                    {
+                        "key": "type",
+                        "val": ""
                     }
-                },
-                {
-                    "key": "seats-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
-                    }
-                },
-                {
-                    "key": "emblem-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
-                    }
-                },
-                {
-                    "key": "headlights-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
-                    }
-                },
-                {
-                    "key": "length",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "ground-to-roof",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "ground-clearance",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "wheel-base",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "weight",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "center-width",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "hood-width",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "grill-width",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "rear-width",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                }
-            ]
-        },
-        {
-            "name": "wheel",
-            "stats": [
-                {
-                    "key": "wheel-type",
-                    "val": "offroad"
-                },
-                {
-                    "key": "rim-type",
-                    "val": ""
-                },
-                {
-                    "key": "rim-material",
-                    "val": {
-                        "type": "",
-                        "id": ""
-                    }
-                },
-                {
-                    "key": "width",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "diameter",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "rim-to-edge",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "weight",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                }
-            ]
-        },
-        {
-            "name": "engine",
-            "stats": [
-                {
-                    "key": "weight",
-                    "val": {
-                        "value": 0.0,
-                        "unit": ""
-                    }
-                }
-            ]
-        }
-    ],
-    "backgrounds": [
-
-    ]
+                ]
+            }
+        ]
+    },
+    "view": {}
 }

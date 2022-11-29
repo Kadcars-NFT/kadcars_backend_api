@@ -79,14 +79,7 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
         components_to_colorize = primary_color_dependent[part]["objects"]
         material_name = get_material_for_given_car_part(kadcar_specs, part)
 
-        # for metadata in kadcar_metadata:
-        #     if metadata["name"] == primary_color_dependent[part]["component"]:
-        #         for stat in metadata["stats"]:
-        #             if stat["key"] == str(part + "-material"):
-        #                 if kadcar_specs['Material'] in material_list:
-        #                     stat["val"]["type"] = "material"
-        #                     stat["val"]["id"] = kadcar_specs['Material'] + "-" + kadcar_specs['Color']
-        update_visual_stat_in_metadata(kadcar_metadata, kadcar_specs, part, primary_color_dependent)
+        update_visual_stat_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, part, primary_color_dependent)
 
         if material_name == "default":
             continue
@@ -156,16 +149,16 @@ def add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_path):
     deselect_all_scene_objects()
     relink_collection('spoilers', 'kadcar')
 
-def add_headlight_to_pickup(kadcar_specs, headlight_gltf_path):
+def add_clearance_light_to_pickup(kadcar_specs, clearance_light_gltf_path):
     dirname = os.path.dirname(__file__)
 
-    import_scene_into_collection(headlight_gltf_path, 'headlight')
+    import_scene_into_collection(clearance_light_gltf_path, 'clearance_light')
 
-    headlight_obj_name = extract_data_from_json(os.path.join(dirname, 'json_config_files/car_parts.json'))['headlight']
+    clearance_light_obj_name = extract_data_from_json(os.path.join(dirname, 'json_config_files/car_parts.json'))['clearance_light']
 
     deselect_all_scene_objects()
     old_names = []
-    for spoiler_name in headlight_obj_name:
+    for spoiler_name in clearance_light_obj_name:
         print(spoiler_name)
         old_names.append(spoiler_name)
         spoiler = bpy.data.objects[spoiler_name]
@@ -173,11 +166,11 @@ def add_headlight_to_pickup(kadcar_specs, headlight_gltf_path):
         bpy.data.objects.remove(spoiler, do_unlink=True)
         bpy.ops.outliner.orphans_purge()
 
-    place_object(False, False, 'Kadcar_Empty', 'headlight.001')
-    rename_object_in_scene('headlight.001', 'headlight')
+    place_object(False, False, 'Kadcar_Empty', 'clearance_light.001')
+    rename_object_in_scene('clearance_light.001', 'clearance_light')
 
     deselect_all_scene_objects()
-    relink_collection('headlight', 'kadcar')
+    relink_collection('clearance_light', 'kadcar')
 
 def place_object(should_transfer_w_materials, should_clear_old_materials, dest_group_object_name, target_name):
     dest_group_object = bpy.data.objects.get(dest_group_object_name)
@@ -244,22 +237,47 @@ def build_car_metadata(kadcar_specs):
             {
                 "key": "spoiler-type",
                 "val": ""
+            },
+            {
+                "key": "handling",
+                "val": {
+                    "value": "",
+                    "unit": ""
+                }
+            },
+            {
+                "key": "downforce",
+                "val": {
+                    "value": "",
+                    "unit": ""
+                }
+            },
+            {
+                "key": "aerodynamic-factor",
+                "val": {
+                    "value": "",
+                    "unit": ""
+                }
             }
         ]
-    }),
-    kadcar_metadata = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))["components"]
+    })
+
+    kadcar_metadata_json = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))
+    kadcar_metadata_components = kadcar_metadata_json["stats"]["components"]
 
     if kadcar_specs['Kadcar'] == "k2":
         # spoiler_meta[0]["stats"][0]["val"] = kadcar_specs['Spoiler']
-        update_metadata_stat(kadcar_metadata, "spoiler", "spoiler-type", kadcar_specs['Spoiler'])
-        kadcar_metadata.append(spoiler_meta[0])
+        kadcar_metadata_components.append(spoiler_meta)
+        update_metadata_stat(kadcar_metadata_components, "spoiler", "spoiler-type", kadcar_specs['Spoiler'])
+        print(spoiler_meta)
 
-    update_metadata_stat(kadcar_metadata, "body", "body-type", kadcar_specs['Kadcar'])
-    update_metadata_stat(kadcar_metadata, "wheel", "rim-type", kadcar_specs['Rim'])
-    update_metadata_stat(kadcar_metadata, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + "-" + kadcar_specs['Color'] })
-    update_metadata_stat(kadcar_metadata, "trim", "trim-material", { "type": "material", "id": kadcar_specs['Trim'] })
+    update_metadata_stat(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
+    update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", kadcar_specs['Rim'])
+    update_metadata_stat(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + "-" + kadcar_specs['Color'] })
+    update_metadata_stat(kadcar_metadata_components, "trim", "trim-material", { "type": "material", "id": kadcar_specs['Trim'] })
 
-    return kadcar_export_file_name, kadcar_metadata
+    # return kadcar_export_file_name, kadcar_metadata
+    return kadcar_export_file_name, kadcar_metadata_json
 
 def update_metadata_stat(kadcar_metadata, primary, secondary, value):
     for metadata in kadcar_metadata:
@@ -268,10 +286,10 @@ def update_metadata_stat(kadcar_metadata, primary, secondary, value):
                 if stat["key"] == secondary:
                     stat["val"] = value
 
-def update_visual_stat_in_metadata(kadcar_metadata, kadcar_specs, part, source_dict):
+def update_visual_stat_in_metadata(kadcar_metadata_components, kadcar_specs, part, source_dict):
     material_list = ["matte", "steel", "chrome", "metallic", "glossy"]
 
-    for metadata in kadcar_metadata:
+    for metadata in kadcar_metadata_components:
         if metadata["name"] == source_dict[part]["component"]:
             for stat in metadata["stats"]:
                 if stat["key"] == str(part + "-material"):
