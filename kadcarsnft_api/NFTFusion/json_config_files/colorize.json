@@ -13,57 +13,44 @@
             "Object001.004"
         ],
         "colorize-k2p": [
-            "Plane014.002",
-            "Object004.002",
-            "Object136.002",
-            "Object083.002",
-            "Object105.002",
-            "Object113.002",
-            "Object111.002",
-            "Object001.004"
+            "Car_Body"
         ],
         "headlights": [
-            "Box007.002",
-            "Box008.002",
-            "Box009.002",
-            "Box010.002"
+            "Headlights"
         ],
         "trim": [
-            "Plane003.002",
-            "Box020.002",
-            "Box012.002",
-            "Box013.002"
+            "Car_Trim"
         ]
     },
     "dependent": {
         "emblem": {
             "component": "body",
             "objects": [
-                "Object117.002"
+                "Emblem"
             ]
         },
         "seats": {
             "component": "body",
             "objects": [
-                "Object001.001"
+                "Seat"
             ]
         },
         "hood-trim": {
             "component": "body",
             "objects": [
-                "Shape001.002"
+                "Hood_trim"
             ]
         },
         "grill-outer": {
             "component": "body",
             "objects": [
-                "Object098.002"
+                "Grill_Outer"
             ]
         },
         "grill-inner": {
             "component": "body",
             "objects": [
-                "Plane025.002"
+                "Grill_Inner"
             ]
         },
         "rim": {
@@ -73,10 +60,10 @@
                 "rim_back_right",
                 "rim_front_left",
                 "rim_back_right",
-                "Cylinder001.001",
-                "Cylinder001.002",
-                "Cylinder001.003",
-                "Cylinder001.004"
+                "Cylinder_FL",
+                "Cylinder_FR",
+                "Cylinder_RL",
+                "Cylinder_RR"
             ]
         }
     }

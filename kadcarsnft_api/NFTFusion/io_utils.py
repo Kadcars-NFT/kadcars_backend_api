@@ -1,12 +1,16 @@
 import os
 import json
+import shutil
 
 def extract_data_from_json(json_file):
-    f = open(json_file)
-    data = json.load(f)
-    f.close()
-
-    return data
+    try:
+        f = open(json_file)
+        data = json.load(f)
+        f.close()
+        return data
+    except FileNotFoundError:
+        print("Requested file does not exist")
+        return None
 
 def extract_json_attribute_data(json_file, attribute):
     attribute_data = extract_data_from_json(json_file)[attribute]
@@ -23,7 +27,8 @@ def export_dictionary_to_json(dictionary, output):
 
 def remove_dir_at_path(dir_path):
     if os.path.exists(dir_path):
-        os.rmdir(dir_path)
+        # os.rmdir(dir_path)
+        shutil.rmtree(dir_path.encode('unicode_escape'))
         return True
     return False
 
