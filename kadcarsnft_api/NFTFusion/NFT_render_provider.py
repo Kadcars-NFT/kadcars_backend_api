@@ -48,5 +48,9 @@ def generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kc_gl
     import_scene_into_collection(bg_glb_path, 'background')
     set_scene_camera(cam_name="Camera")
     if kadcar_specs['Background'] != 'cyber':
-        apply_hdri(hdr_file_path)
+        if kadcar_specs['Background'] == 'snow':
+            customize_world_shader_nodes(hdr_file_path, 'SKY')
+        else:
+            customize_world_shader_nodes(hdr_file_path, 'HDRI')
+            
     set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])

@@ -28,7 +28,7 @@ delete_all_objects_in_scene()
 # for metadata in data["components"]:
 #     print(metadata['name'])
 # shutil.rmtree(r"C:\\Users\\Mohannad Ahmad\\Desktop\\AppDev\\Crypto\\Kadena\\KadcarBackendApi\\kadcars_backend_api_local_bpy\\kadcars_backend_api\\kadcarsnft_api\\NFTFusion\\assets\\car_files\\k2_rims_2_spoiler_1_carbon_fiber_white_matte_beach")
-remove_dir_at_path("C:\\Users\\Mohannad Ahmad\\Desktop\\AppDev\\Crypto\\Kadena\\KadcarBackendApi\\kadcars_backend_api_local_bpy\\kadcars_backend_api\\kadcarsnft_api\\NFTFusion\\assets\\car_files\\test")
+# remove_dir_at_path("C:\\Users\\Mohannad Ahmad\\Desktop\\AppDev\\Crypto\\Kadena\\KadcarBackendApi\\kadcars_backend_api_local_bpy\\kadcars_backend_api\\kadcarsnft_api\\NFTFusion\\assets\\car_files\\test")
 #create kadcar glbs with customization
 # kc_glb_list = generate_kadcar_gltfs(materials_file, kadcar_file, 'glb')
 # kc_glb_list = [

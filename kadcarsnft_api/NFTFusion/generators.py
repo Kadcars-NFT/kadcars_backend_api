@@ -76,7 +76,7 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
 
 
 def generate_render_for_nft(destination_file):
-    configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
+    configure_render_settings('CYCLES', 'CUDA', 'CPU', 200, 50)
     set_render_output_settings(destination_file, 'WEBP', True)
 
 #####################################
@@ -149,7 +149,7 @@ def generate_renders_from_given_scenes(files_to_render, file_prefix, material_na
         import_scene_into_collection(filepath, 'scene')
         set_scene_camera(cam_name="Camera_Orientation")
         add_lights_to_scene("lights.json", os.path.dirname(__file__))
-        apply_hdri(os.path.join(file_prefix, "hdr_files/" + scene_name + "_background.hdr"))
+        customize_world_shader_nodes(os.path.join(file_prefix, "hdr_files/" + scene_name + "_background.hdr"))
         set_render_output_settings(output_filepath, 'WEBP', True)
         delete_all_objects_in_scene()
 

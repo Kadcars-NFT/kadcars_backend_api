@@ -55,4 +55,30 @@ def get_material_for_given_car_part(kadcar_specs, part):
     dirname = os.path.dirname(__file__)
     primary_color = kadcar_specs['Color']
     material = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/color_groupings.json'), primary_color)[part]
-    return material
+    return 
+
+def add_background_shader_node(tree_nodes):
+    node_background = tree_nodes.new(type='ShaderNodeBackground')
+    node_background.inputs['Strength'].default_value = 3.5
+
+def add_sky_texture_shader_node(tree_nodes, sky_type, sun_disc, sun_elevation, sun_rotation, air_density, dust_density, ozone_density):
+    sky_texture = tree_nodes.new('ShaderNodeTexSky')
+
+    sky_texture.sky_type = sky_type
+    sky_texture.sun_disc = sun_disc
+    sky_texture.sun_elevation = sun_elevation
+    sky_texture.sun_rotation = sun_rotation
+    sky_texture.air_density = air_density
+    sky_texture.dust_density = dust_density
+    sky_texture.ozone_density = ozone_density
+
+def add_mapping_shader_node(tree_nodes, vector_type, rotation):
+    mapping_node = tree_nodes.new('ShaderNodeMapping')
+
+    mapping_node.vector_type = vector_type
+    mapping_node.inputs["Rotation"].default_value = rotation
+
+def add_texture_coordinates_shader_node(tree_nodes, from_instancer):
+    tex_coord_node = tree_nodes.new('ShaderNodeTexCoord')
+
+    tex_coord_node.from_instancer = from_instancer

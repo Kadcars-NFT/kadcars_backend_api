@@ -14,15 +14,6 @@ dirname = os.path.dirname(__file__)
 path_to_assets_folder = os.path.join(dirname, 'assets')
 path_to_background_config = os.path.join(dirname, 'background_config_files')
 
-#take x base car glbs
-base_car_glbs = [
-    "00.glb"
-]
-
-rims_glbs = [
-    # "rim_skinny.glb"
-]
-
 #read csv file containing metadata
 metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
 

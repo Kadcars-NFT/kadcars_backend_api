@@ -35,7 +35,7 @@ bpy.context.scene.camera = obj_camera
 configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
 
 #Customize the kadcar and scene
-apply_hdri(os.path.join(path_to_glb_folder, 'bg.hdr'))
+customize_world_shader_nodes(os.path.join(path_to_glb_folder, 'bg.hdr'))
 # colorize_kadcar_and_render("body", "primary", "Material.069")
 
 rim_file = os.path.join(path_to_glb_folder, "rims_poc.glb")
