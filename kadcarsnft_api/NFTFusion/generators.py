@@ -26,8 +26,9 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
     delete_all_objects()
 
     for index, kadcar_specs in kc_spec_list.iterrows():
-        print(kadcar_specs)
-
+        bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
+        bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
+        
         rim_gltf_full_path = os.path.join(filepath_prefix, "rims/" + kadcar_specs['Rim'] + '.glb')
         kc_gltf_full_path = os.path.join(filepath_prefix, "kadcars/" + kadcar_specs['Kadcar'] + '.glb')
         spoiler_gltf_full_path = os.path.join(filepath_prefix, "spoilers/" + kadcar_specs['Spoiler'] + '.glb')
@@ -39,7 +40,7 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
 
         #Import kadcar and add parts
         import_scene_into_collection(kc_gltf_full_path, 'kadcar')
-        add_rims_to_kadcar(rim_gltf_full_path)
+        # add_rims_to_kadcar(rim_gltf_full_path)
 
         if kadcar_specs['Kadcar'] == "k2":
             add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
@@ -47,13 +48,12 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
             clearance_light_file = "clearance_light_1"
             if kadcar_specs['Spoiler'] == 'spoiler_2':
                 clearance_light_file = "clearance_light_2"
-
+            kadcar_specs['Spoiler'] = clearance_light_file
+            
             clearance_light_gltf_full_path = os.path.join(filepath_prefix, "clearance_light/" + clearance_light_file + '.glb')
             add_clearance_light_to_pickup(kadcar_specs, clearance_light_gltf_full_path)
         
         #Add color and materials to car parts
-        # parts_to_colorize = extract_json_attribute_data('colorize.json', str('colorize-' + kadcar_specs['Kadcar']))
-        # add_material_and_colorize_components(filepath_prefix, parts_to_colorize, str(kadcar_specs['Material'] + "_" + kadcar_specs['Color']))
         kadcar_metadata = add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_metadata)
 
         #Export car model
@@ -66,18 +66,18 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         nft_output_path = os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
         if not os.path.exists(nft_output_path):
             os.mkdir(nft_output_path)
-        export_scene_as_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name))
+        # export_scene_as_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name), True, 'GLTF_EMBEDDED')
+        # add_metadata_to_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name), build_background_metadata(bg_config_data), ".glb")
         export_dictionary_to_json(kadcar_metadata, os.path.join(nft_output_path + "/" + nft_name))
 
         #Render and clear
-        # generate_render_for_nft(os.path.join(filepath_prefix, "completed_renders/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_render_file_name))
-        generate_render_for_nft(os.path.join(nft_output_path + "/" + nft_render_file_name))
+        generate_render_for_nft(os.path.join(nft_output_path + "/" + nft_render_file_name), bg_config_data)
         delete_all_objects_in_scene()
 
 
-def generate_render_for_nft(destination_file):
-    configure_render_settings('CYCLES', 'CUDA', 'CPU', 200, 50)
-    set_render_output_settings(destination_file, 'WEBP', True)
+def generate_render_for_nft(destination_file, bg_config_data):
+    configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
+    set_render_output_settings(destination_file, 'WEBP', bg_config_data['render_settings']['res_x'], bg_config_data['render_settings']['res_y'], True)
 
 #####################################
 ############## OLD ##################
@@ -132,7 +132,7 @@ def generate_scenes_w_kadcar_and_background_gltfs(kadcars_with_rims_and_shading,
             # export_scene_as_gltf(os.path.join(filepath_prefix, 'with_backgrounds/' + kc_gltf.split('.')[0] + '_' + bg), export_all=True)
 
             #import scene (background)
-            set_render_output_settings(os.path.join(filepath_prefix, 'final_nft_renders/' + kc_gltf.split('.')[0] + '_' + bg + '_render'), 'WEBP', True)
+            set_render_output_settings(os.path.join(filepath_prefix, 'final_nft_renders/' + kc_gltf.split('.')[0] + '_' + bg + '_render'), 'WEBP', 1920, 1080, True)
             
             # delete_objects_from_collection_name('car')
             delete_all_objects_in_scene()
@@ -150,7 +150,7 @@ def generate_renders_from_given_scenes(files_to_render, file_prefix, material_na
         set_scene_camera(cam_name="Camera_Orientation")
         add_lights_to_scene("lights.json", os.path.dirname(__file__))
         customize_world_shader_nodes(os.path.join(file_prefix, "hdr_files/" + scene_name + "_background.hdr"))
-        set_render_output_settings(output_filepath, 'WEBP', True)
+        set_render_output_settings(output_filepath, 'WEBP', 1920, 1080, True)
         delete_all_objects_in_scene()
 
 def generate_kadcar_gltfs(materials_file, kadcar_file, format='glb'):

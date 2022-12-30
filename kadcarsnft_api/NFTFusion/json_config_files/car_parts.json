@@ -3,10 +3,10 @@
         "Object004.002"
     ],
     "rims": [
-        "rim_front_right",
-        "rim_back_right",
-        "rim_front_left",
-        "rim_back_left"
+        "Rim_FR",
+        "Rim_RR",
+        "Rim_FL",
+        "Rim_RL"
     ],
     "spoiler": [
         "spoiler"

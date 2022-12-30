@@ -42,7 +42,7 @@ rim_file = os.path.join(path_to_glb_folder, "rims_poc.glb")
 # add_rims_to_kadcar(1, rim_file, 'lol')
 
 #Set final render settings
-set_render_output_settings(path_to_glb_folder, 'WEBP', True)
+set_render_output_settings(path_to_glb_folder, 'WEBP', 1920, 1080, True)
 
 
 delete_all_objects()

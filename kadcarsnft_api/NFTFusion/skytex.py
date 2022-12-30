@@ -1,28 +1,30 @@
 import os
 import bpy
-from scene_utils import customize_world_shader_nodes
+from scene_utils import customize_world_shader_nodes, import_scene_into_collection, export_scene_as_gltf
 from render_utils import *
+from pygltflib import GLTF2
+from pygltflib.utils import gltf2glb
 
 dirname = os.path.dirname(__file__)
 path_to_assets_folder = os.path.join(dirname, 'assets')
 path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 # customize_world_shader_nodes(os.path.join(path_to_assets_folder, "hdr_files/snow_background.hdr"), 'HDRI')
-# customize_world_shader_nodes(os.path.join(path_to_assets_folder, "hdr_files/snow_background.hdr"), 'SKY')
+# customize_world_shader_nodes(os.path.join(path_to_assets_folder, "hdr_files/snow_background.hdr"), 'cyber')
 # configure_render_settings('CYCLES', 'CUDA', 'CPU', 20, 10)
-# set_render_output_settings(os.path.join(dirname, "lolol"), 'WEBP', True)
+# set_render_output_settings(os.path.join(dirname, "lolol"), 'WEBP', 2163, 1403, True)
 
 
-context = bpy.context
-scene = context.scene
 
-#Get the environment node tree of the current scene
-node_tree = scene.world.node_tree
-tree_nodes = node_tree.nodes
-links = node_tree.links
+# import_scene_into_collection(os.path.join(path_to_assets_folder, "kadcars/k2.glb"), "car")
+# export_scene_as_gltf(os.path.join(dirname, "testing.gltf"), True, 'GLTF_EMBEDDED')
 
-#Clar all nodes
-tree_nodes.clear()
+gltf = GLTF2()
+gltf = gltf.load(os.path.join(dirname, "testing.gltf"))
+gltf.extras = {"lol":"haha"}
+gltf.save(os.path.join(dirname, "testing.gltf"))
+gltf2glb(os.path.join(dirname, "testing.gltf"), os.path.join(dirname, "testing.glb"), override=True)
 
-#Add background node
-node_background = tree_nodes.new(type='ShaderNodeBackground')
+
+glb = GLTF2().load(os.path.join(dirname, "testing.glb"))
+print(glb.extras)

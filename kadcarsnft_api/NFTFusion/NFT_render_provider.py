@@ -15,7 +15,7 @@ def generate_kadcar_nft_with_mountain_bg_old(path_to_asset_folder, kc_glb_paths,
         set_car_location_in_scene(os.path.join(path_to_asset_folder, glb), {'x': 0, 'y': 0, 'z':0.080608}, {'w': 1.0, 'x':0.0, 'y':0.0, 'z':0.0})
 
         #import scene (background)
-        set_render_output_settings(path_to_asset_folder, 'WEBP', True)
+        set_render_output_settings(path_to_asset_folder, 'WEBP', 1920, 1080, True)
         
         # delete_objects_from_collection_name('car')
         bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -48,9 +48,6 @@ def generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kc_gl
     import_scene_into_collection(bg_glb_path, 'background')
     set_scene_camera(cam_name="Camera")
     if kadcar_specs['Background'] != 'cyber':
-        if kadcar_specs['Background'] == 'snow':
-            customize_world_shader_nodes(hdr_file_path, 'SKY')
-        else:
-            customize_world_shader_nodes(hdr_file_path, 'HDRI')
+        customize_world_shader_nodes(hdr_file_path, kadcar_specs['Background'])
             
     set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])

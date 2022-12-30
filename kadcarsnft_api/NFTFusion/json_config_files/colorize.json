@@ -1,16 +1,7 @@
 {
     "independent": {
         "colorize-k2": [
-            "Plane014.002",
-            "Object004.002",
-            "Object136.002",
-            "Object130.002",
-            "Object083.002",
-            "Object105.002",
-            "Object128.002",
-            "Object113.002",
-            "Object111.002",
-            "Object001.004"
+            "Car_Body"
         ],
         "colorize-k2p": [
             "Car_Body"
@@ -32,13 +23,13 @@
         "seats": {
             "component": "body",
             "objects": [
-                "Seat"
+                "Seats"
             ]
         },
         "hood-trim": {
             "component": "body",
             "objects": [
-                "Hood_trim"
+                "Hood_Trim"
             ]
         },
         "grill-outer": {
@@ -56,10 +47,10 @@
         "rim": {
             "component": "wheel",
             "objects": [
-                "rim_front_right",
-                "rim_back_right",
-                "rim_front_left",
-                "rim_back_right",
+                "Rim_FL",
+                "Rim_FR",
+                "Rim_RL",
+                "Rim_RR",
                 "Cylinder_FL",
                 "Cylinder_FR",
                 "Cylinder_RL",

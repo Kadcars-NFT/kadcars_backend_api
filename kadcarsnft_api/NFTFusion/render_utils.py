@@ -4,9 +4,13 @@ import json
 
 path_to_jpeg_folder = "/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets"
 
-def set_render_output_settings(render_output_path, output_format, write_still=True):
+def set_render_output_settings(render_output_path, output_format, render_res_x, render_res_y, write_still=True):
     bpy.context.scene.render.filepath = render_output_path # Set save path for images
     bpy.context.scene.render.image_settings.file_format = output_format # Set image file format
+    
+    bpy.context.scene.render.resolution_x = render_res_x
+    bpy.context.scene.render.resolution_y = render_res_y
+    
     bpy.ops.render.render(write_still=write_still)
 
 def configure_render_settings(engine, device_type, device, resolution_percentage, samples):

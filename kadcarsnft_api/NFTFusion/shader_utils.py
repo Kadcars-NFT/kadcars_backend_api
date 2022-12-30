@@ -40,6 +40,7 @@ def get_principled_bsdf_for_material(material_name):
     return bsdf
 
 def transfer_materials_bulk(clean, src, target_object_names):
+    print(target_object_names)
     for tgt in target_object_names:
         target_object = bpy.data.objects.get(tgt)
         transfer_materials(clean, src, target_object)
@@ -55,7 +56,7 @@ def get_material_for_given_car_part(kadcar_specs, part):
     dirname = os.path.dirname(__file__)
     primary_color = kadcar_specs['Color']
     material = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/color_groupings.json'), primary_color)[part]
-    return 
+    return material
 
 def add_background_shader_node(tree_nodes):
     node_background = tree_nodes.new(type='ShaderNodeBackground')

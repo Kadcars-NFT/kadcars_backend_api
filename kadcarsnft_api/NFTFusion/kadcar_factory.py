@@ -111,15 +111,15 @@ def add_rims_to_kadcar(rim_gltf_path):
         # bpy.ops.object.delete()
 
     #TODO CRITICAL: rename rims properly
-    place_object(False, False, 'Kadcar_Empty', 'rim_front_right.001')
-    place_object(False, False, 'Kadcar_Empty', 'rim_front_left.001')
-    place_object(False, False, 'Kadcar_Empty', 'rim_back_right.001')
-    place_object(False, False, 'Kadcar_Empty', 'rim_back_left.001')
+    place_object(False, False, 'Kadcar_Empty', 'Rim_FR.001')
+    place_object(False, False, 'Kadcar_Empty', 'Rim_FL.001')
+    place_object(False, False, 'Kadcar_Empty', 'Rim_RR.001')
+    place_object(False, False, 'Kadcar_Empty', 'Rim_RL.001')
 
-    rename_object_in_scene('rim_front_right.001', 'rim_front_right')
-    rename_object_in_scene('rim_front_left.001', 'rim_front_left')
-    rename_object_in_scene('rim_back_right.001', 'rim_back_right')
-    rename_object_in_scene('rim_back_left.001', 'rim_back_left')
+    rename_object_in_scene('Rim_FR.001', 'Rim_FR')
+    rename_object_in_scene('Rim_FL.001', 'Rim_FL')
+    rename_object_in_scene('Rim_RR.001', 'Rim_BR')
+    rename_object_in_scene('Rim_RL.001', 'Rim_BL')
 
     deselect_all_scene_objects()
     relink_collection('rims', 'kadcar')
@@ -231,45 +231,61 @@ def build_car_metadata(kadcar_specs):
         kadcar_specs['Background']
     )
 
-    spoiler_meta = ({
-        "name": "spoiler",
-        "stats": [
-            {
-                "key": "spoiler-type",
-                "val": ""
-            },
-            {
-                "key": "handling",
-                "val": {
-                    "value": "",
-                    "unit": ""
+    spoiler_clearance_light_meta = None
+    
+    if kadcar_specs['Kadcar'] == 'k2p':
+        spoiler_clearance_light_meta = ({
+            "name": "clearance-light",
+            "stats": [
+                {
+                    "key": "clearance-light-type",
+                    "val": "clearance-light-" + kadcar_specs['Spoiler'].split('_')[1]
                 }
-            },
-            {
-                "key": "downforce",
-                "val": {
-                    "value": "",
-                    "unit": ""
+            ]
+        })
+    else:
+        spoiler_clearance_light_meta = ({
+            "name": "spoiler",
+            "stats": [
+                {
+                    "key": "spoiler-type",
+                    "val": kadcar_specs['Spoiler']
+                },
+                {
+                    "key": "handling",
+                    "val": {
+                        "value": "",
+                        "unit": ""
+                    }
+                },
+                {
+                    "key": "downforce",
+                    "val": {
+                        "value": "",
+                        "unit": ""
+                    }
+                },
+                {
+                    "key": "aerodynamic-factor",
+                    "val": {
+                        "value": "",
+                        "unit": ""
+                    }
                 }
-            },
-            {
-                "key": "aerodynamic-factor",
-                "val": {
-                    "value": "",
-                    "unit": ""
-                }
-            }
-        ]
-    })
+            ]
+        })
 
     kadcar_metadata_json = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))
     kadcar_metadata_components = kadcar_metadata_json["stats"]["components"]
 
+    kadcar_metadata_components.append(spoiler_clearance_light_meta)
     if kadcar_specs['Kadcar'] == "k2":
         # spoiler_meta[0]["stats"][0]["val"] = kadcar_specs['Spoiler']
-        kadcar_metadata_components.append(spoiler_meta)
         update_metadata_stat(kadcar_metadata_components, "spoiler", "spoiler-type", kadcar_specs['Spoiler'])
-        print(spoiler_meta)
+        print(spoiler_clearance_light_meta)
+    else:
+        update_metadata_stat(kadcar_metadata_components, "clearance-light", "clearance-light-type", kadcar_specs['Spoiler'])
+
 
     update_metadata_stat(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
     update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", kadcar_specs['Rim'])

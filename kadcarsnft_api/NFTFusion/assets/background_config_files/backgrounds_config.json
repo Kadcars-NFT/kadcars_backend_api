@@ -1,52 +1,202 @@
 {
     "mountain": {
+        "render_settings": {
+            "res_x": 1920,
+            "res_y": 1080
+        },
         "location": {
-            "x": 0.0, 
-            "y": -0.91201, 
-            "z": 0.210559
+            "x": -1.21786, 
+            "y": -0.393034, 
+            "z": -0.531029
         },
         "quaternion_rotation": {
-            "w": 0.029091, 
-            "x": -0.034449, 
-            "y": 0.065337, 
-            "z": 0.996844
-        }
+            "w": 0.311741, 
+            "x": 0.061372, 
+            "y": -0.03844, 
+            "z": -0.947404
+        },
+        "shader_nodes": [
+            {
+                "type": "ShaderNodeTexCoord",
+                "params": {
+                    "from_instancer": "True"
+                }
+            },
+            {
+                "type": "ShaderNodeMapping",
+                "params": {
+                    "vector_type": "POINT",
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.5
+                    }
+                }
+            },
+            {
+                "type": "ShaderNodeTexEnvironment",
+                "params": {
+                    "image_url": ""
+                }
+            },
+            {
+                "type": "ShaderNodeBackground",
+                "params": {
+                    "strength": 3.5
+                }
+            }
+        ]
     },
     "snow": {
+        "render_settings": {
+            "res_x": 1817,
+            "res_y": 1386
+        },
         "location": {
-            "x": -10.5246, 
-            "y": -9.86555, 
-            "z": -0.3
+            "x": -10.2765, 
+            "y": -12.1492, 
+            "z": -0.022505
         },
         "quaternion_rotation": {
             "w": 0.707107, 
             "x": 0.000, 
             "y": 0.000, 
             "z": -0.707
-        }
+        },
+        "shader_nodes": [
+            {
+                "type": "ShaderNodeTexCoord",
+                "params": {
+                    "from_instancer": "True"
+                }
+            },
+            {
+                "type": "ShaderNodeMapping",
+                "params": {
+                    "vector_type": "POINT",
+                    "rotation": {
+                        "x": -10.5,
+                        "y": 6.1,
+                        "z": 272.0
+                    }
+                }
+            },
+            {
+                "type": "ShaderNodeTexSky",
+                "params": {
+                    "sky_type": "NISHITA",
+                    "sun_disc": "False",
+                    "sun_elevation": 24,
+                    "sun_rotation": -212.0,
+                    "air_density": 3.0,
+                    "dust_density": 10.0,
+                    "ozone_density": 6.0
+                }
+            },
+            {
+                "type": "ShaderNodeBackground",
+                "params": {
+                    "strength": 3.0
+                }
+            }
+        ]
     },
     "storage": {
+        "render_settings": {
+            "res_x": 2224,
+            "res_y": 1871
+        },
         "location": {
 
         },
         "quaternion_rotation": {
             
-        }
+        },
+        "shader_nodes": [
+            {
+                "type": "ShaderNodeTexCoord",
+                "params": {
+                    "from_instancer": "False"
+                }
+            },
+            {
+                "type": "ShaderNodeMapping",
+                "params": {
+                    "vector_type": "POINT",
+                    "rotation": {
+                        "x": -8.2,
+                        "y": 5.7,
+                        "z": 131
+                    }
+                }
+            },
+            {
+                "type": "ShaderNodeTexEnvironment",
+                "params": {
+                    "image_url": ""
+                }
+            },
+            {
+                "type": "ShaderNodeBackground",
+                "params": {
+                    "strength": 3.0
+                }
+            }
+        ]
     },
     "beach": {
+        "render_settings": {
+            "res_x": 2115,
+            "res_y": 1484
+        },
         "location": {
-            "x": 3.4772, 
-            "y": -1.866, 
-            "z": -0.122594
+            "x": 6.12131, 
+            "y": -7.83008, 
+            "z": -0.40909
         },
         "quaternion_rotation": {
-            "w": 0.997, 
-            "x": 0.009, 
-            "y": 0.00024, 
-            "z": -0.056
-        }
+            "w": 0.999829, 
+            "x": 0.0, 
+            "y": 0.0, 
+            "z": -0.018524
+        },
+        "shader_nodes": [
+            {
+                "type": "ShaderNodeTexCoord",
+                "params": {
+                    "from_instancer": "False"
+                }
+            },
+            {
+                "type": "ShaderNodeMapping",
+                "params": {
+                    "vector_type": "POINT",
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 9.8,
+                        "z": -20.2
+                    }
+                }
+            },
+            {
+                "type": "ShaderNodeTexEnvironment",
+                "params": {
+                    "image_url": ""
+                }
+            },
+            {
+                "type": "ShaderNodeBackground",
+                "params": {
+                    "strength": 0.6
+                }
+            }
+        ]
     },
     "cyber": {
+        "render_settings": {
+            "res_x": 1901,
+            "res_y": 1632
+        },
         "location": {
             "x": -0.41552, 
             "y": -0.67729, 
@@ -58,6 +208,29 @@
             "x": 0.0, 
             "y": 0.0, 
             "z": -0.998
-        }
+        },
+        "shader_nodes": [
+            {
+                "type": "ShaderNodeTexSky",
+                "params": {
+                    "sky_type": "NISHITA",
+                    "sun_disc": "True",
+                    "sun_size": 1.1,
+                    "sun_intensity": 19.9,
+                    "sun_elevation": -3.3,
+                    "sun_rotation": -94.7,
+                    "altitude": 3.0,
+                    "air_density": 1.307692,
+                    "dust_density": 4.0,
+                    "ozone_density": 6.0
+                }
+            },
+            {
+                "type": "ShaderNodeBackground",
+                "params": {
+                    "strength": 14.2
+                }
+            }
+        ]
     }
 }

@@ -3,6 +3,8 @@ import json
 import math
 import os
 from io_utils import extract_data_from_json
+from pygltflib import GLTF2
+from pygltflib.utils import gltf2glb
 
 #Cleans up scene by deleting all objects
 def delete_all_objects():
@@ -80,7 +82,7 @@ def create_area_light_object(light_metadata):
         light.size_y = light_metadata['size_y']
 
 #Applies given HDRI background to scene
-def customize_world_shader_nodes(hdri, type='HDRI'):
+def customize_world_shader_nodes(hdri, type):
     context = bpy.context
     scene = context.scene
 
@@ -94,13 +96,17 @@ def customize_world_shader_nodes(hdri, type='HDRI'):
 
     #Add background node
     node_background = tree_nodes.new(type='ShaderNodeBackground')
-    node_background.inputs['Strength'].default_value = 3.5
     
     #Add output node
     node_output = tree_nodes.new(type='ShaderNodeOutputWorld')
     node_output.location = 200,0
 
-    if type == 'HDRI':
+    if type == 'mountain':
+        mapping_node = tree_nodes.new('ShaderNodeMapping')
+        tex_coord_node = tree_nodes.new('ShaderNodeTexCoord')
+
+        node_background.inputs['Strength'].default_value = 3.5
+
         #Add environment texture node
         node_environment = tree_nodes.new('ShaderNodeTexEnvironment')
 
@@ -108,12 +114,19 @@ def customize_world_shader_nodes(hdri, type='HDRI'):
         node_environment.image = bpy.data.images.load(hdri)
         node_environment.location = -300, 0
     
+        mapping_node.vector_type = "POINT"
+        mapping_node.inputs["Rotation"].default_value = (math.radians(0.0), math.radians(0.0), math.radians(0.5))
+
         #Link all nodes
         # links = node_tree.links
-        links.new(node_environment.outputs["Color"], node_background.inputs["Color"])
-        links.new(node_background.outputs["Background"], node_output.inputs["Surface"])
+        links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
+        links.new(mapping_node.outputs["Vector"], node_environment.inputs["Vector"])
+        links.new(node_environment.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
+        links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
 
-    elif type == 'SKY':
+    elif type == 'snow':
+        node_background.inputs['Strength'].default_value = 3.0
+
         sky_texture = tree_nodes.new('ShaderNodeTexSky')
         mapping_node = tree_nodes.new('ShaderNodeMapping')
         tex_coord_node = tree_nodes.new('ShaderNodeTexCoord')
@@ -137,6 +150,27 @@ def customize_world_shader_nodes(hdri, type='HDRI'):
         links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
         links.new(mapping_node.outputs["Vector"], sky_texture.inputs["Vector"])
         links.new(sky_texture.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
+        links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
+    
+    elif type == 'beach':
+        mapping_node = tree_nodes.new('ShaderNodeMapping')
+        tex_coord_node = tree_nodes.new('ShaderNodeTexCoord')
+
+        node_background.inputs['Strength'].default_value = 0.6
+
+        #Add environment texture node
+        node_environment = tree_nodes.new('ShaderNodeTexEnvironment')
+
+        #Load and assign the image to then node property
+        node_environment.image = bpy.data.images.load(hdri)
+
+        mapping_node.vector_type = "POINT"
+        mapping_node.inputs["Rotation"].default_value = (math.radians(0.0), math.radians(9.8), math.radians(-20.2))
+
+        #Link nodes
+        links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
+        links.new(mapping_node.outputs["Vector"], node_environment.inputs["Vector"])
+        links.new(node_environment.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
         links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
 
 def import_background_into_scene(filepath, collection_name, hdri=None):
@@ -266,7 +300,17 @@ def add_lights_to_scene(lights_config, file_prefix):
         light_object.rotation_euler = light["rotation_euler"]
         light_object.scale = light["scale"]
 
-def export_scene_as_gltf(output_file, export_all=True):
+def build_background_metadata(bg_config_data):
+    metadata = {
+        "config": {
+            "shader_nodes": bg_config_data['shader_nodes']
+        },
+        "hdri-url": ""
+    }
+
+    return metadata
+
+def export_scene_as_gltf(output_file, export_all=True, format='GLB'):
     filepath = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/'
     # filepath = '/usr/src/app/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets'
     
@@ -276,6 +320,7 @@ def export_scene_as_gltf(output_file, export_all=True):
     bpy.ops.export_scene.gltf(
         filepath=os.path.join(filepath, output_file),
         use_selection=True,
+        export_format=format,
         export_apply=True,
         export_texcoords=True,
         export_normals=True,
@@ -288,3 +333,13 @@ def export_scene_as_gltf(output_file, export_all=True):
         # use_mesh_vertices=True,
         # export_extras=True
     )
+
+def add_metadata_to_gltf(gltf_file_path, metadata, save_format):
+    gltf = GLTF2()
+    gltf = gltf.load(gltf_file_path)
+    gltf.extras = metadata
+    gltf.save(gltf_file_path)
+
+    if save_format == '.glb':
+        output_file_path = gltf_file_path.split('.')[0] + save_format
+        gltf2glb(gltf_file_path, output_file_path, override=True)
