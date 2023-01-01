@@ -2,95 +2,79 @@ import os
 import bpy
 import json
 from scene_utils import *
-from shader_utils import transfer_materials, transfer_materials_bulk, get_material_for_given_car_part
+from shader_utils import transfer_materials, transfer_materials_bulk, get_material_for_given_car_part, apply_texture_image_to_object, change_object_base_color
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
 from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json, extract_json_attribute_data
 
-def add_materials_to_kadcar(kadcar_gltf_path, car_part_objects, kc_name, format='glb'):
-    # material_list = ['steel', 'metallic', 'grainy1', 'darker', 'matte', 'standard']
-    material_list = ['steel']
-    dirname = os.path.dirname(__file__)
-
-    material_file = os.path.join(dirname, 'assets/material_spheres_new.glb')
-    # material_file = os.path.join(dirname, 'assets/material_spheres_red.glb')
-
-    materials_collection = import_scene_into_collection(material_file, 'materials')
-    kadcar_collection = import_scene_into_collection(kadcar_gltf_path, 'kadcar')
-
-    glb_file_names = []
-
-    count = {
-        'steel' : 0,
-        # 'metallic': 0,
-        # 'matte': 0,
-        # 'grainy1': 0,
-        # 'darker': 0,
-        # 'standard': 0
-    }
-
-    for obj in materials_collection.all_objects:
-        if obj.type == 'MESH':
-            print(obj.name)
-            material_type = obj.name.split('.')[0]
-            
-            #CHECK MATERIAL TYPE COMMENTED FOR TESTING
-
-            # if material_type not in material_list:
-            #     continue
-
-            # if material_type in count.keys():
-            #     if count[material_type] == 1:
-            #         continue
-            #     count[material_type] += 1
-
-            file_name = kc_name.split(".")[0] + obj.name.split('.')[0] + obj.name.split('.')[1] + '.' + format
-            transfer_materials_bulk(clean=True, src=obj, target_object_names=car_part_objects)
-            select_only_objects_in_collection(kadcar_collection)
-            export_scene_as_gltf(os.path.join(dirname, 'assets/with_shading/' + file_name), export_all=False)
-            glb_file_names.append(file_name)
-
-    return glb_file_names
-
 def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_metadata):
     #Add material spheres to scene
     dirname = os.path.dirname(__file__)
-    material_list = ["matte", "steel", "chrome", "metallic", "glossy"]
     material_file = os.path.join(filepath_prefix, 'material_gltfs/material_spheres_new.glb')
     import_scene_into_collection(material_file, 'materials')
 
+    #Extract car part colorization data
     colorize_data = extract_data_from_json(os.path.join(dirname, 'json_config_files/colorize.json'))
     primary_color_independent = colorize_data["independent"]
     primary_color_dependent = colorize_data["dependent"]
 
-    kadcar_body = primary_color_independent[str('colorize-' + kadcar_specs['Kadcar'])]
-    add_material_and_colorize_components(filepath_prefix, kadcar_body, str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
+    #Apply trim to kadcar
+    add_trim_to_kadcar(filepath_prefix, kadcar_specs['Trim'], kadcar_metadata, kadcar_specs)
 
-    # headlights = primary_color_independent["headlights"]
-    # if kadcar_specs['Kadcar'] == "k2":
-    #     if kadcar_specs['Spoiler'] == "spoiler_2":
-    #         add_material_and_colorize_components(filepath_prefix, headlights, str(kadcar_specs['Material'] + "_" + kadcar_specs['Color']))
+    #Add color and material to body
+    add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
 
-    # trim = primary_color_independent["trim"]
-    # update_visual_stat_in_metadata(kadcar_metadata, kadcar_specs, "trim", primary_color_independent)
+    #Change headlight color
+    change_kadcar_headlight_color(kadcar_metadata, kadcar_specs)
 
     #Get materials for dependent groups
     for part in primary_color_dependent:
         components_to_colorize = primary_color_dependent[part]["objects"]
         material_name = get_material_for_given_car_part(kadcar_specs, part)
 
-        update_visual_stat_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, part, primary_color_dependent)
+        update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, part, 'material', material_name)
 
         if material_name == "default":
             continue
-        add_material_and_colorize_components(filepath_prefix, components_to_colorize, material_name)
+        add_material_and_colorize_components(components_to_colorize, material_name)
     
     return kadcar_metadata
 
-def add_material_and_colorize_components(filepath_prefix, car_part_objects, material_name):
+def add_material_and_colorize_components(car_part_objects, material_name):
     material = bpy.data.objects[material_name]
-
     transfer_materials_bulk(clean=True, src=material, target_object_names=car_part_objects)
+
+def apply_paint_job_to_kadcar_body_from_presets(filepath_prefix, primary_color_independent, kadcar_specs, kadcar_metadata):
+    add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
+
+def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs):
+    trim_object = bpy.data.objects['Car_Trim']
+    stat_type = ""
+    
+    if trim_type == 'steel':
+        stat_type = "material"
+        src_material = bpy.data.objects['steel-lightgray']
+        transfer_materials(clean=True, src=src_material, tgt=trim_object)
+    else:
+        stat_type = "texture"
+        apply_texture_image_to_object(True, os.path.join(filepath_prefix, 'trims/' + trim_type + '.jpg'), trim_object)
+
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, 'trim', stat_type, trim_type)
+
+def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
+    headlight_object = bpy.data.objects['Headlights']
+    color_name = ""
+
+    if kadcar_specs['Spoiler'] == 'spoiler_1' or kadcar_specs['Spoiler'] == 'clearance_light_1':
+        color_name = "white"
+        change_object_base_color((1.0, 1.0, 1.0, 1.0), 'headlight_color', headlight_object) #White headlights
+    elif kadcar_specs['Spoiler'] == 'spoiler_2' or kadcar_specs['Spoiler'] == 'clearance_light_2':
+        color_name = "orange"
+        change_object_base_color((1.0, 0.143401, 0.001641, 1.0), 'headlight_color', headlight_object) #Orange headlights
+    
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, 'headlights', 'material', color_name)
 
 def add_rims_to_kadcar(rim_gltf_path):
     import_scene_into_collection(rim_gltf_path, 'rims')
@@ -158,10 +142,10 @@ def add_clearance_light_to_pickup(kadcar_specs, clearance_light_gltf_path):
 
     deselect_all_scene_objects()
     old_names = []
-    for spoiler_name in clearance_light_obj_name:
-        print(spoiler_name)
-        old_names.append(spoiler_name)
-        spoiler = bpy.data.objects[spoiler_name]
+    for clearance_light_name in clearance_light_obj_name:
+        print(clearance_light_name)
+        old_names.append(clearance_light_name)
+        spoiler = bpy.data.objects[clearance_light_name]
         spoiler.select_set(True)
         bpy.data.objects.remove(spoiler, do_unlink=True)
         bpy.ops.outliner.orphans_purge()
@@ -223,7 +207,15 @@ def replace_object(should_transfer_w_materials, should_clear_old_materials, dest
 
 def build_car_metadata(kadcar_specs):
     dirname = os.path.dirname(__file__)
-    component_list = ["body", "rim", "engine", "spoiler"]
+
+    if kadcar_specs['Kadcar'] == "k2p":
+        clearance_light_file = "clearance_light_1"
+        
+        if kadcar_specs['Spoiler'] == 'spoiler_2':
+            clearance_light_file = "clearance_light_2"
+
+        kadcar_specs['Spoiler'] = clearance_light_file
+
     kadcar_export_file_name = str(
         kadcar_specs['Kadcar'] + "_" + kadcar_specs['Rim'] + "_" +
         kadcar_specs['Spoiler'] + "_" + kadcar_specs['Trim'] + "_" + 
@@ -280,12 +272,10 @@ def build_car_metadata(kadcar_specs):
 
     kadcar_metadata_components.append(spoiler_clearance_light_meta)
     if kadcar_specs['Kadcar'] == "k2":
-        # spoiler_meta[0]["stats"][0]["val"] = kadcar_specs['Spoiler']
         update_metadata_stat(kadcar_metadata_components, "spoiler", "spoiler-type", kadcar_specs['Spoiler'])
         print(spoiler_clearance_light_meta)
     else:
         update_metadata_stat(kadcar_metadata_components, "clearance-light", "clearance-light-type", kadcar_specs['Spoiler'])
-
 
     update_metadata_stat(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
     update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", kadcar_specs['Rim'])
@@ -302,13 +292,38 @@ def update_metadata_stat(kadcar_metadata, primary, secondary, value):
                 if stat["key"] == secondary:
                     stat["val"] = value
 
-def update_visual_stat_in_metadata(kadcar_metadata_components, kadcar_specs, part, source_dict):
-    material_list = ["matte", "steel", "chrome", "metallic", "glossy"]
-
+def update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, part, type, stat_val_id):
     for metadata in kadcar_metadata_components:
-        if metadata["name"] == source_dict[part]["component"]:
-            for stat in metadata["stats"]:
-                if stat["key"] == str(part + "-material"):
-                    if kadcar_specs['Material'] in material_list:
-                        stat["val"]["type"] = "material"
-                        stat["val"]["id"] = kadcar_specs['Material'] + "-" + kadcar_specs['Color']
+        for stat in metadata["stats"]:
+            if stat["key"] == str(part + "-material"):
+                stat["val"]["type"] = type
+                    
+                if part == 'Car_Body':
+                    stat_val_id = get_color_name(kadcar_specs['Color'])
+
+                # stat["val"]["id"] = kadcar_specs['Material'] + "-" + kadcar_specs['Color']
+                stat["val"]["id"] = stat_val_id
+
+def get_color_name(color):
+    if color == 'black':
+        return 'onyx-black'
+    elif color == 'red':
+        return ''
+    elif color == 'green':
+        return ''
+    elif color == 'gold':
+        return ''
+    elif color == 'blue':
+        return ''
+    elif color == 'orange':
+        return ''
+    elif color == 'lightgray':
+        return ''
+    elif color == 'darkgray':
+        return ''
+    elif color == 'cyan':
+        return ''
+    elif color == 'purple':
+        return ''
+    elif color == 'pink':
+        return ''

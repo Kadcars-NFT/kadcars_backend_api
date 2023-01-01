@@ -39,6 +39,36 @@ def get_principled_bsdf_for_material(material_name):
 
     return bsdf
 
+def change_object_base_color(color, mtl_name, tgt_object):
+    tgt_object.data.materials.clear()
+    material = bpy.data.materials.new(name=mtl_name)
+    bsdf = get_principled_bsdf_for_material(mtl_name)
+
+    bsdf.inputs['Base Color'].default_value = color
+    material.diffuse_color = color
+
+    tgt_object.data.materials.append(material)
+
+def change_object_emission_level(tgt_object):
+    pass
+
+def apply_texture_image_to_object(clean, tex_image_path, tgt_object):
+    if clean:
+        tgt_object.data.materials.clear()
+
+    material = bpy.data.materials.new(name='trim_texture')
+    bsdf = get_principled_bsdf_for_material('trim_texture')
+
+    texImage = material.node_tree.nodes.new('ShaderNodeTexImage')
+    texImage.image = bpy.data.images.load(tex_image_path)
+
+    material.node_tree.links.new(bsdf.inputs['Base Color'], texImage.outputs['Color'])
+
+    if tgt_object.data.materials:
+        tgt_object.data.materials[0] = material
+    else:
+        tgt_object.data.materials.append(material)
+
 def transfer_materials_bulk(clean, src, target_object_names):
     print(target_object_names)
     for tgt in target_object_names:
@@ -58,9 +88,9 @@ def get_material_for_given_car_part(kadcar_specs, part):
     material = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/color_groupings.json'), primary_color)[part]
     return material
 
-def add_background_shader_node(tree_nodes):
+def add_background_shader_node(tree_nodes, strength):
     node_background = tree_nodes.new(type='ShaderNodeBackground')
-    node_background.inputs['Strength'].default_value = 3.5
+    node_background.inputs['Strength'].default_value = strength
 
 def add_sky_texture_shader_node(tree_nodes, sky_type, sun_disc, sun_elevation, sun_rotation, air_density, dust_density, ozone_density):
     sky_texture = tree_nodes.new('ShaderNodeTexSky')

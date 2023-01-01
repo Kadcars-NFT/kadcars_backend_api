@@ -303,7 +303,8 @@ def add_lights_to_scene(lights_config, file_prefix):
 def build_background_metadata(bg_config_data):
     metadata = {
         "config": {
-            "shader_nodes": bg_config_data['shader_nodes']
+            "shader_nodes": bg_config_data['shader_nodes'],
+            "render_settings": bg_config_data['render_settings']
         },
         "hdri-url": ""
     }

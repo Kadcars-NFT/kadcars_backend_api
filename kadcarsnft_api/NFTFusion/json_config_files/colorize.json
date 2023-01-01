@@ -1,9 +1,6 @@
 {
     "independent": {
-        "colorize-k2": [
-            "Car_Body"
-        ],
-        "colorize-k2p": [
+        "body": [
             "Car_Body"
         ],
         "headlights": [
