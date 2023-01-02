@@ -17,9 +17,9 @@ def get_asset_from_ipfs(cid):
     response = requests.get(str("https://api.nft.storage/bafybeihtn6sk44pxizjedv7u2nqdq3ncijwmcdxgin3tcnnqh55hckvpfm"), headers=auth)
     print(response.json())
 
-def upload_asset_to_ipfs(asset_file):
+def upload_asset_to_ipfs(asset_file, format):
     headers = {
-        'Content-Type': 'application/car',
+        'Content-Type': format,
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENmOTAyMjk0MDE3NUE3ZmM5MUJiMDM0NDE3ZjQ1MDhkRjBEOWMyNjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2ODI5OTcyODMzNCwibmFtZSI6ImtleXMifQ.jP_EGo6JSyf6bt9xxJld1TGjgb_fV7ES9yXX84wr2I4'
     }
     

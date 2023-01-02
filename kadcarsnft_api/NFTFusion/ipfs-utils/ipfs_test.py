@@ -34,7 +34,7 @@ def car_file_generator():
                         print("AVOIDED " + car_file_path + "\n")
                         continue
                     
-                    cid = upload_asset_to_ipfs(car_file_path)
+                    cid = upload_asset_to_ipfs(car_file_path, 'application/car')
                     print(car_file_path + "   CID: " + cid + "\n")
 
                 add_cid_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), cid)
