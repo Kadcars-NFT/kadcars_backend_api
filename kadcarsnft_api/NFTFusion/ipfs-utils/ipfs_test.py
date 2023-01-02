@@ -18,12 +18,18 @@ def car_file_generator():
                 output_file_name = nft_dir_name
                 nft_dir_path = os.path.join(current_bg_folder, nft_dir_name)
                 
+                ##############################
+                ## Upload CAR files to IPFS ##
+                ##############################
+
+                #Create directory for car files
                 car_file_dest_directory = os.path.join(car_folder_path, output_file_name)
                 car_file_output_path = os.path.join(car_file_dest_directory, output_file_name + ".car")
                 create_dir_at_path(car_file_dest_directory)
                 
                 glb_path = os.path.join(nft_dir_path, nft_dir_name + "_nft.glb")
 
+                #Create the car files
                 pack_and_split_CAR_file(glb_path, car_file_output_path, output_file_name)
                 print(os.listdir(car_file_dest_directory))
                 
@@ -37,10 +43,21 @@ def car_file_generator():
                     cid = upload_asset_to_ipfs(car_file_path, 'application/car')
                     print(car_file_path + "   CID: " + cid + "\n")
 
-                add_cid_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), cid)
+                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), "ipfs://" + cid, ["views-refs", "data"])
                 if not remove_dir_at_path(car_file_dest_directory):
                     print("Error removing directory")
 
                 print("FINISHED : " + car_file_dest_directory)
+
+                #########################
+                ## Upload WEBP to IPFS ##
+                #########################
+
+                webp_render_path = os.path.join(nft_dir_path, nft_dir_name + "_render.webp")
+
+                cid = upload_asset_to_ipfs(webp_render_path, 'image/*')
+                print(webp_render_path + "   CID: " + cid + "\n")
+
+                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), "ipfs://" + cid, ["webp-ipfs"])
 
 car_file_generator()

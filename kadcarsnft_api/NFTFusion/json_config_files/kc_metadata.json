@@ -1,5 +1,11 @@
 {
-    "stats": {
+    "webp-ipfs": "", 
+    "vehicle-information" : {
+        "vin": "1",
+        "make": "Kadcars",
+        "model": "K2"
+    },
+    "mutable-state": {
         "components": [
             {
                 "name": "body",
@@ -300,5 +306,9 @@
             }
         ]
     },
-    "view": {}
+    "view-refs": {
+        "data": "",
+        "scheme": "ipfs",
+        "cid": ""
+    }
 }

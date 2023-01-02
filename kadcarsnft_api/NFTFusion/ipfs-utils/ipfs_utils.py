@@ -50,7 +50,7 @@ def pack_and_split_CAR_file(asset_path, output_path, asset_file_name):
     #split CAR file 
     os.system("carbites split " + out_path + " --size 100MB --strategy treewalk")
 
-def add_cid_to_kc_metadata(asset_file_name, cid):
+def add_ipfs_data_to_kc_metadata(asset_file_name, cid, keys_array):
     kadcar_metadata = extract_data_from_json(asset_file_name)
     
     if kadcar_metadata:

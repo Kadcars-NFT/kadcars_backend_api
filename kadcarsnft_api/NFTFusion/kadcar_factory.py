@@ -23,7 +23,7 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
 
     #Add color and material to body
     add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
 
     #Change headlight color
     change_kadcar_headlight_color(kadcar_metadata, kadcar_specs)
@@ -33,7 +33,7 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
         components_to_colorize = primary_color_dependent[part]["objects"]
         material_name = get_material_for_given_car_part(kadcar_specs, part)
 
-        update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, part, 'material', material_name)
+        update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, part, 'material', material_name)
 
         if material_name == "default":
             continue
@@ -47,7 +47,7 @@ def add_material_and_colorize_components(car_part_objects, material_name):
 
 def apply_paint_job_to_kadcar_body_from_presets(filepath_prefix, primary_color_independent, kadcar_specs, kadcar_metadata):
     add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
 
 def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs):
     trim_object = bpy.data.objects['Car_Trim']
@@ -61,7 +61,7 @@ def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs
         stat_type = "texture"
         apply_texture_image_to_object(True, os.path.join(filepath_prefix, 'trims/' + trim_type + '.jpg'), trim_object)
 
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, 'trim', stat_type, trim_type)
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'trim', stat_type, trim_type)
 
 def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
     headlight_object = bpy.data.objects['Headlights']
@@ -74,7 +74,7 @@ def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
         color_name = "orange"
         change_object_base_color((1.0, 0.143401, 0.001641, 1.0), 'headlight_color', headlight_object) #Orange headlights
     
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["stats"]["components"], kadcar_specs, 'headlights', 'material', color_name)
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'headlights', 'material', color_name)
 
 def add_rims_to_kadcar(rim_gltf_path):
     import_scene_into_collection(rim_gltf_path, 'rims')
@@ -268,7 +268,7 @@ def build_car_metadata(kadcar_specs):
         })
 
     kadcar_metadata_json = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))
-    kadcar_metadata_components = kadcar_metadata_json["stats"]["components"]
+    kadcar_metadata_components = kadcar_metadata_json["mutable-state"]["components"]
 
     kadcar_metadata_components.append(spoiler_clearance_light_meta)
     if kadcar_specs['Kadcar'] == "k2":
@@ -288,13 +288,13 @@ def build_car_metadata(kadcar_specs):
 def update_metadata_stat(kadcar_metadata, primary, secondary, value):
     for metadata in kadcar_metadata:
         if metadata["name"] == primary:
-            for stat in metadata["stats"]:
+            for stat in metadata["mutable-state"]:
                 if stat["key"] == secondary:
                     stat["val"] = value
 
 def update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, part, type, stat_val_id):
     for metadata in kadcar_metadata_components:
-        for stat in metadata["stats"]:
+        for stat in metadata["mutable-state"]:
             if stat["key"] == str(part + "-material"):
                 stat["val"]["type"] = type
                     
