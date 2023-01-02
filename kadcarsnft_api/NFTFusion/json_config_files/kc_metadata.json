@@ -71,7 +71,7 @@
                         }
                     },
                     {
-                        "key": "length",
+                        "key": "max-length",
                         "val": {
                             "value": 0.0,
                             "unit": ""
@@ -106,28 +106,7 @@
                         }
                     },
                     {
-                        "key": "center-width",
-                        "val": {
-                            "value": 0.0,
-                            "unit": ""
-                        }
-                    },
-                    {
-                        "key": "hood-width",
-                        "val": {
-                            "value": 0.0,
-                            "unit": ""
-                        }
-                    },
-                    {
-                        "key": "grill-width",
-                        "val": {
-                            "value": 0.0,
-                            "unit": ""
-                        }
-                    },
-                    {
-                        "key": "rear-width",
+                        "key": "max-width",
                         "val": {
                             "value": 0.0,
                             "unit": ""
