@@ -30,7 +30,7 @@ def shading_orchestrator(car_collection, materials_file, format='glb'):
     delete_all_objects()
     return glb_file_names
 
-def get_principled_bsdf_for_material(material_name):
+def get_principled_bsdf_for_material_by_name(material_name):
     material = bpy.data.materials[material_name]
     material.use_nodes = True
     tree = material.node_tree
@@ -39,25 +39,35 @@ def get_principled_bsdf_for_material(material_name):
 
     return bsdf
 
+def get_principled_bsdf_for_active_material(tgt_object):
+    material = tgt_object.material_slots[0].material
+    print(tgt_object.material_slots)
+    bsdf = material.node_tree.nodes["Principled BSDF"]
+    return bsdf
+
 def change_object_base_color(color, mtl_name, tgt_object):
     tgt_object.data.materials.clear()
     material = bpy.data.materials.new(name=mtl_name)
-    bsdf = get_principled_bsdf_for_material(mtl_name)
+    
+    bsdf = get_principled_bsdf_for_material_by_name(mtl_name)
 
     bsdf.inputs['Base Color'].default_value = color
     material.diffuse_color = color
 
     tgt_object.data.materials.append(material)
 
-def change_object_emission_level(tgt_object):
-    pass
+def change_object_emission_level(tgt_object, emission_value, emission_color):
+    bsdf = get_principled_bsdf_for_active_material(tgt_object)
+    bsdf.inputs["Emission Strength"].default_value = emission_value
+    bsdf.inputs["Emission"].default_value = emission_color
+    print(bsdf.inputs["Emission Strength"].default_value)
 
 def apply_texture_image_to_object(clean, tex_image_path, tgt_object):
     if clean:
         tgt_object.data.materials.clear()
 
     material = bpy.data.materials.new(name='trim_texture')
-    bsdf = get_principled_bsdf_for_material('trim_texture')
+    bsdf = get_principled_bsdf_for_material_by_name('trim_texture')
 
     texImage = material.node_tree.nodes.new('ShaderNodeTexImage')
     texImage.image = bpy.data.images.load(tex_image_path)
@@ -72,6 +82,7 @@ def apply_texture_image_to_object(clean, tex_image_path, tgt_object):
 def transfer_materials_bulk(clean, src, target_object_names):
     print(target_object_names)
     for tgt in target_object_names:
+        print(tgt)
         target_object = bpy.data.objects.get(tgt)
         transfer_materials(clean, src, target_object)
 

@@ -61,7 +61,7 @@
             "w": 0.707107, 
             "x": 0.000, 
             "y": 0.000, 
-            "z": -0.707
+            "z": -0.707107
         },
         "shader_nodes": [
             {
@@ -198,16 +198,16 @@
             "res_y": 1632
         },
         "location": {
-            "x": -1.74001, 
-            "y": 3.63127, 
+            "x": -1.46119, 
+            "y": 3.21255, 
             "z": -0.986207
             
         },
         "quaternion_rotation": {
-            "w": -0.071, 
+            "w": -0.03554, 
             "x": 0.0, 
             "y": 0.0, 
-            "z": -0.998
+            "z": -0.999368
         },
         "shader_nodes": [
             {
@@ -216,10 +216,10 @@
                     "sky_type": "NISHITA",
                     "sun_disc": "True",
                     "sun_size": 1.1,
-                    "sun_intensity": 19.9,
+                    "sun_intensity": 68.7,
                     "sun_elevation": -3.3,
                     "sun_rotation": -94.7,
-                    "altitude": 3.0,
+                    "altitude": 29,
                     "air_density": 1.307692,
                     "dust_density": 4.0,
                     "ozone_density": 6.0

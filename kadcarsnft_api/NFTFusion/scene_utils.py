@@ -172,6 +172,26 @@ def customize_world_shader_nodes(hdri, type):
         links.new(mapping_node.outputs["Vector"], node_environment.inputs["Vector"])
         links.new(node_environment.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
         links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
+    
+    elif type == 'cyber':
+        node_background.inputs['Strength'].default_value = 5.0
+
+        sky_texture = tree_nodes.new('ShaderNodeTexSky')
+
+        #Customize sky texture
+        sky_texture.sky_type = 'NISHITA'
+        sky_texture.sun_disc = True
+        sky_texture.sun_size = math.radians(1.1)
+        sky_texture.sun_intensity = 68.7
+        sky_texture.sun_elevation = math.radians(-3.3)
+        sky_texture.sun_rotation = math.radians(-94.7)
+        sky_texture.altitude = 29
+        sky_texture.air_density = 1.309
+        sky_texture.dust_density = 4.0
+        sky_texture.ozone_density = 6.0
+
+        links.new(sky_texture.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
+        links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
 
 def import_background_into_scene(filepath, collection_name, hdri=None):
     deselect_all_scene_objects()

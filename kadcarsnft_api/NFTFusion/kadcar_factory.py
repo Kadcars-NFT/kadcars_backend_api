@@ -2,7 +2,7 @@ import os
 import bpy
 import json
 from scene_utils import *
-from shader_utils import transfer_materials, transfer_materials_bulk, get_material_for_given_car_part, apply_texture_image_to_object, change_object_base_color
+from shader_utils import *
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
 from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json, extract_json_attribute_data
@@ -57,6 +57,10 @@ def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs
         stat_type = "material"
         src_material = bpy.data.objects['steel-lightgray']
         transfer_materials(clean=True, src=src_material, tgt=trim_object)
+    elif trim_type == 'chrome':
+        stat_type = "material"
+        src_material = bpy.data.objects['chrome']
+        transfer_materials(clean=True, src=src_material, tgt=trim_object)
     else:
         stat_type = "texture"
         apply_texture_image_to_object(True, os.path.join(filepath_prefix, 'trims/' + trim_type + '.jpg'), trim_object)
@@ -66,14 +70,18 @@ def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs
 def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
     headlight_object = bpy.data.objects['Headlights']
     color_name = ""
+    color_vector = None
 
     if kadcar_specs['Spoiler'] == 'spoiler_1' or kadcar_specs['Spoiler'] == 'clearance_light_1':
         color_name = "white"
-        change_object_base_color((1.0, 1.0, 1.0, 1.0), 'headlight_color', headlight_object) #White headlights
+        color_vector = [1.0, 1.0, 1.0, 1.0]
+        change_object_base_color(color_vector, 'headlight_color', headlight_object) #White headlights
     elif kadcar_specs['Spoiler'] == 'spoiler_2' or kadcar_specs['Spoiler'] == 'clearance_light_2':
         color_name = "orange"
-        change_object_base_color((1.0, 0.143401, 0.001641, 1.0), 'headlight_color', headlight_object) #Orange headlights
+        color_vector = [1.0, 0.143401, 0.001641, 1.0]
+        change_object_base_color(color_vector, 'headlight_color', headlight_object) #Orange headlights
     
+    change_object_emission_level(headlight_object, 20.0, color_vector)
     update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'headlights', 'material', color_name)
 
 def add_rims_to_kadcar(rim_gltf_path):
@@ -102,8 +110,8 @@ def add_rims_to_kadcar(rim_gltf_path):
 
     rename_object_in_scene('Rim_FR.001', 'Rim_FR')
     rename_object_in_scene('Rim_FL.001', 'Rim_FL')
-    rename_object_in_scene('Rim_RR.001', 'Rim_BR')
-    rename_object_in_scene('Rim_RL.001', 'Rim_BL')
+    rename_object_in_scene('Rim_RR.001', 'Rim_RR')
+    rename_object_in_scene('Rim_RL.001', 'Rim_RL')
 
     deselect_all_scene_objects()
     relink_collection('rims', 'kadcar')
@@ -288,13 +296,13 @@ def build_car_metadata(kadcar_specs):
 def update_metadata_stat(kadcar_metadata, primary, secondary, value):
     for metadata in kadcar_metadata:
         if metadata["name"] == primary:
-            for stat in metadata["mutable-state"]:
+            for stat in metadata["stats"]:
                 if stat["key"] == secondary:
                     stat["val"] = value
 
 def update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, part, type, stat_val_id):
     for metadata in kadcar_metadata_components:
-        for stat in metadata["mutable-state"]:
+        for stat in metadata["stats"]:
             if stat["key"] == str(part + "-material"):
                 stat["val"]["type"] = type
                     
