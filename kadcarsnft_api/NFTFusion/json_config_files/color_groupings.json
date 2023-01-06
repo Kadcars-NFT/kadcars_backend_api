@@ -1,8 +1,8 @@
 {
     "purple": {
-        "rim": "steel-darkgray",
+        "rim": "steel-green",
         "seats": "matte-lightgray",
-        "emblem": "steel-black",
+        "emblem": "steel-purple",
         "grill-outer": "matte-black",
         "grill-inner": "matte-black",
         "hood-trim": "steel-darkgray"
@@ -10,7 +10,7 @@
     "green": {
         "rim": "steel-darkgray",
         "seats": "matte-lightgray",
-        "emblem": "metallic-black",
+        "emblem": "metallic-green",
         "grill-outer": "steel-darkgray",
         "grill-inner": "steel-darkgray",
         "hood-trim": "steel-darkgray"
@@ -18,7 +18,7 @@
     "red": {
         "rim": "steel-black",
         "seats": "default",
-        "emblem": "metallic-black",
+        "emblem": "metallic-red",
         "grill-outer": "steel-black",
         "grill-inner": "matte-black",
         "hood-trim": "glossy-black"
@@ -26,15 +26,15 @@
     "gold": {
         "rim": "metallic-black",
         "seats": "matte-lightgray",
-        "emblem": "metallic-black",
+        "emblem": "metallic-gold",
         "grill-outer": "steel-black",
         "grill-inner": "matte-black",
         "hood-trim": "steel-black"
     },
     "orange": {
         "rim": "matte-black",
-        "seats": "matte-black",
-        "emblem": "metallic-black",
+        "seats": "matte-lightgray",
+        "emblem": "metallic-orange",
         "grill-outer": "metallic-black",
         "grill-inner": "matte-black",
         "hood-trim": "matte-black"
@@ -42,7 +42,7 @@
     "blue": {
         "rim": "steel-darkgray",
         "seats": "matte-lightgray",
-        "emblem": "steel-darkgray",
+        "emblem": "steel-blue",
         "grill-outer": "matte-darkgray",
         "grill-inner": "steel-darkgray",
         "hood-trim": "glossy-lightgray"
@@ -57,15 +57,15 @@
     },
     "cyan": {
         "rim": "steel-darkgray",
-        "seats": "matte-lightgray",
-        "emblem": "glossy-black",
+        "seats": "matte-white",
+        "emblem": "metallic-cyan",
         "grill-outer": "metallic-black",
         "grill-inner": "matte-black",
         "hood-trim": "metallic-black"
     },
     "pink": {
         "rim": "steel-darkgray",
-        "seats": "matte-lightgray",
+        "seats": "matte-white",
         "emblem": "metallic-pink",
         "grill-outer": "metallic-black",
         "grill-inner": "steel-darkgray",
@@ -74,14 +74,14 @@
     "lightgray": {
         "rim": "steel-darkgray",
         "seats": "default",
-        "emblem": "steel-darkgray",
+        "emblem": "steel-lightgray",
         "grill-outer": "steel-darkgray",
         "grill-inner": "matte-darkgray",
         "hood-trim": "steel-darkgray"
     },
     "black": {
         "rim": "metallic-black",
-        "seats": "default",
+        "seats": "matte-red",
         "emblem": "metallic-black",
         "grill-outer": "matte-black",
         "grill-inner": "metallic-black",
@@ -89,7 +89,7 @@
     },
     "white": {
         "rim": "metallic-black",
-        "seats": "default",
+        "seats": "matte-red",
         "emblem": "metallic-black",
         "grill-outer": "matte-black",
         "grill-inner": "metallic-black",

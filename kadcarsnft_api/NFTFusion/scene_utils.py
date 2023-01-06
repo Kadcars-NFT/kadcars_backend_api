@@ -5,6 +5,7 @@ import os
 from io_utils import extract_data_from_json
 from pygltflib import GLTF2
 from pygltflib.utils import gltf2glb
+from stat_dictionaries import hdri_ipfs_urls
 
 #Cleans up scene by deleting all objects
 def delete_all_objects():
@@ -112,10 +113,34 @@ def customize_world_shader_nodes(hdri, type):
 
         #Load and assign the image to then node property
         node_environment.image = bpy.data.images.load(hdri)
-        node_environment.location = -300, 0
+        # node_environment.location = -300, 0
     
         mapping_node.vector_type = "POINT"
+        mapping_node.inputs["Location"].default_value = (1.1, 0.0, 0.0)
         mapping_node.inputs["Rotation"].default_value = (math.radians(0.0), math.radians(0.0), math.radians(0.5))
+
+        #Link all nodes
+        # links = node_tree.links
+        links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
+        links.new(mapping_node.outputs["Vector"], node_environment.inputs["Vector"])
+        links.new(node_environment.outputs["Color"], node_background.inputs["Color"]) #connect sky texture to background node
+        links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
+    
+    elif type == 'storage':
+        mapping_node = tree_nodes.new('ShaderNodeMapping')
+        tex_coord_node = tree_nodes.new('ShaderNodeTexCoord')
+
+        node_background.inputs['Strength'].default_value = 3.0
+
+        #Add environment texture node
+        node_environment = tree_nodes.new('ShaderNodeTexEnvironment')
+
+        #Load and assign the image to then node property
+        node_environment.image = bpy.data.images.load(hdri)
+        # node_environment.location = -300, 0
+    
+        mapping_node.vector_type = "POINT"
+        mapping_node.inputs["Rotation"].default_value = (math.radians(-8.2), math.radians(5.7), math.radians(131.0))
 
         #Link all nodes
         # links = node_tree.links
@@ -125,7 +150,7 @@ def customize_world_shader_nodes(hdri, type):
         links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
 
     elif type == 'snow':
-        node_background.inputs['Strength'].default_value = 3.0
+        node_background.inputs['Strength'].default_value = 1.5
 
         sky_texture = tree_nodes.new('ShaderNodeTexSky')
         mapping_node = tree_nodes.new('ShaderNodeMapping')
@@ -134,7 +159,7 @@ def customize_world_shader_nodes(hdri, type):
         #Customize sky texture
         sky_texture.sky_type = 'NISHITA'
         sky_texture.sun_disc = False
-        sky_texture.sun_elevation = math.radians(24)
+        sky_texture.sun_elevation = math.radians(27.2)
         sky_texture.sun_rotation = math.radians(-212.0)
         sky_texture.air_density = 3.0
         sky_texture.dust_density = 10.0
@@ -143,8 +168,6 @@ def customize_world_shader_nodes(hdri, type):
         #Customize mapping node
         mapping_node.vector_type = "POINT"
         mapping_node.inputs["Rotation"].default_value = (math.radians(-10.5), math.radians(6.1), math.radians(272.0))
-
-        tex_coord_node.from_instancer = True
 
         #Link nodes
         links.new(tex_coord_node.outputs["Generated"], mapping_node.inputs["Vector"])
@@ -174,7 +197,7 @@ def customize_world_shader_nodes(hdri, type):
         links.new(node_background.outputs["Background"], node_output.inputs["Surface"]) #connect background node to world node
     
     elif type == 'cyber':
-        node_background.inputs['Strength'].default_value = 5.0
+        node_background.inputs['Strength'].default_value = 3.0
 
         sky_texture = tree_nodes.new('ShaderNodeTexSky')
 
@@ -216,6 +239,11 @@ def import_scene_into_collection(filepath, collection_name):
 def set_scene_camera(cam_name):
     obj_camera = bpy.data.objects[cam_name]
     bpy.context.scene.camera = obj_camera
+
+def shift_camera_lens(cam_name, shift_x, shift_y):
+    camera = bpy.data.cameras[cam_name]
+    camera.shift_x = shift_x
+    camera.shift_y = shift_y
 
 #Changes camera using metadata
 def apply_changes_to_scene_camera(camera_metadata):
@@ -320,13 +348,13 @@ def add_lights_to_scene(lights_config, file_prefix):
         light_object.rotation_euler = light["rotation_euler"]
         light_object.scale = light["scale"]
 
-def build_background_metadata(bg_config_data):
+def build_background_metadata(bg_config_data, background):
     metadata = {
         "config": {
             "shader_nodes": bg_config_data['shader_nodes'],
             "render_settings": bg_config_data['render_settings']
         },
-        "hdri-url": ""
+        "hdri-url": hdri_ipfs_urls[background]
     }
 
     return metadata

@@ -40,19 +40,6 @@
             "objects": [
                 "Grill_Inner"
             ]
-        },
-        "rim": {
-            "component": "wheel",
-            "objects": [
-                "Rim_FL",
-                "Rim_FR",
-                "Rim_RL",
-                "Rim_RR",
-                "Cylinder_FL",
-                "Cylinder_FR",
-                "Cylinder_RL",
-                "Cylinder_RR"
-            ]
         }
     }
 }

@@ -5,6 +5,7 @@ from kadcar_factory import *
 from scene_utils import *
 from io_utils import *
 from NFT_render_provider import *
+from nft_metadata_handler import build_car_metadata
 import pandas as pd
 
 def generate_kadcars_with_given_specs_gltfs(kadcars_metadata_df, filepath_prefix):
@@ -40,7 +41,7 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
 
         #Import kadcar and add parts
         import_scene_into_collection(kc_gltf_full_path, 'kadcar')
-        # add_rims_to_kadcar(rim_gltf_full_path)
+        add_rims_to_kadcar(rim_gltf_full_path)
 
         if kadcar_specs['Kadcar'] == "k2":
             add_spoiler_to_kadcar(kadcar_specs, spoiler_gltf_full_path)
@@ -59,10 +60,11 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         #Generate final gltf and export full nft model with metadata
         generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kadcar_export_file_name)
         nft_output_path = os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
+        # nft_output_path = os.path.join("K:/", "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
         if not os.path.exists(nft_output_path):
             os.mkdir(nft_output_path)
         # export_scene_as_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name), True, 'GLTF_EMBEDDED')
-        # add_metadata_to_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name), build_background_metadata(bg_config_data), ".glb")
+        # add_metadata_to_gltf(os.path.join(nft_output_path + "/" + nft_export_file_name), build_background_metadata(bg_config_data, kadcar_specs['Background']), ".glb")
         export_dictionary_to_json(kadcar_metadata, os.path.join(nft_output_path + "/" + nft_name))
 
         #Render and clear

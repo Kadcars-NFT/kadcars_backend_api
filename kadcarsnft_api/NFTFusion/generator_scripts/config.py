@@ -45,7 +45,7 @@ CONFIG = [
     {
         'id': 4,
         'name': 'Trim',
-        'directory': 'trims',
+        'directory': 'trim_names',
         'required': False,
         'rarity_weights': None,
     },

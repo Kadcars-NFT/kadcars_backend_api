@@ -63,12 +63,13 @@ def change_object_emission_level(tgt_object, emission_value, emission_color):
     print(bsdf.inputs["Emission Strength"].default_value)
 
 def apply_texture_image_to_object(clean, tex_image_path, tgt_object):
-    if clean:
-        tgt_object.data.materials.clear()
+    # if clean:
+    #     tgt_object.data.materials.clear()
 
-    material = bpy.data.materials.new(name='trim_texture')
-    bsdf = get_principled_bsdf_for_material_by_name('trim_texture')
-
+    # material = bpy.data.materials.new(name='trim_texture')
+    # bsdf = get_principled_bsdf_for_material_by_name('trim_texture')
+    bsdf = get_principled_bsdf_for_active_material(tgt_object)
+    material = tgt_object.material_slots[0].material
     texImage = material.node_tree.nodes.new('ShaderNodeTexImage')
     texImage.image = bpy.data.images.load(tex_image_path)
 
@@ -96,7 +97,9 @@ def transfer_materials(clean, src, tgt):
 def get_material_for_given_car_part(kadcar_specs, part):
     dirname = os.path.dirname(__file__)
     primary_color = kadcar_specs['Color']
+    
     material = extract_json_attribute_data(os.path.join(dirname, 'json_config_files/color_groupings.json'), primary_color)[part]
+
     return material
 
 def add_background_shader_node(tree_nodes, strength):

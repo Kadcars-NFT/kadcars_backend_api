@@ -78,7 +78,7 @@
                         }
                     },
                     {
-                        "key": "ground-to-roof",
+                        "key": "max-height",
                         "val": {
                             "value": 0.0,
                             "unit": ""
@@ -172,20 +172,6 @@
                         "val": {
                             "value": 0.0,
                             "unit": "lbs"
-                        }
-                    },
-                    {
-                        "key": "grip",
-                        "val": {
-                            "value": 0.0,
-                            "unit": "%"
-                        }
-                    },
-                    {
-                        "key": "handling",
-                        "val": {
-                            "value": 0.0,
-                            "unit": "%"
                         }
                     },
                     {

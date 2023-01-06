@@ -6,6 +6,8 @@ from shader_utils import *
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
 from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json, extract_json_attribute_data
+from stat_dictionaries import *
+from nft_metadata_handler import *
 
 def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_metadata):
     #Add material spheres to scene
@@ -23,7 +25,7 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
 
     #Add color and material to body
     add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + feature_names['colors'][kadcar_specs['Color']])
 
     #Change headlight color
     change_kadcar_headlight_color(kadcar_metadata, kadcar_specs)
@@ -38,7 +40,7 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
         if material_name == "default":
             continue
         add_material_and_colorize_components(components_to_colorize, material_name)
-    
+
     return kadcar_metadata
 
 def add_material_and_colorize_components(car_part_objects, material_name):
@@ -47,7 +49,7 @@ def add_material_and_colorize_components(car_part_objects, material_name):
 
 def apply_paint_job_to_kadcar_body_from_presets(filepath_prefix, primary_color_independent, kadcar_specs, kadcar_metadata):
     add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + kadcar_specs['Color'])
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', feature_names['colors'][kadcar_specs['Color']])
 
 def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs):
     trim_object = bpy.data.objects['Car_Trim']
@@ -65,7 +67,7 @@ def add_trim_to_kadcar(filepath_prefix, trim_type, kadcar_metadata, kadcar_specs
         stat_type = "texture"
         apply_texture_image_to_object(True, os.path.join(filepath_prefix, 'trims/' + trim_type + '.jpg'), trim_object)
 
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'trim', stat_type, trim_type)
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'trim', stat_type, feature_names['trims'][trim_type])
 
 def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
     headlight_object = bpy.data.objects['Headlights']
@@ -81,7 +83,7 @@ def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
         color_vector = [1.0, 0.143401, 0.001641, 1.0]
         change_object_base_color(color_vector, 'headlight_color', headlight_object) #Orange headlights
     
-    change_object_emission_level(headlight_object, 20.0, color_vector)
+    change_object_emission_level(headlight_object, 12.5, color_vector)
     update_visual_stat_type_and_id_in_metadata(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'headlights', 'material', color_name)
 
 def add_rims_to_kadcar(rim_gltf_path):
@@ -213,125 +215,6 @@ def replace_object(should_transfer_w_materials, should_clear_old_materials, dest
     if should_transfer_w_materials:
         transfer_materials(should_clear_old_materials, dest_group_object, target_object)
 
-def build_car_metadata(kadcar_specs):
-    dirname = os.path.dirname(__file__)
+def format_tire_size():
+    return ""
 
-    if kadcar_specs['Kadcar'] == "k2p":
-        clearance_light_file = "clearance_light_1"
-        
-        if kadcar_specs['Spoiler'] == 'spoiler_2':
-            clearance_light_file = "clearance_light_2"
-
-        kadcar_specs['Spoiler'] = clearance_light_file
-
-    kadcar_export_file_name = str(
-        kadcar_specs['Kadcar'] + "_" + kadcar_specs['Rim'] + "_" +
-        kadcar_specs['Spoiler'] + "_" + kadcar_specs['Trim'] + "_" + 
-        kadcar_specs['Color'] + "_" + kadcar_specs['Material'] + "_" + 
-        kadcar_specs['Background']
-    )
-
-    spoiler_clearance_light_meta = None
-    
-    if kadcar_specs['Kadcar'] == 'k2p':
-        spoiler_clearance_light_meta = ({
-            "name": "clearance-light",
-            "stats": [
-                {
-                    "key": "clearance-light-type",
-                    "val": "clearance-light-" + kadcar_specs['Spoiler'].split('_')[1]
-                }
-            ]
-        })
-    else:
-        spoiler_clearance_light_meta = ({
-            "name": "spoiler",
-            "stats": [
-                {
-                    "key": "spoiler-type",
-                    "val": kadcar_specs['Spoiler']
-                },
-                {
-                    "key": "handling",
-                    "val": {
-                        "value": "",
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "downforce",
-                    "val": {
-                        "value": "",
-                        "unit": ""
-                    }
-                },
-                {
-                    "key": "aerodynamic-factor",
-                    "val": {
-                        "value": "",
-                        "unit": ""
-                    }
-                }
-            ]
-        })
-
-    kadcar_metadata_json = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))
-    kadcar_metadata_components = kadcar_metadata_json["mutable-state"]["components"]
-
-    kadcar_metadata_components.append(spoiler_clearance_light_meta)
-    if kadcar_specs['Kadcar'] == "k2":
-        update_metadata_stat(kadcar_metadata_components, "spoiler", "spoiler-type", kadcar_specs['Spoiler'])
-        print(spoiler_clearance_light_meta)
-    else:
-        update_metadata_stat(kadcar_metadata_components, "clearance-light", "clearance-light-type", kadcar_specs['Spoiler'])
-
-    update_metadata_stat(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
-    update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", kadcar_specs['Rim'])
-    update_metadata_stat(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + "-" + kadcar_specs['Color'] })
-    update_metadata_stat(kadcar_metadata_components, "trim", "trim-material", { "type": "material", "id": kadcar_specs['Trim'] })
-
-    # return kadcar_export_file_name, kadcar_metadata
-    return kadcar_export_file_name, kadcar_metadata_json
-
-def update_metadata_stat(kadcar_metadata, primary, secondary, value):
-    for metadata in kadcar_metadata:
-        if metadata["name"] == primary:
-            for stat in metadata["stats"]:
-                if stat["key"] == secondary:
-                    stat["val"] = value
-
-def update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, part, type, stat_val_id):
-    for metadata in kadcar_metadata_components:
-        for stat in metadata["stats"]:
-            if stat["key"] == str(part + "-material"):
-                stat["val"]["type"] = type
-                    
-                if part == 'Car_Body':
-                    stat_val_id = get_color_name(kadcar_specs['Color'])
-
-                # stat["val"]["id"] = kadcar_specs['Material'] + "-" + kadcar_specs['Color']
-                stat["val"]["id"] = stat_val_id
-
-def get_color_name(color):
-    if color == 'black':
-        return 'onyx-black'
-    elif color == 'red':
-        return ''
-    elif color == 'green':
-        return ''
-    elif color == 'gold':
-        return ''
-    elif color == 'blue':
-        return ''
-    elif color == 'orange':
-        return ''
-    elif color == 'lightgray':
-        return ''
-    elif color == 'darkgray':
-        return ''
-    elif color == 'cyan':
-        return ''
-    elif color == 'purple':
-        return ''
-    elif color == 'pink':
-        return ''
