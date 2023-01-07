@@ -193,14 +193,14 @@
                     {
                         "key": "weight",
                         "val": {
-                            "value": 0.0,
+                            "value": 390.0,
                             "unit": "lbs"
                         }
                     },
                     {
                         "key": "horse-power",
                         "val": {
-                            "value": 0.0,
+                            "value": 754.0,
                             "unit": "hp"
                         }
                     },

@@ -22,7 +22,8 @@ def extract_json_keys(json_file):
 
 def export_dictionary_to_json(dictionary, output):
     dirname = os.path.dirname(__file__)
-    with open(os.path.join(dirname, output + ".json"), "w") as outfile:
+    # with open(os.path.join(dirname, output + ".json"), "w") as outfile:
+    with open(os.path.join("K:/", output + ".json"), "w") as outfile:
         json.dump(dictionary, outfile)
 
 def remove_dir_at_path(dir_path):

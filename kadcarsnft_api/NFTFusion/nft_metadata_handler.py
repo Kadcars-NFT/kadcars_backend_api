@@ -62,6 +62,13 @@ def build_car_metadata(kadcar_specs):
                         "value": kadcar_stats[kadcar_specs['Kadcar']]['spoiler']['aerodynamic-factor'],
                         "unit": ""
                     }
+                },
+                {
+                    "key": "weight",
+                    "val": {
+                        "value": weights[kadcar_specs['Kadcar']][kadcar_specs['Spoiler']],
+                        "unit": "kg"
+                    }
                 }
             ]
         })
@@ -69,23 +76,35 @@ def build_car_metadata(kadcar_specs):
     kadcar_metadata_json = extract_data_from_json(os.path.join(dirname, "json_config_files/kc_metadata.json"))
     kadcar_metadata_components = kadcar_metadata_json["mutable-state"]["components"]
     kadcar_metadata_components.append(spoiler_clearance_light_meta)
-    
+
     if kadcar_specs['Kadcar'] == "k2":
         update_metadata_stat(kadcar_metadata_components, "spoiler", "spoiler-type", feature_names['spoilers'][kadcar_specs['Spoiler']])
     else:
         update_metadata_stat(kadcar_metadata_components, "clearance-light", "clearance-light-type", feature_names['spoilers'][kadcar_specs['Spoiler']])
 
-    #Cosmetic stats
+    #Body stats
     update_metadata_stat(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
-    update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", feature_names['rims'][kadcar_specs['Rim']])
     update_metadata_stat(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + feature_names['colors'][kadcar_specs['Color']] })
-    update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, 'rim', 'material', rim_materials[kadcar_specs['Rim']])
-
-    #Performance stats
     update_metadata_stat(kadcar_metadata_components, "body", "downforce", { "value": kadcar_stats[kadcar_specs['Kadcar']]['downforce'], "unit": "%"})
     update_metadata_stat(kadcar_metadata_components, "body", "aerodynamic-factor", { "value": kadcar_stats[kadcar_specs['Kadcar']]['aerodynamic-factor'], "unit": "%"})
+    update_metadata_stat(kadcar_metadata_components, "body", "max-width", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-width'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "body", "max-length", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-length'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "body", "max-height", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-height'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "body", "wheel-base", { "value": kadcar_stats[kadcar_specs['Kadcar']]['wheel-base'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "body", "ground-clearance", { "value": kadcar_stats[kadcar_specs['Kadcar']]['ground-clearance'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "body", "weight", { "value": weights[kadcar_specs['Kadcar']]['wheel'], "unit": "m"})
+
+    #Wheel stats
+    update_metadata_stat(kadcar_metadata_components, "wheel", "rim-type", feature_names['rims'][kadcar_specs['Rim']])
+    update_metadata_stat(kadcar_metadata_components, "wheel", "width", { "value": wheel_stats[kadcar_specs['Rim']]['width'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "wheel", "height", { "value": wheel_stats[kadcar_specs['Rim']]['height'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "wheel", "rim-to-edge", { "value": wheel_stats[kadcar_specs['Rim']]['rim-to-edge'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "wheel", "diameter", { "value": wheel_stats[kadcar_specs['Rim']]['diameter'], "unit": "m"})
+    update_metadata_stat(kadcar_metadata_components, "wheel", "braking-power", { "value": kadcar_stats[kadcar_specs['Kadcar']]['braking-power'], "unit": "m"})
+    update_visual_stat_type_and_id_in_metadata(kadcar_metadata_components, kadcar_specs, 'rim', 'material', rim_stats[kadcar_specs['Rim']]['material'])
 
     #Engine stats
+    update_metadata_stat(kadcar_metadata_components, "body", "aerodynamic-factor", { "value": kadcar_stats[kadcar_specs['Kadcar']]['aerodynamic-factor'], "unit": "%"})
 
     
     #Derived stats

@@ -10,7 +10,11 @@ kadcar_stats = {
             'aerodynamic-factor': 1.0,
             'downforce': 9.0
         },
-        'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors'
+        'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors',
+        'max-length': 3.35038,
+        'max-height': 1.32583,
+        'ground-clearance': 1.24046,
+        'wheel-base': 0.0
     },
     'k2': {
         'handling': 65.0,
@@ -23,7 +27,11 @@ kadcar_stats = {
             'aerodynamic-factor': 3.0,
             'downforce': 6.0
         },
-        'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors'
+        'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors',
+        'max-length': 3.35038,
+        'max-height': 1.32583,
+        'ground-clearance': 1.24046,
+        'wheel-base': 0.0
     }
 }
 
@@ -68,12 +76,30 @@ feature_names = {
     }
 }
 
-rim_materials = {
-    'rims_1': 'matte-maroon',
-    'rims_2': 'matte-black',
-    'rims_3': 'steel-darkgray',
-    'rims_4': 'matte-black',
-    'rims_5': 'steel-darkgray',
+rim_stats = {
+    'rims_1': {
+        'material': 'matte-maroon',
+    },
+    'rims_2': {
+        'material': 'matte-black',
+    },
+    'rims_3': {
+        'material': 'steel-darkgray',
+    },
+    'rims_4': {
+        'material': 'matte-black',
+    },
+    'rims_5': {
+        'material': 'steel-darkgray',
+    },
+}
+
+wheel_stats = {
+    'width': 0.0,
+    'height': 0.0,
+    'rim-to-edge': 0.0,
+    'diameter': 0.0,
+    'braking-power': 0.0
 }
 
 hdri_ipfs_urls = {
@@ -82,4 +108,28 @@ hdri_ipfs_urls = {
     'beach': 'ipfs://',
     'storage': 'ipfs://',
     'mountain': 'ipfs://',
+}
+
+weights = {
+    'k2': {
+        'engine': 185.0,
+        'electric_motor': 184.0,
+        'body': 1600.0,
+        'tire': 4.0,
+        'rim': 40.0,
+        'spoiler_1': 5.8,
+        'spoiler_2': 7.0,
+        'wheel': 0.0
+    },
+    'k2p': {
+        'engine': 185.0,
+        'electric_motor': 184.0,
+        'body': 1550.0,
+        'tire': 5.0,
+        'rim': 50.0,
+        'clearance_light_1': 7.0,
+        'clearance_light_2': 6.0,
+        'wheel_bar': 15.0,
+        'wheel': 0.0
+    }
 }

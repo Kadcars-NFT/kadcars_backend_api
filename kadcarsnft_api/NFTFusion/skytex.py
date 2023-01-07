@@ -1,6 +1,7 @@
 import os
 import bpy
 from scene_utils import customize_world_shader_nodes, import_scene_into_collection, export_scene_as_gltf
+from shader_utils import *
 from render_utils import *
 from pygltflib import GLTF2
 from pygltflib.utils import gltf2glb
@@ -11,6 +12,8 @@ path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 # customize_world_shader_nodes(os.path.join(path_to_assets_folder, "hdr_files/snow_background.hdr"), 'HDRI')
 # customize_world_shader_nodes(os.path.join(path_to_assets_folder, "hdr_files/snow_background.hdr"), 'cyber')
+change_object_base_color((1.0, 0.10, 0.0, 1.0), "test", bpy.data.objects["Cube"])
+change_object_emission_level(bpy.data.objects["Cube"], 500.0)
 configure_render_settings('CYCLES', 'CUDA', 'CPU', 20, 10)
 set_render_output_settings(os.path.join(dirname, "lolol"), 'WEBP', 2163, 1403, True)
 
