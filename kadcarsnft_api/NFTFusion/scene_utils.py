@@ -353,9 +353,11 @@ def build_background_metadata(bg_config_data, background):
         "config": {
             "shader_nodes": bg_config_data['shader_nodes'],
             "render_settings": bg_config_data['render_settings']
-        },
-        "hdri-url": hdri_ipfs_urls[background]
+        }
     }
+
+    if background == 'beach' or background == 'mountain' or background == 'storage':
+        metadata['hdri-url'] = hdri_ipfs_urls[background]
 
     return metadata
 

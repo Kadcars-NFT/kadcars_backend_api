@@ -13,8 +13,13 @@ kadcar_stats = {
         'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors',
         'max-length': 3.35038,
         'max-height': 1.32583,
+        'max-width': 0.0,
         'ground-clearance': 1.24046,
-        'wheel-base': 0.0
+        'wheel-base': 0.0,
+        'wheel-type': 'offroad',
+        'horse-power': 754.0,
+        'engine-size': 3.5,
+        'fuel-consumption': '20/12.8/100'
     },
     'k2': {
         'handling': 65.0,
@@ -30,8 +35,13 @@ kadcar_stats = {
         'engine-type': 'Hybrid : V6 3.5L + Twin Electric Motors',
         'max-length': 3.35038,
         'max-height': 1.32583,
+        'max-width': 0.0,
         'ground-clearance': 1.24046,
-        'wheel-base': 0.0
+        'wheel-base': 0.0,
+        'wheel-type': 'offroad',
+        'horse-power': 754.0,
+        'engine-size': 3.5,
+        'fuel-consumption': '20/12.8/100'
     }
 }
 
@@ -47,7 +57,8 @@ feature_names = {
         'lightgray': 'Silver Bullet',
         'darkgray': 'Graphite Gray',
         'orange': 'Marmalade Orange',
-        'purple': 'Ultraviolet'
+        'purple': 'Ultraviolet',
+        'white': 'Phantom White'
     },
     'backgrounds': {
         'beach': 'Kadena Beach',
@@ -67,8 +78,9 @@ feature_names = {
         'spoiler_1': 'Victory Wing',
         'spoiler_2': 'Precision'
     },
-    'clearance_light': {
-        'clearance'
+    'clearance-light': {
+        'clearance_light_1': 'Classic',
+        'clearance_light_2': 'LED Panel',
     },
     'trims': {
         'carbon_fiber': 'Carbon Fiber',
@@ -127,8 +139,8 @@ weights = {
         'body': 1550.0,
         'tire': 5.0,
         'rim': 50.0,
-        'clearance_light_1': 7.0,
-        'clearance_light_2': 6.0,
+        'clearance-light_1': 7.0,
+        'clearance-light_2': 6.0,
         'wheel_bar': 15.0,
         'wheel': 0.0
     }

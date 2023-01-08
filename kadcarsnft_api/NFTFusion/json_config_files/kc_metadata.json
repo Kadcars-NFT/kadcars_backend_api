@@ -85,7 +85,7 @@
                         }
                     },
                     {
-                        "key": "ground-clearance",
+                        "key": "max-width",
                         "val": {
                             "value": 0.0,
                             "unit": ""
@@ -99,14 +99,14 @@
                         }
                     },
                     {
-                        "key": "weight",
+                        "key": "ground-clearance",
                         "val": {
                             "value": 0.0,
                             "unit": ""
                         }
                     },
                     {
-                        "key": "max-width",
+                        "key": "weight",
                         "val": {
                             "value": 0.0,
                             "unit": ""
@@ -241,21 +241,28 @@
                         "key": "weight",
                         "val": {
                             "value": 0.0,
-                            "unit": "liters"
+                            "unit": "kg"
                         }
                     },
                     {
                         "key": "aerodynamic-factor",
                         "val": {
                             "value": 0.0,
-                            "unit": "mpg"
+                            "unit": "%"
                         }
                     },
                     {
                         "key": "downforce",
                         "val": {
                             "value": 0.0,
-                            "unit": "mpg"
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "%"
                         }
                     }
                 ]
