@@ -50,6 +50,13 @@
                         }
                     },
                     {
+                        "key": "headlight-panels",
+                        "val": {
+                            "type": "",
+                            "id": ""
+                        }
+                    },
+                    {
                         "key": "seats-material",
                         "val": {
                             "type": "",
@@ -240,11 +247,16 @@
                 "name": "drive-train",
                 "stats": [
                     {
-                        "drive-train-type": "4WD"
-                    },
-                    {
-                        "transmission-type": "automatic",
-                        "gears": "8 speed"
+                        "key": "drive-train",
+                        "val": [
+                            {
+                                "drive-train-type": "4WD"
+                            },
+                            {
+                                "transmission-type": "automatic",
+                                "gears": "8 speed"
+                            }
+                        ]
                     }
                 ]
             },
@@ -262,7 +274,7 @@
                         "key": "acceleration",
                         "val": {
                             "value": 0.0,
-                            "unit": "time"
+                            "unit": "s"
                         }
                     },
                     {

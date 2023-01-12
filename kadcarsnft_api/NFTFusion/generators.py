@@ -27,6 +27,13 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
     delete_all_objects()
 
     for index, kadcar_specs in kc_spec_list.iterrows():
+        #######################################################
+        #######################################################
+        if kadcar_specs['Headlight_Panels'] != 'carbon_fiber':
+            continue
+        #######################################################
+        #######################################################
+
         bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
         bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
         
@@ -54,7 +61,8 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
 
         #Export car model
         select_only_objects_in_collection_name("kadcar")
-        export_scene_as_gltf(os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name), export_all=False)
+        # export_scene_as_gltf(os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name), export_all=False)
+        export_scene_as_gltf("K:/completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name, export_all=False)
         delete_all_objects_in_scene()
 
         #Generate final gltf and export full nft model with metadata

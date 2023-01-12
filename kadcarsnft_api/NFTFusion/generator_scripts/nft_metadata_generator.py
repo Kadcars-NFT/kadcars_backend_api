@@ -25,6 +25,7 @@ def parse_config():
     assets_path = 'C:\\Users\\Mohannad Ahmad\\Desktop\\AppDev\\Crypto\\Kadena\\KadcarBackendApi\\kadcars_backend_api_local_bpy\\kadcars_backend_api\\kadcarsnft_api\\NFTFusion\\assets'
     dirname = os.path.dirname(__file__)
     assets_path = os.path.join(dirname, '../assets')
+    print(assets_path)
 
     # Loop through all layers defined in CONFIG
     for layer in CONFIG:
@@ -236,7 +237,7 @@ def main():
 
     print("Saving metadata...")
     rt.to_csv(os.path.join('output', 'edition ' + str(edition_name), 'metadata.csv'))
-    # split_df_into_chunks(rt, 10, 'K:/kadcars_metadata_batches')
+    split_df_into_chunks(rt, 10, 'K:/kadcars_metadata_batches')
 
     print("Task complete!")
 
@@ -246,6 +247,7 @@ def split_df_into_chunks(dataframe, num_chunks, output_directory):
     count = 0
     for chunk in df_chunks:
         chunk.to_csv(os.path.join(output_directory, 'batch_' + str(count) + '.csv'))
+        count += 1
 
 # Run the main function
 main()

@@ -45,7 +45,7 @@ CONFIG = [
     {
         'id': 4,
         'name': 'Trim',
-        'directory': 'trim_names',
+        'directory': 'trims',
         'required': True,
         'rarity_weights': [40,60],
     },
@@ -72,9 +72,16 @@ CONFIG = [
     },
     {
         'id': 8,
-        'name': 'Headalights',
+        'name': 'Headlights',
         'directory': 'headlights',
         'required': True,
         'rarity_weights': [10,90],
+    },
+    {
+        'id': 9,
+        'name': 'Headlight_Panels',
+        'directory': 'headlight_panels',
+        'required': True,
+        'rarity_weights': [25,75],
     }
 ]
