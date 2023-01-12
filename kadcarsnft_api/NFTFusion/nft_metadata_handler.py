@@ -20,7 +20,7 @@ def build_car_metadata(kadcar_specs):
         kadcar_specs['Spoiler'] + "_" + kadcar_specs['Trim'] + "_" + 
         kadcar_specs['Color'] + "_" + kadcar_specs['Material'] + "_" + 
         kadcar_specs['Background'] + "_" + kadcar_specs['Headlights'] + "_" +
-        kadcar_specs['Headlight Panels']
+        kadcar_specs['Headlight_Panels']
     )
 
     spoiler_clearance_light_meta = None
@@ -88,7 +88,7 @@ def build_car_metadata(kadcar_specs):
     update_metadata_mutable_state(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
     update_metadata_mutable_state(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + '-' + feature_names['colors'][kadcar_specs['Color']] })
     update_metadata_mutable_state(kadcar_metadata_components, "body", "headlight-panels", { "type": "texture", "id": kadcar_specs['Headlight_Panels']})
-    update_metadata_mutable_state(kadcar_metadata_components, "body", "max-length", { "value": kadcar_stats[kadcar_specs['Kadcar']]['headlight'], "unit": "m"})
+    update_metadata_mutable_state(kadcar_metadata_components, "body", "max-length", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-length'], "unit": "m"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "max-height", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-height'], "unit": "m"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "max-width", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-width'], "unit": "m"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "wheel-base", { "value": kadcar_stats[kadcar_specs['Kadcar']]['wheel-base'], "unit": "m"})

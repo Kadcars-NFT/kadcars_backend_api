@@ -37,7 +37,8 @@ def generate_kadcar_nft_with_background_gltf(path_to_asset_folder, kc_glb_name, 
     set_car_location_in_scene(kc_glb_path, bg_config_data["location"], bg_config_data["quaternion_rotation"])
 
 def generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kc_gltf_name):
-    kc_glb_path = os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kc_gltf_name)
+    # kc_glb_path = os.path.join(filepath_prefix, "completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kc_gltf_name)
+    kc_glb_path = "K:/completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kc_gltf_name
     bg_glb_path = os.path.join(filepath_prefix, "backgrounds/" + kadcar_specs['Background'] + "_no_car.glb")
     hdr_file_path = os.path.join(filepath_prefix, "hdr_files/" + kadcar_specs['Background'] + "_background")
     bg_config_path = os.path.join(filepath_prefix, 'background_config_files')

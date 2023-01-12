@@ -9,7 +9,7 @@
 *.hdr
 *.blend
 *.zip
-*.txt
+# *.txt
 *.csv
 *k2_*.json
 *.car
