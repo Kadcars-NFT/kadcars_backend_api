@@ -369,7 +369,8 @@ def export_scene_as_gltf(output_file, export_all=True, format='GLB'):
         bpy.ops.object.select_all(action="SELECT")
 
     bpy.ops.export_scene.gltf(
-        filepath=os.path.join(filepath, output_file),
+        # filepath=os.path.join(filepath, output_file),
+        filepath=output_file,
         use_selection=True,
         export_format=format,
         export_apply=True,
@@ -391,6 +392,6 @@ def add_metadata_to_gltf(gltf_file_path, metadata, save_format):
     gltf.extras = metadata
     gltf.save(gltf_file_path)
 
-    if save_format == '.glb':
-        output_file_path = gltf_file_path.split('.')[0] + save_format
-        gltf2glb(gltf_file_path, output_file_path, override=True)
+    # if save_format == '.glb':
+    #     output_file_path = gltf_file_path.split('.')[0] + save_format
+    #     gltf2glb(gltf_file_path, output_file_path, override=True)

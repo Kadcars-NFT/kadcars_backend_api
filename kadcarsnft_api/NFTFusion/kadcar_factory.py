@@ -2,7 +2,7 @@ import os
 import bpy
 import json
 from scene_utils import *
-from shader_utils import *
+from shader_utils import get_material_for_given_car_part, transfer_materials_bulk, transfer_materials, apply_texture_image_to_object, change_object_base_color, change_object_emission_level
 from scene_utils import deselect_all_scene_objects, import_scene_into_collection, parenting_object
 from bpy_data_utils import rename_object_in_scene
 from io_utils import extract_data_from_json, extract_json_attribute_data
@@ -74,11 +74,13 @@ def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
     color_name = ""
     color_vector = None
 
-    if kadcar_specs['Spoiler'] == 'spoiler_1' or kadcar_specs['Spoiler'] == 'clearance_light_1':
+    # if kadcar_specs['Spoiler'] == 'spoiler_1' or kadcar_specs['Spoiler'] == 'clearance_light_1':
+    if kadcar_specs['Headlights'] == 'white':
         color_name = "white"
         color_vector = [1.0, 1.0, 1.0, 1.0]
         change_object_base_color(color_vector, 'headlight_color', headlight_object) #White headlights
-    elif kadcar_specs['Spoiler'] == 'spoiler_2' or kadcar_specs['Spoiler'] == 'clearance_light_2':
+    # elif kadcar_specs['Spoiler'] == 'spoiler_2' or kadcar_specs['Spoiler'] == 'clearance_light_2':
+    elif kadcar_specs['Headlights'] == 'orange':
         color_name = "orange"
         color_vector = [1.0, 0.143401, 0.001641, 1.0]
         change_object_base_color(color_vector, 'headlight_color', headlight_object) #Orange headlights

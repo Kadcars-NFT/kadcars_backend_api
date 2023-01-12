@@ -147,76 +147,104 @@
                         }
                     },
                     {
-                        "key": "width",
+                        "key": "size",
                         "val": {
-                            "value": 0.0,
-                            "unit": ""
-                        }
-                    },
-                    {
-                        "key": "diameter",
-                        "val": {
-                            "value": 0.0,
-                            "unit": ""
-                        }
-                    },
-                    {
-                        "key": "rim-to-edge",
-                        "val": {
-                            "value": 0.0,
-                            "unit": "m"
+                            "value": "391/50 R 23",
+                            "unit": "<width>/<height/width> R <rim diameter>"
                         }
                     },
                     {
                         "key": "weight",
                         "val": {
                             "value": 0.0,
-                            "unit": "lbs"
+                            "unit": "kg"
                         }
                     },
                     {
                         "key": "braking-power",
                         "val": {
-                            "value": 0.0,
+                            "value": 70.0,
                             "unit": "%"
                         }
                     }
                 ]
             },
             {
-                "name": "engine",
+                "name": "power-unit",
                 "stats": [
                     {
-                        "key": "engine-type",
-                        "val": ""
+                        "key": "power-units",
+                        "val": [
+                            {
+                                "unit-type": "v6 3.5 liter",
+                                "weight": {
+                                    "value": 185.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 340.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 375.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 372.0,
+                                    "unit": "nm@4800 rpm"
+                                }
+                            },
+                            {
+                                "unit-type": "electric motor",
+                                "weight": {
+                                    "value": 92.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 207.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 65.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 350.0,
+                                    "unit": "nm"
+                                }
+                            },
+                            {
+                                "unit-type": "electric motor",
+                                "weight": {
+                                    "value": 92.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 207.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 65.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 350.0,
+                                    "unit": "nm"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "drive-train",
+                "stats": [
+                    {
+                        "drive-train-type": "4WD"
                     },
                     {
-                        "key": "weight",
-                        "val": {
-                            "value": 390.0,
-                            "unit": "lbs"
-                        }
-                    },
-                    {
-                        "key": "horse-power",
-                        "val": {
-                            "value": 754.0,
-                            "unit": "hp"
-                        }
-                    },
-                    {
-                        "key": "size",
-                        "val": {
-                            "value": 0.0,
-                            "unit": "liters"
-                        }
-                    },
-                    {
-                        "key": "fuel-consumption",
-                        "val": {
-                            "value": 0.0,
-                            "unit": "mpg"
-                        }
+                        "transmission-type": "automatic",
+                        "gears": "8 speed"
                     }
                 ]
             },
@@ -227,11 +255,11 @@
                         "key": "top-speed",
                         "val": {
                             "value": 0.0,
-                            "unit": ""
+                            "unit": "km/h"
                         }
                     },
                     {
-                        "key": "0-60",
+                        "key": "acceleration",
                         "val": {
                             "value": 0.0,
                             "unit": "time"
@@ -271,7 +299,7 @@
                 "name": "background",
                 "stats": [
                     {
-                        "key": "type",
+                        "key": "name",
                         "val": ""
                     }
                 ]
@@ -280,7 +308,6 @@
     },
     "view-refs": {
         "data": "",
-        "scheme": "ipfs",
-        "cid": ""
+        "scheme": "ipfs://"
     }
 }

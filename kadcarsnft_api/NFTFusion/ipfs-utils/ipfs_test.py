@@ -6,8 +6,10 @@ from io_utils import *
 
 dirname = os.path.dirname(__file__)
 metadata_dir = os.path.join(dirname, "../metadata_json")
-kadcar_dirs_root = os.path.join(dirname, "../assets/completed_nfts/")
-car_folder_path = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/car_files/'
+# kadcar_dirs_root = os.path.join(dirname, "../assets/completed_nfts/")
+kadcar_dirs_root = "K:/completed_nfts/"
+# car_folder_path = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/car_files/'
+car_folder_path = 'K:/car_files/'
 
 def car_file_generator():
     for dir in os.listdir(kadcar_dirs_root):
@@ -27,7 +29,8 @@ def car_file_generator():
                 car_file_output_path = os.path.join(car_file_dest_directory, output_file_name + ".car")
                 create_dir_at_path(car_file_dest_directory)
                 
-                glb_path = os.path.join(nft_dir_path, nft_dir_name + "_nft.glb")
+                # glb_path = os.path.join(nft_dir_path, nft_dir_name + "_nft.glb")
+                glb_path = os.path.join(nft_dir_path, "nft.glb")
 
                 #Create the car files
                 pack_and_split_CAR_file(glb_path, car_file_output_path, output_file_name)
@@ -43,7 +46,7 @@ def car_file_generator():
                     cid = upload_asset_to_ipfs(car_file_path, 'application/car')
                     print(car_file_path + "   CID: " + cid + "\n")
 
-                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), "ipfs://" + cid, ["views-refs", "data"])
+                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "glb")
                 if not remove_dir_at_path(car_file_dest_directory):
                     print("Error removing directory")
 
@@ -58,6 +61,6 @@ def car_file_generator():
                 cid = upload_asset_to_ipfs(webp_render_path, 'image/*')
                 print(webp_render_path + "   CID: " + cid + "\n")
 
-                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, "/", nft_dir_name + ".json"), "ipfs://" + cid, ["webp-ipfs"])
+                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "webp")
 
 car_file_generator()

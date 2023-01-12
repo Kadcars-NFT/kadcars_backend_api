@@ -4,6 +4,7 @@ import shutil
 
 def extract_data_from_json(json_file):
     try:
+        print(json_file)
         f = open(json_file)
         data = json.load(f)
         f.close()

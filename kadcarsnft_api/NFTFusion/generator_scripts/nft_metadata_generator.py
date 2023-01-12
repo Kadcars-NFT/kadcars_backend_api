@@ -236,9 +236,16 @@ def main():
 
     print("Saving metadata...")
     rt.to_csv(os.path.join('output', 'edition ' + str(edition_name), 'metadata.csv'))
+    # split_df_into_chunks(rt, 10, 'K:/kadcars_metadata_batches')
 
     print("Task complete!")
 
+def split_df_into_chunks(dataframe, num_chunks, output_directory):
+    df_chunks = np.array_split(dataframe, num_chunks)
+
+    count = 0
+    for chunk in df_chunks:
+        chunk.to_csv(os.path.join(output_directory, 'batch_' + str(count) + '.csv'))
 
 # Run the main function
 main()

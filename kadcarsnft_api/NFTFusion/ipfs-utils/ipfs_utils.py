@@ -50,9 +50,13 @@ def pack_and_split_CAR_file(asset_path, output_path, asset_file_name):
     #split CAR file 
     os.system("carbites split " + out_path + " --size 100MB --strategy treewalk")
 
-def add_ipfs_data_to_kc_metadata(asset_file_name, cid, keys_array):
-    kadcar_metadata = extract_data_from_json(asset_file_name)
+def add_ipfs_data_to_kc_metadata(asset_file_name, ipfs_url, destination):
+    kadcar_metadata = extract_data_from_json(asset_file_name + '.json')
     
     if kadcar_metadata:
-        kadcar_metadata["cid"] = cid
+        if destination == 'webp':
+            kadcar_metadata["webp-ipfs"] = ipfs_url
+        elif destination == 'glb':
+            kadcar_metadata["view-refs"]["data"] = ipfs_url
+
         export_dictionary_to_json(kadcar_metadata, asset_file_name)
