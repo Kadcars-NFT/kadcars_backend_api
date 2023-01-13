@@ -1,0 +1,21 @@
+{
+    "id": "matte_purple",
+    "Subsurface IOR": 1.4,
+    "Subsurface Anisotropy": 0.0,
+    "Metallic": 0.759,
+    "Specular": 0.5,
+    "Specular Tint": 0.0,
+    "Roughness": 0.364,
+    "Anisotropic": 0.0,
+    "Anisotropic Rotation": 0.0,
+    "Sheen": 0.0,
+    "Sheen Tint": 0.5,
+    "Clearcoat": 0.0,
+    "Clearcoat Roughness": 0.03,
+    "IOR": 1.45,
+    "Transmission": 0.0,
+    "Transmission Roughness": 0.0,
+    "Emission": "black",
+    "Emission Strength": 1.0,
+    "Alpha": 1.0
+}
