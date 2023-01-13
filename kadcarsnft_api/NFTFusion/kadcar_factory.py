@@ -23,6 +23,8 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
     #Apply trim to kadcar
     add_trim_to_kadcar(filepath_prefix, kadcar_specs['Trim'], kadcar_metadata, kadcar_specs)
 
+    add_headlight_panels_to_kadcar(filepath_prefix, kadcar_specs)
+
     #Add color and material to body
     add_material_and_colorize_components(primary_color_independent['body'], str(kadcar_specs['Material'] + "-" + kadcar_specs['Color']))
     # update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata["mutable-state"]["components"], kadcar_specs, "body", 'material', kadcar_specs['Material'] + "-" + feature_names['colors'][kadcar_specs['Color']])
@@ -87,6 +89,24 @@ def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
     
     change_object_emission_level(headlight_object, 12.5, color_vector)
     update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata["mutable-state"]["components"], kadcar_specs, 'headlights', 'material', color_name)
+
+def add_headlight_panels_to_kadcar(filepath_prefix, kadcar_specs):
+    if kadcar_specs['Headlight_Panels'] == 'grated':
+        return
+        
+    import_scene_into_collection(os.path.join(filepath_prefix, 'headlight_panels/' + kadcar_specs['Headlight_Panels'] + ".glb"), 'headlight_panels')
+
+    headlight_panels = bpy.data.objects['Metal_Sheet']
+    headlight_panels.select_set(True)
+    bpy.data.objects.remove(headlight_panels, do_unlink=True)
+    bpy.ops.outliner.orphans_purge()
+
+    deselect_all_scene_objects()
+    place_object(False, False, 'Kadcar_Empty', 'Metal_Sheet.001')
+    rename_object_in_scene('Metal_Sheet.001', 'Metal_Sheet')
+    
+    deselect_all_scene_objects()
+    relink_collection('headlight_panels', 'kadcar')
 
 def add_rims_to_kadcar(rim_gltf_path):
     import_scene_into_collection(rim_gltf_path, 'rims')

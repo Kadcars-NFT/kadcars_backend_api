@@ -101,7 +101,6 @@ def build_car_metadata(kadcar_specs):
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "wheel-type", kadcar_stats[kadcar_specs['Kadcar']]['wheel-type'])
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "rim-type", feature_names['rims'][kadcar_specs['Rim']])
     update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata_components, kadcar_specs, 'rim', 'material', rim_stats[kadcar_specs['Rim']]['material'])
-    update_metadata_mutable_state(kadcar_metadata_components, "wheel", "size", { "value": wheel_stats['size'], "unit": "<width>/<height/width> R <rim diameter>"})
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "weight", { "value": weights[kadcar_specs['Kadcar']]['wheel'], "unit": "kg"})
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "braking-power", { "value": kadcar_stats[kadcar_specs['Kadcar']]['braking-power'], "unit": "%"})
 

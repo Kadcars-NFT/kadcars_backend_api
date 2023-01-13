@@ -27,13 +27,6 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
     delete_all_objects()
 
     for index, kadcar_specs in kc_spec_list.iterrows():
-        #######################################################
-        #######################################################
-        if kadcar_specs['Headlight_Panels'] != 'carbon_fiber':
-            continue
-        #######################################################
-        #######################################################
-
         bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
         bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
         
