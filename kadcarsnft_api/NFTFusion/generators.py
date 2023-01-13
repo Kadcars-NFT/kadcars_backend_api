@@ -64,8 +64,8 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         nft_output_path = os.path.join("K:/", "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
         if not os.path.exists(nft_output_path):
             os.mkdir(nft_output_path)
-        # export_scene_as_gltf(os.path.join(nft_output_path + "/" + "nft"), True, 'GLB')
-        # add_metadata_to_gltf(os.path.join(nft_output_path + "/" + "nft.glb"), build_background_metadata(bg_config_data, kadcar_specs['Background']), ".glb")
+        export_scene_as_gltf(os.path.join(nft_output_path + "/" + "nft"), True, 'GLB')
+        add_metadata_to_gltf(os.path.join(nft_output_path + "/" + "nft.glb"), build_background_metadata(bg_config_data, kadcar_specs['Background']), ".glb")
         export_dictionary_to_json(kadcar_metadata, os.path.join(nft_output_path + "/" + nft_name))
 
         #Render and clear

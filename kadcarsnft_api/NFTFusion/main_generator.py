@@ -15,7 +15,8 @@ path_to_assets_folder = os.path.join(dirname, 'assets')
 path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 #read csv file containing metadata
-metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
+# metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
+metadata_df = pd.read_csv('K:/kadcars_metadata_batches/batch_0.csv')
 
 kadcar_glbs = generate_kadcars_with_given_specs_gltfs(metadata_df, path_to_assets_folder)
 
