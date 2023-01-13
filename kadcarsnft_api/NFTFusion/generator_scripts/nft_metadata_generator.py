@@ -250,4 +250,7 @@ def split_df_into_chunks(dataframe, num_chunks, output_directory):
         count += 1
 
 # Run the main function
-main()
+# main()
+
+df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'output/edition prod2/metadata.csv'))
+split_df_into_chunks(df, 60, 'K:/kadcars_metadata_batches')

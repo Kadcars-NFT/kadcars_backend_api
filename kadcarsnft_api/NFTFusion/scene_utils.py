@@ -219,7 +219,7 @@ def customize_world_shader_nodes(hdri, type):
 def import_background_into_scene(filepath, collection_name, hdri=None):
     deselect_all_scene_objects()
     import_scene_into_collection(filepath, collection_name)
-    set_scene_camera(cam_name="Camera")
+    set_scene_camera(cam_name="Camera_Orientation")
 
     if hdri:
         customize_world_shader_nodes(hdri)
