@@ -25,7 +25,8 @@ def generate_kadcars_with_given_specs_gltfs(kadcars_metadata_df, filepath_prefix
 
 def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
     delete_all_objects()
-
+    f = None
+    count = 0
     for index, kadcar_specs in kc_spec_list.iterrows():
         bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
         bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
@@ -71,7 +72,11 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         #Render and clear
         generate_render_for_nft(os.path.join(nft_output_path + "/" + nft_render_file_name), bg_config_data)
         delete_all_objects_in_scene()
-
+        
+        count += 1
+        f = open('K:/batch_0.txt', 'a')
+        f.write(str(count) + '  ' + nft_name + '\n')
+        f.close()
 
 def generate_render_for_nft(destination_file, bg_config_data):
     configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
