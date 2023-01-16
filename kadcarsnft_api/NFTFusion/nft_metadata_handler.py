@@ -33,6 +33,10 @@ def build_car_metadata(kadcar_specs):
                     "key": "clearance-light-type",
                     # "val": "clearance-light-" + kadcar_specs['Spoiler'].split('_')[1]
                     "val": feature_names['clearance-light'][kadcar_specs['Spoiler']]
+                },
+                {
+                    "key": "weight",
+                    "val": weights[kadcar_specs['Kadcar']][kadcar_specs['Spoiler']]
                 }
             ]
         })
@@ -48,21 +52,21 @@ def build_car_metadata(kadcar_specs):
                     "key": "handling",
                     "val": {
                         "value": kadcar_stats[kadcar_specs['Kadcar']]['spoiler'][kadcar_specs['Spoiler']]['handling'],
-                        "unit": ""
+                        "unit": "%"
                     }
                 },
                 {
                     "key": "downforce",
                     "val": {
                         "value": kadcar_stats[kadcar_specs['Kadcar']]['spoiler'][kadcar_specs['Spoiler']]['downforce'],
-                        "unit": ""
+                        "unit": "%"
                     }
                 },
                 {
                     "key": "aerodynamic-factor",
                     "val": {
                         "value": kadcar_stats[kadcar_specs['Kadcar']]['spoiler'][kadcar_specs['Spoiler']]['aerodynamic-factor'],
-                        "unit": ""
+                        "unit": "%"
                     }
                 },
                 {
@@ -85,9 +89,10 @@ def build_car_metadata(kadcar_specs):
         update_metadata_mutable_state(kadcar_metadata_components, "clearance-light", "clearance-light-type", feature_names['clearance-light'][kadcar_specs['Spoiler']])
 
     #Body stats
-    update_metadata_mutable_state(kadcar_metadata_components, "body", "body-type", kadcar_specs['Kadcar'])
-    update_metadata_mutable_state(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": kadcar_specs['Material'] + '-' + feature_names['colors'][kadcar_specs['Color']] })
-    update_metadata_mutable_state(kadcar_metadata_components, "body", "headlight-panels", { "type": "texture", "id": kadcar_specs['Headlight_Panels']})
+    kadcar_metadata_json["vehicle-information"]["model"] = feature_names['body-type'][kadcar_specs['Kadcar']]
+    update_metadata_mutable_state(kadcar_metadata_components, "body", "body-type", feature_names['body-type'][kadcar_specs['Kadcar']])
+    update_metadata_mutable_state(kadcar_metadata_components, "body", "body-material", { "type": "material", "id": feature_names['materials'][kadcar_specs['Material']] + '-' + feature_names['colors'][kadcar_specs['Color']] })
+    update_metadata_mutable_state(kadcar_metadata_components, "body", "headlight-panels", { "type": "texture", "id": feature_names['headlight-panels'][kadcar_specs['Headlight_Panels']]})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "max-length", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-length'], "unit": "m"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "max-height", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-height'], "unit": "m"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "max-width", { "value": kadcar_stats[kadcar_specs['Kadcar']]['max-width'], "unit": "m"})
@@ -96,10 +101,12 @@ def build_car_metadata(kadcar_specs):
     update_metadata_mutable_state(kadcar_metadata_components, "body", "weight", { "value": weights[kadcar_specs['Kadcar']]['body'], "unit": "kg"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "aerodynamic-factor", { "value": kadcar_stats[kadcar_specs['Kadcar']]['aerodynamic-factor'], "unit": "%"})
     update_metadata_mutable_state(kadcar_metadata_components, "body", "downforce", { "value": kadcar_stats[kadcar_specs['Kadcar']]['downforce'], "unit": "%"})
+    update_metadata_mutable_state(kadcar_metadata_components, "body", "handling", { "value": kadcar_stats[kadcar_specs['Kadcar']]['handling'], "unit": "%"})
 
     #Wheel stats
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "wheel-type", kadcar_stats[kadcar_specs['Kadcar']]['wheel-type'])
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "rim-type", feature_names['rims'][kadcar_specs['Rim']])
+    update_metadata_mutable_state(kadcar_metadata_components, "wheel", "wheel-units", kadcar_stats[kadcar_specs['Kadcar']]['wheel-units'])
     update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata_components, kadcar_specs, 'rim', 'material', rim_stats[kadcar_specs['Rim']]['material'])
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "weight", { "value": weights[kadcar_specs['Kadcar']]['wheel'], "unit": "kg"})
     update_metadata_mutable_state(kadcar_metadata_components, "wheel", "braking-power", { "value": kadcar_stats[kadcar_specs['Kadcar']]['braking-power'], "unit": "%"})
@@ -114,7 +121,7 @@ def build_car_metadata(kadcar_specs):
     update_metadata_mutable_state(kadcar_metadata_components, "derived-stats", "top-speed", { "value": compute_top_speed(aerodynamic_factor_total), "unit": "km/h"})
 
     #Background
-    update_metadata_mutable_state(kadcar_metadata_components, "background", "name", kadcar_specs['Background'])
+    update_metadata_mutable_state(kadcar_metadata_components, "background", "name", feature_names['backgrounds'][kadcar_specs['Background']])
 
     # return kadcar_export_file_name, kadcar_metadata
     return kadcar_export_file_name, kadcar_metadata_json
@@ -154,8 +161,16 @@ def compute_stat_total_sum(stat_name, kadcar_specs):
     spoiler_type = kadcar_specs['Spoiler']
 
     if stat_name == 'weight':
-        for value in weights[kadcar_type].values():
-            total += value
+        for key, value in weights[kadcar_type].items():
+            if key == 'wheel':
+                continue
+            if key.split('_')[0] == 'clearance' or key.split('_')[0] == 'spoiler':
+                if key == kadcar_specs['Spoiler']:
+                    print(key + "    " + str(value))
+                    total += value
+            else:
+                print(key + "    " + str(value))
+                total += value
     elif stat_name == 'aerodynamic-factor' or stat_name == 'downforce' or stat_name == 'handling':
         total += kadcar_stats[kadcar_type][stat_name]
         if kadcar_type == 'k2':

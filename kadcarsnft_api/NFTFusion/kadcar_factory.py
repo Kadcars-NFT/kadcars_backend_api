@@ -37,7 +37,11 @@ def add_materials_and_colorize_kadcar(filepath_prefix, kadcar_specs, kadcar_meta
         components_to_colorize = primary_color_dependent[part]["objects"]
         material_name = get_material_for_given_car_part(kadcar_specs, part)
 
-        update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata["mutable-state"]["components"], kadcar_specs, part, 'material', material_name)
+        material_metadata_name = material_name
+        if material_name.split('-')[0] == 'steel':
+            material_metadata_name = 'matte metallic-' + material_name.split('-')[1]
+
+        update_cosmetic_type_and_id_in_mutable_state(kadcar_metadata["mutable-state"]["components"], kadcar_specs, part, 'material', material_metadata_name)
 
         if material_name == "default":
             continue
@@ -93,7 +97,7 @@ def change_kadcar_headlight_color(kadcar_metadata, kadcar_specs):
 def add_headlight_panels_to_kadcar(filepath_prefix, kadcar_specs):
     if kadcar_specs['Headlight_Panels'] == 'grated':
         return
-        
+
     import_scene_into_collection(os.path.join(filepath_prefix, 'headlight_panels/' + kadcar_specs['Headlight_Panels'] + ".glb"), 'headlight_panels')
 
     headlight_panels = bpy.data.objects['Metal_Sheet']

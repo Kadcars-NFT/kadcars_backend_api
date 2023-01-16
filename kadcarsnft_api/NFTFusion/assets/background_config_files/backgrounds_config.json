@@ -36,7 +36,7 @@
             {
                 "type": "ShaderNodeTexEnvironment",
                 "params": {
-                    "image_url": ""
+                    "image_url": "ipfs://bafybeifjzsae4pexxjwob7va3pjafbquypa7fnmlh5p4ce6t7jwcrfnw54"
                 }
             },
             {
@@ -138,7 +138,7 @@
             {
                 "type": "ShaderNodeTexEnvironment",
                 "params": {
-                    "image_url": ""
+                    "image_url": "ipfs://bafybeie5zfpm3i4kn4vyyanbjujsktdvx3uozeojapilcob2et6ym4xcfu"
                 }
             },
             {
@@ -186,7 +186,7 @@
             {
                 "type": "ShaderNodeTexEnvironment",
                 "params": {
-                    "image_url": ""
+                    "image_url": "ipfs://bafybeicf5erfubp7gx4lvwamugu3wnzmdlbydmztxujroeb73an4quetru"
                 }
             },
             {

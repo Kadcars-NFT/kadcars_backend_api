@@ -7,9 +7,10 @@ from io_utils import *
 dirname = os.path.dirname(__file__)
 metadata_dir = os.path.join(dirname, "../metadata_json")
 # kadcar_dirs_root = os.path.join(dirname, "../assets/completed_nfts/")
-kadcar_dirs_root = "K:/completed_nfts/"
 # car_folder_path = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/car_files/'
 car_folder_path = 'K:/car_files/'
+batch_config_file = extract_data_from_json(os.path.join(dirname, "../json_config_files/batch_config.json"))
+kadcar_dirs_root = os.path.join("K:/completed_nfts/", batch_config_file["batch"])
 
 def car_file_generator():
     for dir in os.listdir(kadcar_dirs_root):
@@ -46,7 +47,7 @@ def car_file_generator():
                     cid = upload_asset_to_ipfs(car_file_path, 'application/car')
                     print(car_file_path + "   CID: " + cid + "\n")
 
-                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "glb")
+                # add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "glb")
                 if not remove_dir_at_path(car_file_dest_directory):
                     print("Error removing directory")
 
@@ -61,6 +62,6 @@ def car_file_generator():
                 cid = upload_asset_to_ipfs(webp_render_path, 'image/*')
                 print(webp_render_path + "   CID: " + cid + "\n")
 
-                add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "webp")
+                # add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "webp")
 
 car_file_generator()

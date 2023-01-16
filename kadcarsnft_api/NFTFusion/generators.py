@@ -8,7 +8,7 @@ from NFT_render_provider import *
 from nft_metadata_handler import build_car_metadata
 import pandas as pd
 
-def generate_kadcars_with_given_specs_gltfs(kadcars_metadata_df, filepath_prefix):
+def generate_kadcars_with_given_specs_gltfs(kadcars_metadata_df, filepath_prefix, batch):
     delete_all_objects_in_scene()
 
     k2_specs = kadcars_metadata_df[kadcars_metadata_df['Kadcar'] == 'k2']
@@ -20,10 +20,11 @@ def generate_kadcars_with_given_specs_gltfs(kadcars_metadata_df, filepath_prefix
 
     # build_kadcars_using_metadata(k2_specs, filepath_prefix)
     # delete_all_objects_in_scene()
-    build_kadcars_using_metadata(k2p_specs, filepath_prefix)
-    build_kadcars_using_metadata(k2_specs, filepath_prefix)
+    # build_kadcars_using_metadata(k2p_specs, filepath_prefix)
+    # build_kadcars_using_metadata(k2_specs, filepath_prefix)
+    build_kadcars_using_metadata(kadcars_metadata_df, filepath_prefix, batch)
 
-def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
+def build_kadcars_using_metadata(kc_spec_list, filepath_prefix, batch):
     delete_all_objects()
     f = None
     count = 0
@@ -59,10 +60,13 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         export_scene_as_gltf("K:/completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name, export_all=False)
         delete_all_objects_in_scene()
 
+        if not os.path.exists("K:/completed_nfts/" + batch):
+            os.mkdir("K:/completed_nfts/" + batch)
+
         #Generate final gltf and export full nft model with metadata
         generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kadcar_export_file_name)
         # nft_output_path = os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
-        nft_output_path = os.path.join("K:/", "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
+        nft_output_path = os.path.join("K:/", "completed_nfts/" + batch + "/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
         if not os.path.exists(nft_output_path):
             os.mkdir(nft_output_path)
         export_scene_as_gltf(os.path.join(nft_output_path + "/" + "nft"), True, 'GLB')
@@ -74,7 +78,7 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix):
         delete_all_objects_in_scene()
         
         count += 1
-        f = open('K:/batch_0.txt', 'a')
+        f = open('K:/batch_logs/' + batch + '.txt', 'a')
         f.write(str(count) + '  ' + nft_name + '\n')
         f.close()
 

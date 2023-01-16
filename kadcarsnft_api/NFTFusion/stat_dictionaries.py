@@ -14,7 +14,8 @@ kadcar_stats = {
         'wheel-type': 'offroad',
         'horse-power': 754.0,
         'engine-size': 3.5,
-        'fuel-consumption': '20/12.8/100'
+        'fuel-consumption': '20/12.8/100',
+        'wheel-units': 5.0
     },
     'k2': {
         'handling': 65.0,
@@ -43,11 +44,22 @@ kadcar_stats = {
         'wheel-type': 'offroad',
         'horse-power': 754.0,
         'engine-size': 3.5,
-        'fuel-consumption': '20/12.8/100'
+        'fuel-consumption': '20/12.8/100',
+        'wheel-units': 4.0
     }
 }
 
 feature_names = {
+    'body-type': {
+        'k2': 'K:2',
+        'k2p': 'K:2p'
+    },
+    'materials': {
+        'matte': 'Matte',
+        'glossy': 'Glossy',
+        'metallic': 'Metallic',
+        'steel': 'Matte Metallic',
+    },
     'colors': {
         'black': 'Onyx Black',
         'red': 'Daredevil Red',
@@ -87,6 +99,10 @@ feature_names = {
     'trims': {
         'carbon_fiber': 'Carbon Fiber',
         'steel': 'Steel Wolf'
+    },
+    'headlight-panels': {
+        'carbon_fiber': 'Carbon Fiber',
+        'grated': 'Grated'
     }
 }
 
@@ -100,7 +116,7 @@ rim_stats = {
         'diameter': 0.592856
     },
     'rims_3': {
-        'material': 'steel-darkgray',
+        'material': 'matte metallic-darkgray',
         'diameter': 0.592856
     },
     'rims_4': {
@@ -108,7 +124,7 @@ rim_stats = {
         'diameter': 0.592856
     },
     'rims_5': {
-        'material': 'steel-darkgray',
+        'material': 'matte metallic-darkgray',
         'diameter': 0.592856
     },
 }
@@ -144,12 +160,11 @@ weights = {
     'k2p': {
         'engine': 185.0,
         'electric_motors': 184.0,
-        'body': 1550.0,
+        'body': 1565.0,
         'tire': 145.0,
         'rim': 50.0,
-        'clearance-light_1': 7.0,
-        'clearance-light_2': 6.0,
-        'wheel_bar': 15.0,
+        'clearance_light_1': 7.0,
+        'clearance_light_2': 6.0,
         'wheel': 195.0
     }
 }

@@ -1,7 +1,7 @@
 {
     "webp-ipfs": "", 
     "vehicle-information" : {
-        "vin": "1",
+        "vin": "",
         "make": "Kadcars",
         "model": "K2"
     },
@@ -132,6 +132,13 @@
                             "value": 0.1,
                             "unit": "%"
                         }
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 0.0,
+                            "unit": "%"
+                        }
                     }
                 ]
             },
@@ -145,6 +152,10 @@
                     {
                         "key": "rim-type",
                         "val": ""
+                    },
+                    {
+                        "key": "wheel-units",
+                        "val": 0.0
                     },
                     {
                         "key": "rim-material",

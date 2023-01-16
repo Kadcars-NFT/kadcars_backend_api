@@ -13,12 +13,13 @@ delete_all_objects()
 dirname = os.path.dirname(__file__)
 path_to_assets_folder = os.path.join(dirname, 'assets')
 path_to_background_config = os.path.join(dirname, 'background_config_files')
+batch_config_file = extract_data_from_json(os.path.join(dirname, "json_config_files/batch_config.json"))
 
 #read csv file containing metadata
-# metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
-metadata_df = pd.read_csv('K:/kadcars_metadata_batches/batch_0.csv')
+metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
+# metadata_df = pd.read_csv('K:/kadcars_metadata_batches/batch_1.csv')
 
-kadcar_glbs = generate_kadcars_with_given_specs_gltfs(metadata_df, path_to_assets_folder)
+kadcar_glbs = generate_kadcars_with_given_specs_gltfs(metadata_df, path_to_assets_folder, batch_config_file["batch"])
 
 #feed base cars glbs + rim glbs, return base cars * rims glbs
 # kadcars_with_rims_gltf_file_names = generate_kadcars_with_rims_gltfs(base_car_glbs, rims_glbs, path_to_assets_folder)
