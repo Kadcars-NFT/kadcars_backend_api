@@ -52,7 +52,7 @@ kadcar_stats = {
 feature_names = {
     'body-type': {
         'k2': 'K:2',
-        'k2p': 'K:2p'
+        'k2p': 'K:2 Diamond Back'
     },
     'materials': {
         'matte': 'Matte',

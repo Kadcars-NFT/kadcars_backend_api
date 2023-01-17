@@ -36,7 +36,10 @@ def build_car_metadata(kadcar_specs):
                 },
                 {
                     "key": "weight",
-                    "val": weights[kadcar_specs['Kadcar']][kadcar_specs['Spoiler']]
+                    "val": {
+                        "value": weights[kadcar_specs['Kadcar']][kadcar_specs['Spoiler']],
+                        "unit": "kg"
+                    }
                 }
             ]
         })

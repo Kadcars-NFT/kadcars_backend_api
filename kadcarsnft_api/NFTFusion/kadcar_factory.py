@@ -98,7 +98,11 @@ def add_headlight_panels_to_kadcar(filepath_prefix, kadcar_specs):
     if kadcar_specs['Headlight_Panels'] == 'grated':
         return
 
-    import_scene_into_collection(os.path.join(filepath_prefix, 'headlight_panels/' + kadcar_specs['Headlight_Panels'] + ".glb"), 'headlight_panels')
+    version = '_1'
+    if kadcar_specs['Kadcar'] == 'k2p':
+        version = '_2'
+        
+    import_scene_into_collection(os.path.join(filepath_prefix, 'headlight_panels/' + kadcar_specs['Headlight_Panels'] + version + ".glb"), 'headlight_panels')
 
     headlight_panels = bpy.data.objects['Metal_Sheet']
     headlight_panels.select_set(True)

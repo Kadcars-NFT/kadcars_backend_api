@@ -13,19 +13,23 @@ delete_all_objects()
 dirname = os.path.dirname(__file__)
 path_to_assets_folder = os.path.join(dirname, 'assets')
 path_to_background_config = os.path.join(dirname, 'background_config_files')
-batch_config_file = extract_data_from_json(os.path.join(dirname, "json_config_files/batch_config.json"))
 
-#read csv file containing metadata
-metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
-# metadata_df = pd.read_csv('K:/kadcars_metadata_batches/batch_1.csv')
+def generate_nfts(batch_number):
+    #read csv file containing metadata
+    # metadata_df = pd.read_csv(os.path.join(dirname, 'generator_scripts/output/edition 30/metadata.csv'))
+    metadata_df = pd.read_csv('K:/kadcars_metadata_batches/batch_' + str(batch_number) + '.csv')
 
-kadcar_glbs = generate_kadcars_with_given_specs_gltfs(metadata_df, path_to_assets_folder, batch_config_file["batch"])
+    kadcar_glbs = generate_kadcars_with_given_specs_gltfs(metadata_df, path_to_assets_folder, 'batch_' + str(batch_number))
 
-#feed base cars glbs + rim glbs, return base cars * rims glbs
-# kadcars_with_rims_gltf_file_names = generate_kadcars_with_rims_gltfs(base_car_glbs, rims_glbs, path_to_assets_folder)
+print("How many batches are you generating?")
+num_batches = input()
 
-#take x glbs, colorize, return x * color glbs
-# kadcars_with_shading_gltf_file_names = generate_kadcars_with_shading_gltfs(kadcars_with_rims_gltf_file_names, path_to_assets_folder)
+print("Type starting batch number")
+starting_batch = input()
 
-#place each car in each bg and return glbs
-# kadcars_with_backgrounds_gltf_file_names = generate_scenes_w_kadcar_and_background_gltfs(kadcars_with_shading_gltf_file_names, path_to_assets_folder)
+if num_batches < 1:
+    exit() 
+
+for i in range(num_batches):
+    generate_nfts(starting_batch)
+    starting_batch += 1

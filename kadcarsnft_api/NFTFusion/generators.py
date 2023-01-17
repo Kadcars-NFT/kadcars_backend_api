@@ -60,15 +60,32 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix, batch):
         export_scene_as_gltf("K:/completed_kadcars/" + kadcar_specs['Kadcar'] + "/" + kadcar_export_file_name, export_all=False)
         delete_all_objects_in_scene()
 
-        if not os.path.exists("K:/completed_nfts/" + batch):
-            os.mkdir("K:/completed_nfts/" + batch)
 
         #Generate final gltf and export full nft model with metadata
         generate_gltf_with_kadcar_in_background(filepath_prefix, kadcar_specs, kadcar_export_file_name)
         # nft_output_path = os.path.join(filepath_prefix, "completed_nfts/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
         nft_output_path = os.path.join("K:/", "completed_nfts/" + batch + "/" + kadcar_specs['Kadcar'] + "/" + kadcar_specs['Background'] + "/" + nft_name)
+        
+        #Make batch directory
+        if not os.path.exists("K:/completed_nfts/" + batch):
+            os.mkdir("K:/completed_nfts/" + batch)
+            os.mkdir("K:/completed_nfts/" + batch + "/k2")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2/snow")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2/beach")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2/cyber")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2/storage")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2/mountain")
+
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p/snow")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p/beach")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p/cyber")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p/storage")
+            os.mkdir("K:/completed_nfts/" + batch + "/k2p/mountain")
+        #Make NFT directory
         if not os.path.exists(nft_output_path):
             os.mkdir(nft_output_path)
+
         export_scene_as_gltf(os.path.join(nft_output_path + "/" + "nft"), True, 'GLB')
         add_metadata_to_gltf(os.path.join(nft_output_path + "/" + "nft.glb"), build_background_metadata(bg_config_data, kadcar_specs['Background']), ".glb")
         export_dictionary_to_json(kadcar_metadata, os.path.join(nft_output_path + "/" + nft_name))
