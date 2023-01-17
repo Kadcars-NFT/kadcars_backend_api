@@ -39,6 +39,6 @@ if num_batches < 1:
     print("Invalid number of batches")
     exit() 
 
-# for i in range(num_batches):
-    # generate_nfts(starting_batch)
-    # starting_batch += 1
+for i in range(num_batches):
+    generate_nfts(starting_batch)
+    starting_batch += 1
