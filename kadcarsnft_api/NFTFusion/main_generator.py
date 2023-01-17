@@ -27,6 +27,11 @@ num_batches = input()
 print("Type starting batch number")
 starting_batch = input()
 
+print("Press y to confirm, starting at " + str(starting_batch) + " for a total of " + str(num_batches))
+answer = input()
+if answer != 'y':
+    exit()
+
 if num_batches < 1:
     exit() 
 
