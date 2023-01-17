@@ -23,18 +23,22 @@ def generate_nfts(batch_number):
 
 print("How many batches are you generating?")
 num_batches = input()
+num_batches = int(num_batches)
 
 print("Type starting batch number")
 starting_batch = input()
+starting_batch = int(starting_batch)
 
 print("Press y to confirm, starting at " + str(starting_batch) + " for a total of " + str(num_batches))
 answer = input()
 if answer != 'y':
+    print("Invalid input")
     exit()
 
 if num_batches < 1:
+    print("Invalid number of batches")
     exit() 
 
-for i in range(num_batches):
-    generate_nfts(starting_batch)
-    starting_batch += 1
+# for i in range(num_batches):
+    # generate_nfts(starting_batch)
+    # starting_batch += 1
