@@ -14,6 +14,12 @@ batch_config_file = extract_data_from_json(os.path.join(dirname, "../json_config
 print("Enter batch number")
 batch_number = input()
 
+print("Press y to confirm batch number " + str(batch_number))
+answer = input()
+if answer != 'y':
+    print("Invalid input")
+    exit()
+
 kadcar_dirs_root = os.path.join("K:/completed_nfts/batch_" + str(batch_number))
 
 def car_file_generator():
