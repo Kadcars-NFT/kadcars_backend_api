@@ -358,10 +358,6 @@ def build_background_metadata(bg_config_data, background):
         }
     }
 
-    #TODO: hard code them in metadata directly instead
-    if background == 'beach' or background == 'mountain' or background == 'storage':
-        metadata['hdri-url'] = hdri_ipfs_urls[background]
-
     return metadata
 
 def export_scene_as_gltf(output_file, export_all=True, format='GLB'):
