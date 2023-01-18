@@ -6,21 +6,22 @@ from io_utils import *
 
 dirname = os.path.dirname(__file__)
 metadata_dir = os.path.join(dirname, "../metadata_json")
-# kadcar_dirs_root = os.path.join(dirname, "../assets/completed_nfts/")
+kadcar_dirs_root = os.path.join(dirname, "../assets/completed_nfts/")
 # car_folder_path = 'C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/car_files/'
-car_folder_path = 'K:/car_files/'
+car_folder_path = 'C:/Users/Mohannad Ahmad/Desktop/AppDev/Kadena/kadcars_backend/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/car_files/'
+# car_folder_path = 'K:/car_files/'
 batch_config_file = extract_data_from_json(os.path.join(dirname, "../json_config_files/batch_config.json"))
 
-print("Enter batch number")
-batch_number = input()
+# print("Enter batch number")
+# batch_number = input()
 
-print("Press y to confirm batch number " + str(batch_number))
-answer = input()
-if answer != 'y':
-    print("Invalid input")
-    exit()
+# print("Press y to confirm batch number " + str(batch_number))
+# answer = input()
+# if answer != 'y':
+#     print("Invalid input")
+#     exit()
 
-kadcar_dirs_root = os.path.join("K:/completed_nfts/batch_" + str(batch_number))
+# kadcar_dirs_root = os.path.join("K:/completed_nfts/batch_" + str(batch_number))
 
 def car_file_generator():
     for dir in os.listdir(kadcar_dirs_root):
@@ -31,6 +32,8 @@ def car_file_generator():
                 output_file_name = nft_dir_name
                 nft_dir_path = os.path.join(current_bg_folder, nft_dir_name)
                 
+                output_file_name = reformat_name(output_file_name.split('_'))
+
                 ##############################
                 ## Upload CAR files to IPFS ##
                 ##############################
@@ -43,6 +46,8 @@ def car_file_generator():
                 # glb_path = os.path.join(nft_dir_path, nft_dir_name + "_nft.glb")
                 glb_path = os.path.join(nft_dir_path, "nft.glb")
 
+                file_name_parts = output_file_name.split('_')
+
                 #Create the car files
                 pack_and_split_CAR_file(glb_path, car_file_output_path, output_file_name)
                 print(os.listdir(car_file_dest_directory))
@@ -50,6 +55,7 @@ def car_file_generator():
                 glb_cid = ""
                 for car_file in os.listdir(car_file_dest_directory):
                     car_file_path = os.path.join(car_file_dest_directory, car_file)
+
                     if car_file_path == car_file_output_path:
                         print("AVOIDED " + car_file_path + "\n")
                         continue
@@ -74,12 +80,26 @@ def car_file_generator():
 
                 # add_ipfs_data_to_kc_metadata(os.path.join(nft_dir_path, nft_dir_name), "ipfs://" + cid, "webp")
 
-                f1 = open(kadcar_dirs_root + 'glb_cids.txt', 'a')
-                f1.write(glb_cid + '\n')
-                f1.close()
+                # f1 = open(kadcar_dirs_root + 'glb_cids.txt', 'a')
+                # f1.write(glb_cid + '\n')
+                # f1.close()
                 
-                f2 = open(kadcar_dirs_root + 'webp_cids.txt', 'a')
-                f2.write(webp_cid + '\n')
-                f2.close()
+                # f2 = open(kadcar_dirs_root + 'webp_cids.txt', 'a')
+                # f2.write(webp_cid + '\n')
+                # f2.close()
 
+def reformat_name(tokens):
+    name = ""
+    for i in range(len(tokens)):
+        if tokens[i] == "fiber":
+            continue
+        elif tokens[i] == "spoiler":
+            name += "sp_"
+            continue
+        name += tokens[i]
+
+        if i < len(tokens) - 1:
+            name += "_"
+    print(name)
+    return name
 car_file_generator()

@@ -33,8 +33,10 @@ def upload_asset_to_ipfs(asset_file, format):
         if response.ok == True:
             cid = response.json()["value"]["cid"]
             return cid
-    except:
+    except Exception as error:
+        print(error)
         print("Something went wrong with request")
+        exit()
 
 def pack_and_split_CAR_file(asset_path, output_path, asset_file_name):
     in_path = '"{fname}"'.format(fname=asset_path)
