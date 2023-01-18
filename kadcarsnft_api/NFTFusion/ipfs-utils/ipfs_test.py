@@ -73,7 +73,7 @@ def car_file_generator():
                 ## Upload WEBP to IPFS ##
                 #########################
 
-                webp_render_path = os.path.join(nft_dir_path, nft_dir_name + "_render.webp")
+                webp_render_path = os.path.join(nft_dir_path, output_file_name + "_render.webp")
 
                 webp_cid = upload_asset_to_ipfs(webp_render_path, 'image/*')
                 print(webp_render_path + "   CID: " + webp_cid + "\n")
