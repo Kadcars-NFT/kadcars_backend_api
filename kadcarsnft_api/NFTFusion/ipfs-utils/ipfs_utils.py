@@ -12,7 +12,7 @@ IPFS_URL_PREFIX = "https://api.nft.storage/"
 def get_asset_from_ipfs(cid):
     auth = {
         'Content-type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENmOTAyMjk0MDE3NUE3ZmM5MUJiMDM0NDE3ZjQ1MDhkRjBEOWMyNjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2ODI5OTcyODMzNCwibmFtZSI6ImtleXMifQ.jP_EGo6JSyf6bt9xxJld1TGjgb_fV7ES9yXX84wr2I4'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEFDNTJiZmU3Rjk2MzkzN0Q2YWQ4NWM1NENBQmYyNzllMTM0MzRlMDYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3NDAyNzYzMTk3NCwibmFtZSI6Im5mdF91cGxvYWQifQ.d45mS9HwTZWbAmMbdwNKkKTVPV4_kWNT2XGtSsDlncY'
     }
     response = requests.get(str("https://api.nft.storage/bafybeihtn6sk44pxizjedv7u2nqdq3ncijwmcdxgin3tcnnqh55hckvpfm"), headers=auth)
     print(response.json())
@@ -20,7 +20,7 @@ def get_asset_from_ipfs(cid):
 def upload_asset_to_ipfs(asset_file, format):
     headers = {
         'Content-Type': format,
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweENmOTAyMjk0MDE3NUE3ZmM5MUJiMDM0NDE3ZjQ1MDhkRjBEOWMyNjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2ODI5OTcyODMzNCwibmFtZSI6ImtleXMifQ.jP_EGo6JSyf6bt9xxJld1TGjgb_fV7ES9yXX84wr2I4'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEFDNTJiZmU3Rjk2MzkzN0Q2YWQ4NWM1NENBQmYyNzllMTM0MzRlMDYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3NDAyNzYzMTk3NCwibmFtZSI6Im5mdF91cGxvYWQifQ.d45mS9HwTZWbAmMbdwNKkKTVPV4_kWNT2XGtSsDlncY'
     }
     
     response = None
@@ -38,7 +38,7 @@ def upload_asset_to_ipfs(asset_file, format):
         print("Something went wrong with request")
         exit()
 
-def pack_and_split_CAR_file(asset_path, output_path, asset_file_name):
+def pack_and_split_CAR_file(asset_path, output_path):
     in_path = '"{fname}"'.format(fname=asset_path)
     out_path = '"{fname}"'.format(fname=output_path)
     command = "ipfs-car --pack " + str(in_path) + " --output " + str(out_path)
@@ -53,12 +53,13 @@ def pack_and_split_CAR_file(asset_path, output_path, asset_file_name):
     os.system("carbites split " + out_path + " --size 100MB --strategy treewalk")
 
 def add_ipfs_data_to_kc_metadata(asset_file_name, ipfs_url, destination):
-    kadcar_metadata = extract_data_from_json(asset_file_name + '.json')
-    
-    if kadcar_metadata:
-        if destination == 'webp':
-            kadcar_metadata["webp-ipfs"] = ipfs_url
-        elif destination == 'glb':
-            kadcar_metadata["view-refs"]["data"] = ipfs_url
+    kadcar_metadata = extract_data_from_json(asset_file_name)
+    print(kadcar_metadata)
 
-        export_dictionary_to_json(kadcar_metadata, asset_file_name)
+    if destination == 'webp':
+        kadcar_metadata["webp-ipfs"] = ipfs_url
+    elif destination == 'glb':
+        kadcar_metadata["view-refs"]["data"] = ipfs_url
+
+    with open(asset_file_name, 'w') as out:
+        json.dump(kadcar_metadata, out)
