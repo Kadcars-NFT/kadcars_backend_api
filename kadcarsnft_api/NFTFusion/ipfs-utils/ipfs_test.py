@@ -14,19 +14,17 @@ metadata_dir = os.path.join(dirname, "../metadata_json")
 car_folder_path = 'K:/car_files/'
 batch_config_file = extract_data_from_json(os.path.join(dirname, "../json_config_files/batch_config.json"))
 
-print("Enter batch number")
-batch_number = input()
-batch_number = 0
+# print("Enter batch number")
+# batch_number = input()
 
-print("Press y to confirm batch number " + str(batch_number))
-answer = input()
-if answer != 'y':
-    print("Invalid input")
-    exit()
+# print("Press y to confirm batch number " + str(batch_number))
+# answer = input()
+# if answer != 'y':
+#     print("Invalid input")
+#     exit()
 
-kadcar_dirs_root = os.path.join("K:/completed_nfts/batch_" + str(batch_number))
-
-def car_file_generator():
+def car_file_generator(batch_number):
+    kadcar_dirs_root = os.path.join("K:/completed_nfts/batch_" + str(batch_number))
     counter = 0
     for dir in os.listdir(kadcar_dirs_root):
         current_kc_folder = os.path.join(kadcar_dirs_root, dir)
@@ -43,8 +41,12 @@ def car_file_generator():
                 ## Rename files correctly ##
                 ############################
                 
-                vin = str(counter + (counter * batch_number))
-
+                vin_int = counter + (103 * int(batch_number))
+                vin = str(vin_int)
+                
+                counter += 1
+                # if vin_int <1687:
+                #     continue
                 glb_path = os.path.join(nft_dir_path, "nft_" + vin + ".glb")
                 webp_render_path = os.path.join(nft_dir_path, "render_" + vin + ".webp")
                 json_path = os.path.join(nft_dir_path, "metadata_" + vin + ".json")
@@ -96,15 +98,15 @@ def car_file_generator():
 
                 add_ipfs_data_to_kc_metadata(json_path, "ipfs://" + webp_cid, "webp")
 
-                f1 = open(kadcar_dirs_root + 'glb_cids.txt', 'a')
+                f1 = open(kadcar_dirs_root + '/glb_cids.txt', 'a')
                 f1.write(glb_cid + '\n')
                 f1.close()
                 
-                f2 = open(kadcar_dirs_root + 'webp_cids.txt', 'a')
+                f2 = open(kadcar_dirs_root + '/webp_cids.txt', 'a')
                 f2.write(webp_cid + '\n')
                 f2.close()
-
-                counter += 1
+                
+                
 
 def reformat_name(tokens):
     name = ""
@@ -131,4 +133,32 @@ def reformat_name(tokens):
             name += "_"
     print(name)
     return name
-car_file_generator()
+
+print("How many batches are you uploading?")
+num_batches = input()
+num_batches = int(num_batches)
+
+print("Type starting batch number")
+starting_batch = input()
+starting_batch = int(starting_batch)
+
+print("Press y to confirm, starting at " + str(starting_batch) + " for a total of " + str(num_batches))
+answer = input()
+if answer != 'y':
+    print("Invalid input")
+    exit()
+
+if num_batches < 1:
+    print("Invalid number of batches")
+    exit() 
+
+for i in range(num_batches):
+    car_file_generator(starting_batch)
+    starting_batch += 1
+
+########################
+## FAILED: 
+##   1. batch 16
+##
+## MATTHEW:
+##   batches 19 - 27
