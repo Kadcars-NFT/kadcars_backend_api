@@ -29,6 +29,8 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix, batch):
     f = None
     count = 0
     for index, kadcar_specs in kc_spec_list.iterrows():
+        count += 1
+
         bg_config_path = os.path.join(filepath_prefix, 'background_config_files')
         bg_config_data = extract_json_attribute_data(os.path.join(bg_config_path, "backgrounds_config.json"), kadcar_specs['Background'])
         
@@ -94,7 +96,7 @@ def build_kadcars_using_metadata(kc_spec_list, filepath_prefix, batch):
         generate_render_for_nft(os.path.join(nft_output_path + "/" + nft_render_file_name), bg_config_data)
         delete_all_objects_in_scene()
         
-        count += 1
+        
         f = open('K:/batch_logs/' + batch + '.txt', 'a')
         f.write(str(count) + '  ' + nft_name + '\n')
         f.close()

@@ -1,0 +1,387 @@
+{
+    "webp-ipfs": "",
+    "vehicle-information": {
+        "vin": "",
+        "make": "Kadcars",
+        "model": "K:2"
+    },
+    "mutable-state": {
+        "components": [
+            {
+                "name": "body",
+                "stats": [
+                    {
+                        "key": "body-type",
+                        "val": "K:2"
+                    },
+                    {
+                        "key": "body-material",
+                        "val": {
+                            "type": "material",
+                            "id": "Matte Metallic-Marmalade Orange"
+                        }
+                    },
+                    {
+                        "key": "trim-material",
+                        "val": {
+                            "type": "texture",
+                            "id": "Carbon Fiber"
+                        }
+                    },
+                    {
+                        "key": "hood-trim-material",
+                        "val": {
+                            "type": "material",
+                            "id": "matte-black"
+                        }
+                    },
+                    {
+                        "key": "grill-inner-material",
+                        "val": {
+                            "type": "material",
+                            "id": "matte-black"
+                        }
+                    },
+                    {
+                        "key": "grill-outer-material",
+                        "val": {
+                            "type": "material",
+                            "id": "metallic-black"
+                        }
+                    },
+                    {
+                        "key": "headlight-panels",
+                        "val": {
+                            "type": "texture",
+                            "id": "Carbon Fiber"
+                        }
+                    },
+                    {
+                        "key": "seats-material",
+                        "val": {
+                            "type": "material",
+                            "id": "matte-lightgray"
+                        }
+                    },
+                    {
+                        "key": "emblem-material",
+                        "val": {
+                            "type": "material",
+                            "id": "metallic-orange"
+                        }
+                    },
+                    {
+                        "key": "headlights-material",
+                        "val": {
+                            "type": "material",
+                            "id": "orange"
+                        }
+                    },
+                    {
+                        "key": "max-length",
+                        "val": {
+                            "value": 5.12352,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "max-height",
+                        "val": {
+                            "value": 2.08889,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "max-width",
+                        "val": {
+                            "value": 2.49419,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "wheel-base",
+                        "val": {
+                            "value": 2.82967,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "ground-clearance",
+                        "val": {
+                            "value": 0.297131,
+                            "unit": "m"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 1600.0,
+                            "unit": "kg"
+                        }
+                    },
+                    {
+                        "key": "aerodynamic-factor",
+                        "val": {
+                            "value": 70.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "downforce",
+                        "val": {
+                            "value": 50.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 65.0,
+                            "unit": "%"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "wheel",
+                "stats": [
+                    {
+                        "key": "wheel-type",
+                        "val": "offroad"
+                    },
+                    {
+                        "key": "rim-type",
+                        "val": "Core"
+                    },
+                    {
+                        "key": "wheel-units",
+                        "val": 4.0
+                    },
+                    {
+                        "key": "rim-material",
+                        "val": {
+                            "type": "material",
+                            "id": "matte-maroon"
+                        }
+                    },
+                    {
+                        "key": "size",
+                        "val": {
+                            "value": "391/50 R 23",
+                            "unit": "<width>/<height/width> R <rim diameter>"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 156.0,
+                            "unit": "kg"
+                        }
+                    },
+                    {
+                        "key": "braking-power",
+                        "val": {
+                            "value": 70.0,
+                            "unit": "%"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "power-unit",
+                "stats": [
+                    {
+                        "key": "power-units",
+                        "val": [
+                            {
+                                "unit-type": "v6 3.5 liter",
+                                "weight": {
+                                    "value": 185.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 340.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 375.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 372.0,
+                                    "unit": "nm@4800 rpm"
+                                }
+                            },
+                            {
+                                "unit-type": "electric motor",
+                                "weight": {
+                                    "value": 92.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 207.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 65.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 350.0,
+                                    "unit": "nm"
+                                }
+                            },
+                            {
+                                "unit-type": "electric motor",
+                                "weight": {
+                                    "value": 92.0,
+                                    "unit": "kg"
+                                },
+                                "horse-power": {
+                                    "value": 207.0,
+                                    "unit": "hp"
+                                },
+                                "range": {
+                                    "value": 65.0,
+                                    "unit": "km"
+                                },
+                                "torque": {
+                                    "value": 350.0,
+                                    "unit": "nm"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "drive-train",
+                "stats": [
+                    {
+                        "key": "drive-train",
+                        "val": [
+                            {
+                                "drive-train-type": "4WD"
+                            },
+                            {
+                                "transmission-type": "automatic",
+                                "gears": "8 speed"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "derived-stats",
+                "stats": [
+                    {
+                        "key": "top-speed",
+                        "val": {
+                            "value": 258.4890330828,
+                            "unit": "km/h"
+                        }
+                    },
+                    {
+                        "key": "acceleration",
+                        "val": {
+                            "value": 3.6,
+                            "unit": "s"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 2130.8,
+                            "unit": "kg"
+                        }
+                    },
+                    {
+                        "key": "aerodynamic-factor",
+                        "val": {
+                            "value": 71.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "downforce",
+                        "val": {
+                            "value": 59.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 74.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "braking-power",
+                        "val": {
+                            "value": 70.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "horse-power",
+                        "val": {
+                            "value": 754.0,
+                            "unit": "hp"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "background",
+                "stats": [
+                    {
+                        "key": "name",
+                        "val": "Kadena Beach"
+                    }
+                ]
+            },
+            {
+                "name": "spoiler",
+                "stats": [
+                    {
+                        "key": "spoiler-type",
+                        "val": "Victory Wing"
+                    },
+                    {
+                        "key": "handling",
+                        "val": {
+                            "value": 9.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "downforce",
+                        "val": {
+                            "value": 9.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "aerodynamic-factor",
+                        "val": {
+                            "value": 1.0,
+                            "unit": "%"
+                        }
+                    },
+                    {
+                        "key": "weight",
+                        "val": {
+                            "value": 5.8,
+                            "unit": "kg"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "view-refs": {
+        "data": "",
+        "scheme": "ipfs://"
+    }
+}

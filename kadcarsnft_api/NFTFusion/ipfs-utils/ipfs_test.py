@@ -45,11 +45,14 @@ def car_file_generator(batch_number):
                 vin = str(vin_int)
                 
                 counter += 1
-                # if vin_int <1687:
-                #     continue
+                if vin_int < 5402:
+                    continue
+                print(vin_int)
                 glb_path = os.path.join(nft_dir_path, "nft_" + vin + ".glb")
                 webp_render_path = os.path.join(nft_dir_path, "render_" + vin + ".webp")
                 json_path = os.path.join(nft_dir_path, "metadata_" + vin + ".json")
+                print(glb_path)
+                print(json_path)
 
                 if os.path.exists(glb_path) == False:
                     os.rename(nft_dir_path + "/nft.glb", glb_path)
@@ -84,8 +87,8 @@ def car_file_generator(batch_number):
                     print(car_file_path + "   CID: " + glb_cid + "\n")
 
                 add_ipfs_data_to_kc_metadata(json_path, "ipfs://" + glb_cid, "glb")
-                if not remove_dir_at_path(car_file_dest_directory):
-                    print("Error removing directory")
+                # if not remove_dir_at_path(car_file_dest_directory):
+                #     print("Error removing directory")
 
                 print("FINISHED : " + car_file_dest_directory)
 

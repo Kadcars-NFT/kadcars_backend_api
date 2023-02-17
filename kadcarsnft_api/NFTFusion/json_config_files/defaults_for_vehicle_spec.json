@@ -1,0 +1,32 @@
+{
+    "upgrade": false,
+    "creator": "k:f157854c15e9bb8fb55aafdecc1ce27a3d60973cbe6870045f4415dc06be06f5",
+    "creator-guard": {
+        "keys": [
+            "f157854c15e9bb8fb55aafdecc1ce27a3d60973cbe6870045f4415dc06be06f5"
+        ],
+        "pred": "keys-all"
+    },
+    "token_spec": {
+        "fungible": {
+            "refName" : {
+                "namespace": null,
+                "name": "coin"
+            },
+            "refSpec":[{
+                "namespace":null,
+                "name":"fungible-v2"
+            }]
+        },
+        "creator": "k:f157854c15e9bb8fb55aafdecc1ce27a3d60973cbe6870045f4415dc06be06f5",
+        "creator-guard": {
+            "keys": [
+                "f157854c15e9bb8fb55aafdecc1ce27a3d60973cbe6870045f4415dc06be06f5"
+            ],
+            "pred": "keys-all"
+        },
+        "royalty-rate": 0.03,
+        "owner": "k:f157854c15e9bb8fb55aafdecc1ce27a3d60973cbe6870045f4415dc06be06f5",
+        "collection-id": "k:2"
+    }
+}
