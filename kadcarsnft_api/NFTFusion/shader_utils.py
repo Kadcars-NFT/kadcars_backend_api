@@ -45,6 +45,11 @@ def get_principled_bsdf_for_active_material(tgt_object):
     bsdf = material.node_tree.nodes["Principled BSDF"]
     return bsdf
 
+def get_node_tree_for_selected_object(tgt_object):
+    material = tgt_object.material_slots[0].material
+    node_tree = material.node_tree
+    return node_tree
+
 def change_object_base_color(color, mtl_name, tgt_object):
     tgt_object.data.materials.clear()
     material = bpy.data.materials.new(name=mtl_name)

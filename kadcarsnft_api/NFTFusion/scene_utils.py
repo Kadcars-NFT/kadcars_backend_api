@@ -225,6 +225,7 @@ def import_background_into_scene(filepath, collection_name, hdri=None):
         customize_world_shader_nodes(hdri)
 
 def import_scene_into_collection(filepath, collection_name):
+    print(filepath)
     deselect_all_scene_objects()
     
     if collection_name in bpy.data.collections:
