@@ -325,6 +325,22 @@ def get_objects_from_collection_by_names(collection, name_list):
 
     return object_list
 
+def apply_transform_to_selected_object(target_object, location=True, rotation=True):
+    select_object_and_make_active(target_object)
+    bpy.ops.object.transform_apply(location=location, rotation=rotation)
+
+def select_object_and_make_active(selected_object):
+    selected_object.select_set(True)
+    bpy.context.view_layer.objects.active = selected_object
+
+def select_object_by_name_and_make_active(object_name):
+    selected_object = bpy.data.objects.get(object_name)
+    # selected_object.select_set(True)
+    # bpy.context.view_layer.objects.active = selected_object
+    selected_object  = select_object_and_make_active(selected_object)
+
+    return selected_object
+
 def parenting_object(parent_object, child_object):
     bpy.ops.object.select_all(action="DESELECT")
     child_object.select_set(True)

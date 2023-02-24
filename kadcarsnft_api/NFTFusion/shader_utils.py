@@ -61,6 +61,13 @@ def change_object_base_color(color, mtl_name, tgt_object):
 
     tgt_object.data.materials.append(material)
 
+def get_input_value_from_bsdf(principled_bsdf, value_name):
+    value = principled_bsdf.inputs[value_name].default_value
+    return value
+
+def set_input_value_in_bsdf(principled_bsdf, value_name, value):
+    principled_bsdf.inputs[value_name].default_value = value
+
 def change_object_emission_level(tgt_object, emission_value, emission_color):
     bsdf = get_principled_bsdf_for_active_material(tgt_object)
     bsdf.inputs["Emission Strength"].default_value = emission_value
@@ -71,8 +78,6 @@ def apply_texture_image_to_object(clean, tex_image_path, tgt_object):
     # if clean:
     #     tgt_object.data.materials.clear()
 
-    # material = bpy.data.materials.new(name='trim_texture')
-    # bsdf = get_principled_bsdf_for_material_by_name('trim_texture')
     bsdf = get_principled_bsdf_for_active_material(tgt_object)
     material = tgt_object.material_slots[0].material
     texImage = material.node_tree.nodes.new('ShaderNodeTexImage')

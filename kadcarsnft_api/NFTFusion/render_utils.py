@@ -44,5 +44,13 @@ def configure_render_settings(engine, device_type, device, resolution_percentage
 #         scene.render.resolution_percentage = resolution_percentage
 #         scene.cycles.samples = samples
 
+def configure_bake_settings(engine, device_type, device, use_pass_direct, use_pass_indirect, use_selected_to_active, bake_type):
+    configure_render_settings(engine, device_type, device, 200, 1000)
+
+    bpy.context.scene.render.bake.use_pass_direct = use_pass_direct
+    bpy.context.scene.render.bake.use_pass_indirect = use_pass_indirect
+    bpy.context.scene.render.bake.use_selected_to_active = use_selected_to_active
+    bpy.context.scene.cycles.bake_type = bake_type
+
 def configure_render_operation_and_render():
     bpy.ops.render.render(write_still=True)

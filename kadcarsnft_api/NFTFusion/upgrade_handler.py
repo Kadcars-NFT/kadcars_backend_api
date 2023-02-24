@@ -18,14 +18,14 @@ from scene_utils import *
 from render_utils import *
 from shader_utils import *
 
-# nft = "K:\completed_nfts_2/batch_20\k2\storage\k2_rims_1_spoiler_1_steel_darkgray_glossy_storage_white_carbon_fiber/nft_59.glb"
-# uv_nft = "K:\\completed_nfts\\batch_0\\k2\\beach\\k2_rims_1_spoiler_1_carbon_fiber_black_metallic_beach_white_grated\\nft_0.glb"
-# hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files\storage_background.exr"
-# sticker = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
-nft = "C:/Users/Mohannad Ahmad/Desktop/nft_1.glb"
-uv_nft = "C:/Users/Mohannad Ahmad/Desktop/Kadcar_UV.glb"
-hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files/beach_background.hdr"
-sticker = "C:/Users/Mohannad Ahmad/Desktop/AppDev/Kadena/kadcars_backend/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
+nft = "K:/completed_nfts_2/batch_20/k2/storage/k2_rims_1_spoiler_1_steel_darkgray_glossy_storage_white_carbon_fiber/nft_2120.glb"
+uv_nft = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/uv_gltfs/Kadcar_UV.glb"
+hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files/storage_background.exr"
+sticker = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
+# nft = "C:/Users/Mohannad Ahmad/Desktop/nft_1.glb"
+# uv_nft = "C:/Users/Mohannad Ahmad/Desktop/Kadcar_UV.glb"
+# hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files/beach_background.hdr"
+# sticker = "C:/Users/Mohannad Ahmad/Desktop/AppDev/Kadena/kadcars_backend/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
 
 def handle_upgrade():
     handle_upgrade_contract_trigger()
@@ -51,6 +51,8 @@ def handle_upgrade():
     # replace_top_uri()
     # replace_mutable_state_with_upgrade_nft_data()
     # replace_view_refs_with_glb_ref_to_upgrade()
+
+    
 
 def handle_upgrade_contract_trigger():
     pass
@@ -94,54 +96,89 @@ def load_assets_into_blender():
 #                     bpy.ops.object.join_uvs()
 
 def copy_uv_maps_from_source():
-    #1. make metallic value 0
+    permanent_node_names = ["Principled BSDF", "Material Output", "BAKED_TEXTURE"]
     deselect_all_scene_objects()
 
-    og_kadcar_empty = bpy.data.objects.get('Car_Body')
-    og_kadcar_empty.select_set(True)
+    og_kadcar_body = select_object_by_name_and_make_active('Car_Body')
+    bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
 
-    uv_kadcar_empty = bpy.data.objects.get('Car_Body.001')
-    uv_kadcar_empty.select_set(True)
-    bpy.context.view_layer.objects.active = uv_kadcar_empty
+    uv_kadcar_body = select_object_by_name_and_make_active('Car_Body.001')
+    bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
 
     #Link object data
     bpy.ops.object.make_links_data(type='OBDATA')
 
+    #Fix the rotation
+    bpy.context.view_layer.objects.active = og_kadcar_body
+    og_kadcar_body.rotation_quaternion.x = 1.0
+    apply_transform_to_selected_object(og_kadcar_body, location=True, rotation=True)
+
     deselect_all_scene_objects()
     delete_objects_from_collection_name('uv_kadcar')
 
-    bsdf = get_principled_bsdf_for_active_material(og_kadcar_empty)
-    node_tree = get_node_tree_for_selected_object(og_kadcar_empty)
+    bsdf = get_principled_bsdf_for_active_material(og_kadcar_body)
+    kadcar_color = get_input_value_from_bsdf(bsdf, 'Base Color')
+    metallic_value = get_input_value_from_bsdf(bsdf, 'Metallic')
+    
+    node_tree = get_node_tree_for_selected_object(og_kadcar_body)
     nodes = node_tree.nodes
 
     texture_node = nodes.new("ShaderNodeTexImage")
     texture_node.image = bpy.data.images.load(sticker)
+    texture_node.name = "STICKER_NODE"
 
+    #UV Map Setting
     uv_node = nodes.new("ShaderNodeUVMap")
     uv_node.uv_map = "UVMap.002"
+    uv_node.name = "UV_MAP_NODE"
+
+    mix_node = nodes.new("ShaderNodeMixRGB")
+    mix_node.inputs['Color1'].default_value = kadcar_color
+    mix_node.name = "MIX_NODE"
 
     node_tree.links.new(uv_node.outputs['UV'], texture_node.inputs['Vector'])
-    node_tree.links.new(texture_node.outputs['Color'], bsdf.inputs['Base Color'])
+    node_tree.links.new(texture_node.outputs['Color'], mix_node.inputs['Color2'])
+    node_tree.links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
+    node_tree.links.new(mix_node.outputs['Color'], bsdf.inputs['Base Color'])
 
-    export_scene_as_gltf('C:/Users/Mohannad Ahmad/Desktop/test_uv.glb')
+    #Baking
+    deselect_all_scene_objects()
+    bsdf.inputs['Metallic'].default_value = 0.0
+    
+    configure_bake_settings('CYCLES', 'CUDA', 'GPU', False, False, False, 'DIFFUSE')
+    
+    uv_layers = og_kadcar_body.data.uv_layers
+    uv_layer_names = [uv.name for uv in uv_layers]
+    for name in uv_layer_names:
+        if name == "UVMap":
+            uv_layers[name].active = True
+            print(name)
+            print(uv_layers[name])
 
+    image_name = "baked_texture_image"
+    image = bpy.data.images.new(image_name, 4096, 4096)
+    bake_texture_node = nodes.new("ShaderNodeTexImage")
+    bake_texture_node.select = True
+    bake_texture_node.name = "BAKED_TEXTURE"
+    nodes.active = bake_texture_node
+    bake_texture_node.image = image
+    
+    select_object_by_name_and_make_active('Car_Body')
+    
+    print(bpy.context.view_layer.objects.active)
+    print(uv_layers.active)
 
-    # bpy.context.view_layer.objects.active = og_kadcar_empty
-    # bsdf = get_principled_bsdf_for_active_material(og_kadcar_empty)
-    # bsdf.inputs['Metallic'].default_value = 0.0
+    bpy.ops.object.bake('INVOKE_DEFAULT', type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL', target='IMAGE_TEXTURES')
 
-    # 2. get the UV map
-    # uv_layers = og_kadcar_empty.data.uv_layers
-    # door_uv = None
-    # hood_uv = None
+    for node in nodes:
+        print(node.name)
+        if node.name not in permanent_node_names:
+            nodes.remove(node)
+    
+    node_tree.links.new(bake_texture_node.outputs['Color'], bsdf.inputs['Base Color'])
+    set_input_value_in_bsdf(bsdf, 'Metallic', metallic_value)
 
-    # for uv in uv_layers:
-    #     if uv.name == "UV_Hood":
-    #         hood_uv = uv
-    #     if uv.name == "UV_Door":
-    #         door_uv = uv
-
-    # print(uv_layers)
+    export_scene_as_gltf('K:/test_uv.glb')
 
 def build_shader_nodes_for_sticker_upgrade(location):
     pass
