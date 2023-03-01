@@ -52,6 +52,13 @@ def pack_and_split_CAR_file(asset_path, output_path):
     #split CAR file 
     os.system("carbites split " + out_path + " --size 100MB --strategy treewalk")
 
+def pin_asset_using_cid(cid):
+    command = "ipfs pin add " + cid
+    
+    print("Pinning asset " + cid)
+    command_output = subprocess.run(command, shell=True, capture_output=True)
+    print(command_output)
+
 def add_ipfs_data_to_kc_metadata(asset_file_name, ipfs_url, destination):
     kadcar_metadata = extract_data_from_json(asset_file_name)
     print(kadcar_metadata)
