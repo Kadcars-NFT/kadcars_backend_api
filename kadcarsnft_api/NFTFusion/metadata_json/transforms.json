@@ -1,0 +1,52 @@
+[
+    {
+        "transform": {
+            "type": "replace",
+            "obj": {
+                "new-datum": {
+                    "datum": {
+                        "art-asset": {
+                            "data": "ipfs://bafybeielzyapofnglxicaith7etxczpxq3psaeq6uh7chuh6dtbbmtqyny",
+                            "scheme": "ipfs://"
+                        }
+                    },
+                    "hash": "6Te22fUzf-9ynFfzYTYnKLzVVU2JhqhimJPgYGyuAwQ",
+                    "uri": {
+                        "data": "view-references",
+                        "scheme": "pact:schema"
+                    }
+                },
+                "uri": {
+                    "scheme": "ipfs",
+                    "data": "view-references"
+                }
+            }
+        }
+    },
+    {
+        "transform": {
+            "type": "add",
+            "obj": {
+                "datum": {
+                    "test": "test"
+                },
+                "hash": "6Te22fUzf-9ynFfzYTYnKLzVVU2JhqhimJPgYGyuAwQ",
+                "uri": {
+                    "data": "nft-references",
+                    "scheme": "pact:schema"
+                }
+            }
+        }
+    },
+    {
+        "transform": {
+            "type": "uri",
+            "obj": {
+                "uri": {
+                    "scheme": "ipfs",
+                    "data": "ipfs://bafybeia3obqfvgnxpm56oan2b7mempewuml4xynlcgkodks6tf44b3hnie"
+                }
+            }
+        }
+    }
+]
