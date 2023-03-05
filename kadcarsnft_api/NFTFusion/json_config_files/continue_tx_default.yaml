@@ -1,0 +1,12 @@
+pactTxHash: ""
+step: 0
+rollback: false
+dataFile: ""
+networkId: ""
+publicMeta:
+  chainId: ""
+  sender: ""
+  gasLimit: 150000
+  gasPrice: 0.00000001
+  ttl: 600
+type: cont

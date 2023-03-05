@@ -18,6 +18,7 @@ from NFTFusion.scene_utils import *
 from NFTFusion.render_utils import *
 from NFTFusion.shader_utils import *
 from NFTFusion.ipfs_utils.ipfs_utils import *
+import yaml
 
 dirname = os.path.dirname(__file__)
 path_to_transforms_folder = os.path.join(dirname, 'metadata_json')
@@ -32,6 +33,8 @@ sticker = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi
 # uv_nft = "C:/Users/Mohannad Ahmad/Desktop/Kadcar_UV.glb"
 # hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files/beach_background.hdr"
 # sticker = "C:/Users/Mohannad Ahmad/Desktop/AppDev/Kadena/kadcars_backend/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
+
+r2r_public_key = "b9b798dd046eccd4d2c42c18445859c62c199a8d673b8c1bf7afcfca6a6a81e3"
 
 def handle_upgrade(kadcar_id, upgrade_id, upgrade_type):
     handle_upgrade_contract_trigger()
@@ -230,6 +233,8 @@ def replace_view_refs_with_glb_ref_to_upgrade(glb_ipfs_url):
     transform_data[0]["transform"]["obj"]["new-datum"]["datum"]["art-asset"]["data"] = glb_ipfs_url
 
 def sign_using_pact_cli():
-    pass
+    tx = yaml.load(os.path.join(dirname, 'json_config_files/continue_tx_default.yaml'))
+    print(tx)
 
+sign_using_pact_cli()
 # handle_upgrade()
