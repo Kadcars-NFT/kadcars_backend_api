@@ -14,10 +14,10 @@
 # 10.2 replace mutable state with new body-stickers [loc, refid]
 # 10.3 replace view refs with new glb + ref to sticker nft
 import bpy
-from NFTFusion.scene_utils import *
-from NFTFusion.render_utils import *
-from NFTFusion.shader_utils import *
-from NFTFusion.ipfs_utils.ipfs_utils import *
+from scene_utils import *
+from render_utils import *
+from shader_utils import *
+from ipfs_utils.ipfs_utils import *
 import yaml
 
 dirname = os.path.dirname(__file__)
@@ -232,9 +232,44 @@ def replace_view_refs_with_glb_ref_to_upgrade(glb_ipfs_url):
 
     transform_data[0]["transform"]["obj"]["new-datum"]["datum"]["art-asset"]["data"] = glb_ipfs_url
 
-def sign_using_pact_cli():
-    tx = yaml.load(os.path.join(dirname, 'json_config_files/continue_tx_default.yaml'))
-    print(tx)
+def sign_using_pact_cli(transforms):
+    data = {
+        "pactTxHash": "",
+        "step": 0,
+        "rollback": False,
+        "data": transform_data,
+        "networkId": "testnet04",
+        "publicMeta": [
+            {"chainId": "1"}, 
+            {"sender": r2r_public_key}, 
+            {"gasLimit": 150000}, 
+            {"gasPrice": 0.00000001}, 
+            {"ttl": 600}
+        ],
+        "type": "cont"
+    }
 
-sign_using_pact_cli()
+    #prepare unsigned transaction data
+    path_to_tx_yaml = os.path.join(path_to_transforms_folder, "tx.yaml")
+    path_to_r2r_key_yaml = os.path.join(path_to_transforms_folder, "keyset.yaml")
+    path_to_tx_final_yaml = os.path.join(path_to_transforms_folder, "tx-final.yaml")
+    path_to_tx_signed_yaml = os.path.join(path_to_transforms_folder, "tx-signed.yaml")
+    path_to_tx_unsigned_yaml = os.path.join(path_to_transforms_folder, "tx-unsigned.yaml")
+
+    #create tx file with above data
+    with open(path_to_tx_yaml, 'w') as f:
+        yaml.dump(data, f, default_flow_style=False, sort_keys=False)
+        
+    #Convert the transaction to an unsigned prepared form that signatures can be added to
+    subprocess.run("pact -u " + path_to_tx_yaml + " > " + path_to_tx_unsigned_yaml)
+    
+    #sign the prepared transaction
+    subprocess.run("cat " + path_to_tx_unsigned_yaml + " | " + "pact add-sig " + path_to_r2r_key_yaml + " > " + path_to_tx_signed_yaml)
+
+    #combine the signatures into transaction ready to be sent to blockchain
+    subprocess.run("pact combine-sigs " + path_to_tx_signed_yaml + " > " + path_to_tx_final_yaml)
+
+transform_data = extract_data_from_json(os.path.join(path_to_transforms_folder, 'transforms.json'))
+
+sign_using_pact_cli(transform_data[0])
 # handle_upgrade()
