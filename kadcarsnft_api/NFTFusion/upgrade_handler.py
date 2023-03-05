@@ -14,9 +14,15 @@
 # 10.2 replace mutable state with new body-stickers [loc, refid]
 # 10.3 replace view refs with new glb + ref to sticker nft
 import bpy
-from scene_utils import *
-from render_utils import *
-from shader_utils import *
+from NFTFusion.scene_utils import *
+from NFTFusion.render_utils import *
+from NFTFusion.shader_utils import *
+from NFTFusion.ipfs_utils.ipfs_utils import *
+
+dirname = os.path.dirname(__file__)
+path_to_transforms_folder = os.path.join(dirname, 'metadata_json')
+path_to_assets_folder = os.path.join(dirname, 'assets')
+path_to_background_config = os.path.join(dirname, 'background_config_files')
 
 nft = "K:/completed_nfts_2/batch_20/k2/storage/k2_rims_1_spoiler_1_steel_darkgray_glossy_storage_white_carbon_fiber/nft_2120.glb"
 uv_nft = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/uv_gltfs/Kadcar_UV.glb"
@@ -27,7 +33,7 @@ sticker = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi
 # hdri = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi/kadcars_backend_api_local_bpy/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/hdr_files/beach_background.hdr"
 # sticker = "C:/Users/Mohannad Ahmad/Desktop/AppDev/Kadena/kadcars_backend/kadcars_backend_api/kadcarsnft_api/NFTFusion/assets/textures/wiz.png"
 
-def handle_upgrade():
+def handle_upgrade(kadcar_id, upgrade_id, upgrade_type):
     handle_upgrade_contract_trigger()
 
     # pact_id = extract_pact_id_from_contract_for_upgrade_details()
@@ -40,19 +46,17 @@ def handle_upgrade():
     # sticker_nft_assets = download_assets(sticker_nft['sticker_nft'])
 
     load_assets_into_blender()
-    copy_uv_maps_from_source()
 
-    # build_shader_nodes_for_sticker_upgrade()
-    # add_hdri_to_scene()
-    # render_upgraded_nft()
-    # split_nft_to_car_files()
-    # upload_car_file()
+    nft_glb_asset_path = apply_sticker_to_uv_maps_and_bake()
+
+    nft_webp_asset_path = render_upgraded_nft()
+
+    glb_url, webp_url = upload_nft_files_to_ipfs(nft_glb_asset_path, nft_webp_asset_path)
     # create_metadata_for_upgraded_nft()
     # replace_top_uri()
     # replace_mutable_state_with_upgrade_nft_data()
     # replace_view_refs_with_glb_ref_to_upgrade()
 
-    
 
 def handle_upgrade_contract_trigger():
     pass
@@ -78,24 +82,7 @@ def load_assets_into_blender():
     #import the UV car
     import_scene_into_collection(uv_nft, 'uv_kadcar')
 
-# def copy_uv_maps_from_source(source_car):
-#     deselect_all_scene_objects()
-#     import_scene_into_collection(uv_nft, 'uv_nft')
-#     context = bpy.context
-#     obj = context.active_object
-#     uv_layer_names = [uv.name for uv in obj.data.uv_layers]
-
-#     if uv_layer_names:
-#         for ob in context.selected_objects:
-#             if ob != obj and ob.type =='MESH':
-#                 for uv_map in uv_layer_names:
-#                     obj.data.uv_layers[uv_map].active = True
-#                     if uv_map not in ob.data.uv_layers:
-#                         ob.data.uv_layers.new(name=uv_map)
-#                     ob.data.uv_layers[uv_map].active = True
-#                     bpy.ops.object.join_uvs()
-
-def copy_uv_maps_from_source():
+def apply_sticker_to_uv_maps_and_bake():
     permanent_node_names = ["Principled BSDF", "Material Output", "BAKED_TEXTURE"]
     deselect_all_scene_objects()
 
@@ -116,37 +103,42 @@ def copy_uv_maps_from_source():
     deselect_all_scene_objects()
     delete_objects_from_collection_name('uv_kadcar')
 
+    #Retrieve bsdf values and node tree
     bsdf = get_principled_bsdf_for_active_material(og_kadcar_body)
     kadcar_color = get_input_value_from_bsdf(bsdf, 'Base Color')
     metallic_value = get_input_value_from_bsdf(bsdf, 'Metallic')
-    
     node_tree = get_node_tree_for_selected_object(og_kadcar_body)
     nodes = node_tree.nodes
 
+    #Create texture shader node for sticker
     texture_node = nodes.new("ShaderNodeTexImage")
     texture_node.image = bpy.data.images.load(sticker)
     texture_node.name = "STICKER_NODE"
 
-    #UV Map Setting
+    #Create UV map node to specify destination
     uv_node = nodes.new("ShaderNodeUVMap")
-    uv_node.uv_map = "UVMap.002"
+    uv_node.uv_map = "UVMap.002" #TODO: change hard-coded uv map location
     uv_node.name = "UV_MAP_NODE"
 
+    #Create Mix RGB node to set kadcar color
     mix_node = nodes.new("ShaderNodeMixRGB")
     mix_node.inputs['Color1'].default_value = kadcar_color
     mix_node.name = "MIX_NODE"
 
+    #Link all created nodes to the principled bsdf
     node_tree.links.new(uv_node.outputs['UV'], texture_node.inputs['Vector'])
     node_tree.links.new(texture_node.outputs['Color'], mix_node.inputs['Color2'])
     node_tree.links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
     node_tree.links.new(mix_node.outputs['Color'], bsdf.inputs['Base Color'])
 
-    #Baking
+    #Baking begins here
     deselect_all_scene_objects()
-    bsdf.inputs['Metallic'].default_value = 0.0
     
+    #Set up baking parameters
+    bsdf.inputs['Metallic'].default_value = 0.0
     configure_bake_settings('CYCLES', 'CUDA', 'GPU', False, False, False, 'DIFFUSE')
     
+    #Select the main uv map for the kadcar
     uv_layers = og_kadcar_body.data.uv_layers
     uv_layer_names = [uv.name for uv in uv_layers]
     for name in uv_layer_names:
@@ -155,6 +147,7 @@ def copy_uv_maps_from_source():
             print(name)
             print(uv_layers[name])
 
+    #Create a new texture image shader node for the baked texture destination
     image_name = "baked_texture_image"
     image = bpy.data.images.new(image_name, 4096, 4096)
     bake_texture_node = nodes.new("ShaderNodeTexImage")
@@ -163,49 +156,80 @@ def copy_uv_maps_from_source():
     nodes.active = bake_texture_node
     bake_texture_node.image = image
     
+    #Select the kadcar body and bake
     select_object_by_name_and_make_active('Car_Body')
-    
-    print(bpy.context.view_layer.objects.active)
-    print(uv_layers.active)
-
     bpy.ops.object.bake('INVOKE_DEFAULT', type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL', target='IMAGE_TEXTURES')
 
+    #Remove old unneeded nodes
     for node in nodes:
         print(node.name)
         if node.name not in permanent_node_names:
             nodes.remove(node)
     
+    #Link new baked texture shader node to the principled bsdf
     node_tree.links.new(bake_texture_node.outputs['Color'], bsdf.inputs['Base Color'])
+    
+    #Restore the metallic value of the car 
     set_input_value_in_bsdf(bsdf, 'Metallic', metallic_value)
 
-    export_scene_as_gltf('K:/test_uv.glb')
+    #Complete scene details and export
+    glb_path = 'K:/test_uv.glb'
+    add_hdri_to_scene('storage')
+    export_scene_as_gltf(glb_path)
 
-def build_shader_nodes_for_sticker_upgrade(location):
-    pass
+    return glb_path
 
-def add_hdri_to_scene():
-    customize_world_shader_nodes(hdri, 'storage')
+def add_hdri_to_scene(background_name):
+    hdr_file_path = os.path.join(path_to_assets_folder, "hdr_files/" + background_name + "_background")
+
+    if background_name == 'storage':
+        hdr_file_path = hdr_file_path + ".exr"
+    else:
+        hdr_file_path = hdr_file_path + ".hdr"
+
+    customize_world_shader_nodes(hdr_file_path, background_name)
 
 def render_upgraded_nft():
+    render_path = 'K:/test_uv'
+    bg_config_data = extract_json_attribute_data(os.path.join(path_to_background_config, "backgrounds_config.json"), 'storage') #TODO: change hard-coded bg name
+    
     configure_render_settings('CYCLES', 'CUDA', 'GPU', 200, 50)
-    set_render_output_settings("K:/UpgradeTest/render", 'WEBP', 1920, 1192, True)
+    set_render_output_settings(render_path, 'WEBP', bg_config_data['render_settings']['res_x'], bg_config_data['render_settings']['res_y'], True)
 
-def split_nft_to_car_files():
-    pass
+    return render_path + '.webp'
 
-def upload_car_file():
-    pass
+def upload_nft_files_to_ipfs(nft_asset_path, render_asset_path):
+    destination = nft_asset_path.split('/')[len(nft_asset_path.split('/')) - 1] + ".car"
+    
+    car_file_dest_directory = 'K:/car_file/'
+    car_file_dest_file = os.path.join(car_file_dest_directory, destination)
+
+    pack_and_split_CAR_file(nft_asset_path, car_file_dest_file)
+    glb_cid = iterate_over_car_files_and_upload(car_file_dest_directory, car_file_dest_file)
+    glb_url = "ipfs://" + glb_cid
+
+    webp_cid = upload_asset_to_ipfs(render_asset_path, 'image/*')
+    webp_url = "ipfs://" + webp_cid
+
+    return glb_url, webp_url
 
 def create_metadata_for_upgraded_nft():
     pass
 
-def replace_top_uri():
-    pass
+def replace_top_uri(webp_ipfs_url):
+    transform_data = extract_data_from_json(os.path.join(path_to_transforms_folder, 'transforms.json'))
+
+    transform_data[2]["transform"]["obj"]["uri"]["data"] = webp_ipfs_url
 
 def replace_mutable_state_with_upgrade_nft_data():
     pass
 
-def replace_view_refs_with_glb_ref_to_upgrade():
+def replace_view_refs_with_glb_ref_to_upgrade(glb_ipfs_url):
+    transform_data = extract_data_from_json(os.path.join(path_to_transforms_folder, 'transforms.json'))
+
+    transform_data[0]["transform"]["obj"]["new-datum"]["datum"]["art-asset"]["data"] = glb_ipfs_url
+
+def sign_using_pact_cli():
     pass
 
-handle_upgrade()
+# handle_upgrade()

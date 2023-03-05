@@ -2,10 +2,10 @@ import bpy
 import json
 import math
 import os
-from io_utils import extract_data_from_json
 from pygltflib import GLTF2
 from pygltflib.utils import gltf2glb
-from stat_dictionaries import hdri_ipfs_urls
+from NFTFusion.io_utils import extract_data_from_json
+from NFTFusion.stat_dictionaries import hdri_ipfs_urls
 
 #Cleans up scene by deleting all objects
 def delete_all_objects():

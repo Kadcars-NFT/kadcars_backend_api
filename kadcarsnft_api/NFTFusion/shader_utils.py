@@ -1,7 +1,7 @@
 import bpy
 # from kadcar_factory import *
-from scene_utils import *
-from io_utils import *
+from NFTFusion.scene_utils import *
+from NFTFusion.io_utils import *
 
 def shading_orchestrator(car_collection, materials_file, format='glb'):
     f = open('colorize.json')
