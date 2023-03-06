@@ -14,11 +14,13 @@
 # 10.2 replace mutable state with new body-stickers [loc, refid]
 # 10.3 replace view refs with new glb + ref to sticker nft
 import bpy
+import yaml
 from scene_utils import *
 from render_utils import *
 from shader_utils import *
 from ipfs_utils.ipfs_utils import *
-import yaml
+from hashlib import blake2b
+from constants import pact_fetch_local_url_prefix, testnet_network_id, default_chain_id
 
 dirname = os.path.dirname(__file__)
 path_to_transforms_folder = os.path.join(dirname, 'metadata_json')
@@ -72,8 +74,20 @@ def get_upgrade_from_blockchain(pact_id):
     #call get mainnet
     pass
 
-def get_nft_from_blockchain():
-    pass
+def get_nft_from_blockchain(payload):
+    cmd_string = "{\"networkId\":null,\"payload\":{\"exec\":{\"data\":{},\"code\":\"(free.kadcars-ledger-policy.get-minted-tokens-for-collection \\\"k2:final\\\")\"}},\"signers\":[],\"meta\":{\"creationTime\":1678055190,\"ttl\":600,\"gasLimit\":150000,\"chainId\":\"1\",\"gasPrice\":1e-8,\"sender\":\"\"},\"nonce\":\"\\\"2023-03-05T22:26:39.679Z\\\"\"}"
+    hash_string = blake2b(cmd_string)
+
+    payload = {
+        "hash": hash_string,
+        "sigs": [],
+        "cmd": cmd_string
+    }
+
+    try:
+        requests.post(pact_fetch_local_url_prefix + testnet_network_id + "/chain/" + default_chain_id + "/pact/api/v1/local")
+    except:
+        print("Error with post request")
 
 def download_assets():
     pass

@@ -2,10 +2,13 @@ import bpy
 import os
 import django
 from django.shortcuts import render
-from constants import *
-from blender_utils import deleteAllObjects
-from render_factory import *
-
+from django.http import HttpResponse
+from rest_framework.decorators import api_view
+from NFTFusion.constants import *
+from NFTFusion.blender_utils import deleteAllObjects
+from NFTFusion.render_factory import *
+from NFTFusion.upgrade_handler import handle_upgrade
+from NFTFusion.io_utils import *
 # Create your views here.
 
 
@@ -37,3 +40,22 @@ def renderModel(payload):
     bpy.ops.render.render(write_still=True)  # Tell Blender to render an image
 
     deleteAllObjects()
+
+@api_view(['GET'])
+def testing(request):
+    print("LOL")
+    return HttpResponse("LOL")
+
+@api_view(['POST'])
+def apply_upgrade(request):
+    dirname = os.path.dirname(__file__)
+
+    kadcar_id = request.data['kadcar_id']
+    upgrade_id = request.data['upgrade_id']
+    upgrade_type = request.data['upgrade_type']
+
+    # handle_upgrade(kadcar_id, upgrade_id, upgrade_type)
+    transforms_data = extract_data_from_json(os.path.join(dirname, "metadata_json/transforms.json"))
+    json_data_dump = json.dumps(transforms_data)
+
+    return HttpResponse(json_data_dump, content_type='application/json')
