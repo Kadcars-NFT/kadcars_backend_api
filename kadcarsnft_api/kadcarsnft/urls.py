@@ -19,5 +19,5 @@ from NFTFusion.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('nftfusionapi/', include('NFTFusion.urls'))
+    path('r2r/', include('NFTFusion.urls'))
 ]
