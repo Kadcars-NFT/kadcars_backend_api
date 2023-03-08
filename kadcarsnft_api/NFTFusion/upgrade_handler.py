@@ -19,7 +19,7 @@ from scene_utils import *
 from render_utils import *
 from shader_utils import *
 from ipfs_utils.ipfs_utils import *
-from hashlib import blake2b
+from pact_utils.command_utils import *
 from constants import pact_fetch_local_url_prefix, testnet_network_id, default_chain_id
 
 dirname = os.path.dirname(__file__)
@@ -38,7 +38,7 @@ sticker = "C:/Users/Mohannad Ahmad\Desktop/AppDev/Crypto/Kadena\KadcarBackendApi
 
 r2r_public_key = "b9b798dd046eccd4d2c42c18445859c62c199a8d673b8c1bf7afcfca6a6a81e3"
 
-def handle_upgrade(kadcar_id, upgrade_id, upgrade_type):
+def handle_upgrade(payload):
     handle_upgrade_contract_trigger()
 
     # pact_id = extract_pact_id_from_contract_for_upgrade_details()
@@ -75,8 +75,9 @@ def get_upgrade_from_blockchain(pact_id):
     pass
 
 def get_nft_from_blockchain(payload):
-    cmd_string = "{\"networkId\":null,\"payload\":{\"exec\":{\"data\":{},\"code\":\"(free.kadcars-ledger-policy.get-minted-tokens-for-collection \\\"k2:final\\\")\"}},\"signers\":[],\"meta\":{\"creationTime\":1678055190,\"ttl\":600,\"gasLimit\":150000,\"chainId\":\"1\",\"gasPrice\":1e-8,\"sender\":\"\"},\"nonce\":\"\\\"2023-03-05T22:26:39.679Z\\\"\"}"
-    hash_string = blake2b(cmd_string)
+    # cmd_string = "{\"networkId\":null,\"payload\":{\"exec\":{\"data\":{},\"code\":\"(free.kadcars-ledger-policy.get-minted-tokens-for-collection \\\"k2:final\\\")\"}},\"signers\":[],\"meta\":{\"creationTime\":1678055190,\"ttl\":600,\"gasLimit\":150000,\"chainId\":\"1\",\"gasPrice\":1e-8,\"sender\":\"\"},\"nonce\":\"\\\"2023-03-05T22:26:39.679Z\\\"\"}"
+    cmd_string = assemble_command_for_pact_api("free.universal-ledger.get-manifest \"" + payload["kadcar_id"] + "\"")
+    hash_string = hash_command(cmd_string)
 
     payload = {
         "hash": hash_string,
@@ -85,7 +86,7 @@ def get_nft_from_blockchain(payload):
     }
 
     try:
-        requests.post(pact_fetch_local_url_prefix + testnet_network_id + "/chain/" + default_chain_id + "/pact/api/v1/local")
+        requests.post(pact_fetch_local_url_prefix + testnet_network_id + "/chain/" + default_chain_id + "/pact/api/v1/local", json=json.dumps(payload))
     except:
         print("Error with post request")
 

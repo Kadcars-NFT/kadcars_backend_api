@@ -1,0 +1,14 @@
+pactTxHash: 6Te22fUzf-9ynFfzYTYnKLzVVU2JhqhimJPgYGyuAwQ
+step: 1
+rollback: false
+data: null
+networkId: testnet04
+signers:
+- public: b9b798dd046eccd4d2c42c18445859c62c199a8d673b8c1bf7afcfca6a6a81e3
+publicMeta:
+  chainId: '1'
+  sender: k:b9b798dd046eccd4d2c42c18445859c62c199a8d673b8c1bf7afcfca6a6a81e3
+  gasLimit: 150000
+  gasPrice: 1.0e-08
+  ttl: 600
+type: cont
